@@ -1,0 +1,24 @@
+# coding app's project files
+.idea
+.vscode
+
+
+# Go testing output
+*.out
+*.test
+profile*.pdf
+
+
+# binary exes
+cmd/*/*.exe
+cmd/main_yugioh_card_editor/main_yugioh_card_editor
+
+
+# config with real username, password...
+configs/*ignore*.sh
+configs/.*
+
+
+# crawler Konami database result, need to rename before add to git
+web/konami_db.json
+web/konami_data/konami_db.json
