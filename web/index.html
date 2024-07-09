@@ -16,6 +16,7 @@
   <script src="external_lib/lunr.js"></script>
 
   <!-- main -->
+  <script type="text/javascript" src="konami_data/konami_db_en.js"></script>
   <script type="text/javascript" src="index.js"></script>
 
   <!--
@@ -40,21 +41,21 @@
 <body>
 
 <div class="pageContainerColumns">
-  <div class="colLeft" id="colLeft">
+  <div class="colLeft mono" id="colLeft">
     <div id="CardFieldsCommon" class="CardFieldsCommon">
       <div id="cardNameWrap">
         <h3><label for="CardName">Name: </label></h3>
-        <input id="CardName" size="48">
+        <input id="CardName" size="46">
       </div>
 
       <div id="CardTypeWrap">
         <h3>Type: </h3>
         <input type="radio" name="CardType" id="Monster"/>
-        <label class="mono" for="Monster">Monster   </label>
+        <label for="Monster">Monster   </label>
         <input type="radio" name="CardType" id="Spell"/>
-        <label class="mono" for="Spell">Spell     </label>
+        <label for="Spell">Spell     </label>
         <input type="radio" name="CardType" id="Trap"/>
-        <label class="mono" for="Trap">Trap      </label>
+        <label for="Trap">Trap      </label>
       </div>
 
       <div id="CardSubtypeWrap">
@@ -62,43 +63,43 @@
         <div class="indent">
           <div id="CardSubtypeMonster">
             <input name="CardSubtype" id="MonsterNormal" type="radio"/>
-            <label class="mono" for="MonsterNormal">Normal    </label>
+            <label for="MonsterNormal">Normal    </label>
             <input name="CardSubtype" id="MonsterEffect" type="radio"/>
-            <label class="mono" for="MonsterEffect">Effect    </label>
+            <label for="MonsterEffect">Effect    </label>
             <input name="CardSubtype" id="MonsterRitual" type="radio"/>
-            <label class="mono" for="MonsterRitual">Ritual    </label>
+            <label for="MonsterRitual">Ritual    </label>
             <br>
             <input name="CardSubtype" id="MonsterFusion" type="radio"/>
-            <label class="mono" for="MonsterFusion">Fusion    </label>
+            <label for="MonsterFusion">Fusion    </label>
             <input name="CardSubtype" id="MonsterSynchro" type="radio"/>
-            <label class="mono" for="MonsterSynchro">Synchro   </label>
+            <label for="MonsterSynchro">Synchro   </label>
             <input name="CardSubtype" id="MonsterXyz" type="radio"/>
-            <label class="mono" for="MonsterXyz">Xyz       </label>
+            <label for="MonsterXyz">Xyz       </label>
             <input name="CardSubtype" id="MonsterLink" type="radio"/>
-            <label class="mono" for="MonsterLink">Link      </label>
+            <label for="MonsterLink">Link</label>
           </div>
           <div id="CardSubtypeSpell">
             <input name="CardSubtype" id="SpellNormal" type="radio"/>
-            <label class="mono" for="SpellNormal">Normal    </label>
+            <label for="SpellNormal">Normal    </label>
             <input name="CardSubtype" id="SpellContinuous" type="radio"/>
-            <label class="mono" for="SpellContinuous">Continuous</label>
+            <label for="SpellContinuous">Continuous</label>
             <input name="CardSubtype" id="SpellQuickPlay" type="radio"/>
-            <label class="mono" for="SpellQuickPlay">Quick-Play</label>
+            <label for="SpellQuickPlay">Quick-Play</label>
             <br>
             <input name="CardSubtype" id="SpellField" type="radio"/>
-            <label class="mono" for="SpellField">Field     </label>
+            <label for="SpellField">Field     </label>
             <input name="CardSubtype" id="SpellEquip" type="radio"/>
-            <label class="mono" for="SpellEquip">Equip     </label>
+            <label for="SpellEquip">Equip     </label>
             <input name="CardSubtype" id="SpellRitual" type="radio"/>
-            <label class="mono" for="SpellRitual">Ritual    </label>
+            <label for="SpellRitual">Ritual    </label>
           </div>
           <div id="CardSubtypeTrap">
             <input name="CardSubtype" id="TrapNormal" type="radio"/>
-            <label class="mono" for="TrapNormal">Normal    </label>
+            <label for="TrapNormal">Normal    </label>
             <input name="CardSubtype" id="TrapContinuous" type="radio"/>
-            <label class="mono" for="TrapContinuous">Continuous</label>
+            <label for="TrapContinuous">Continuous</label>
             <input name="CardSubtype" id="TrapCounter" type="radio"/>
-            <label class="mono" for="TrapCounter">Counter   </label>
+            <label for="TrapCounter">Counter   </label>
             <br>
             <br>
           </div>
@@ -107,8 +108,8 @@
 
       <div id="CardEffectWrap">
         <h3><label for="CardEffect">Effect: </label></h3>
-        <span style="font-size: 24px">(many effects should be separated by <b style="font-size: 40px">① ② ③ ④ ⑤ ●</b>)</span>
-        <textarea id="CardEffect" rows="10" cols="66"></textarea>
+        <span class="smallNote">(many effects should be separated by <b style="font-size: 40px">① ② ③ ④ ⑤ ●</b>)</span>
+        <textarea id="CardEffect" rows="10" cols="64"></textarea>
       </div>
 
       <div>
@@ -117,7 +118,7 @@
       </div>
 
       <div>
-        <table class="mono">
+        <table>
           <tr>
             <td>
               <label for="SetNumber">SetNumber:</label>
@@ -151,30 +152,30 @@
         <h4>Attribute:</h4>
         <div class="indent">
           <input type="radio" name="MonsterAttribute" id="DARK" checked/>
-          <label class="mono" for="DARK">DARK   </label>
+          <label for="DARK">DARK   </label>
           <input type="radio" name="MonsterAttribute" id="EARTH"/>
-          <label class="mono" for="EARTH">EARTH  </label>
+          <label for="EARTH">EARTH  </label>
           <input type="radio" name="MonsterAttribute" id="FIRE"/>
-          <label class="mono" for="FIRE">FIRE   </label>
+          <label for="FIRE">FIRE   </label>
           <br>
           <input type="radio" name="MonsterAttribute" id="LIGHT"/>
-          <label class="mono" for="LIGHT">LIGHT  </label>
+          <label for="LIGHT">LIGHT  </label>
           <input type="radio" name="MonsterAttribute" id="WATER"/>
-          <label class="mono" for="WATER">WATER  </label>
+          <label for="WATER">WATER  </label>
           <input type="radio" name="MonsterAttribute" id="WIND"/>
-          <label class="mono" for="WIND">WIND   </label>
+          <label for="WIND">WIND   </label>
           <input type="radio" name="MonsterAttribute" id="DIVINE"/>
-          <label class="mono" for="DIVINE">DIVINE </label>
+          <label for="DIVINE">DIVINE </label>
         </div>
       </div>
 
       <div>
         <h4><label for="MonsterATK">ATK: </label></h4>
         <input id="MonsterATK" size="4">
-            
+         
         <h4><label for="MonsterDEF">DEF: </label></h4>
         <input id="MonsterDEF" size="4">
-            
+         
         <h4><label for="MonsterLevelRankLink">Level/Rank/Link:</label></h4>
         <input id="MonsterLevelRankLink" size="4" maxlength="2">
       </div>
@@ -182,32 +183,30 @@
       <div id="MonsterTypeWrap">
         <h4><label for="MonsterType">Type:</label></h4>
         <select id="MonsterType"
-                style="width: 384px; font-size: 32px; text-align: center">
+                style="width: 408px; font-size: 32px; text-align: center">
           <!-- options will be generated by JS onload -->
         </select>
       </div>
 
       <div id="MonsterAbilitiesWrap">
-        <h4>Abilities:</h4>
-        <div id="MonsterAbilities" class="indent">
-          <input type="checkbox" name="MonsterAbilities" id="Flip">
-          <label class="mono" for="Flip">Flip   </label>
-          <input type="checkbox" name="MonsterAbilities" id="Gemini">
-          <label class="mono" for="Gemini">Gemini </label>
-          <input type="checkbox" name="MonsterAbilities" id="Spirit">
-          <label class="mono" for="Spirit">Spirit </label>
-          <br>
-          <input type="checkbox" name="MonsterAbilities" id="Toon">
-          <label class="mono" for="Toon">Toon   </label>
-          <input type="checkbox" name="MonsterAbilities" id="Tuner">
-          <label class="mono" for="Tuner">Tuner  </label>
-          <input type="checkbox" name="MonsterAbilities" id="Union">
-          <label class="mono" for="Union">Union  </label>
-        </div>
+        <h4>Abilities:  </h4>
+        <input type="checkbox" name="MonsterAbilities" id="Flip">
+        <label for="Flip">Flip   </label>
+        <input type="checkbox" name="MonsterAbilities" id="Gemini">
+        <label for="Gemini">Gemini </label>
+        <input type="checkbox" name="MonsterAbilities" id="Spirit">
+        <label for="Spirit">Spirit </label>
+        <br>            
+        <input type="checkbox" name="MonsterAbilities" id="Toon">
+        <label for="Toon">Toon   </label>
+        <input type="checkbox" name="MonsterAbilities" id="Tuner">
+        <label for="Tuner">Tuner  </label>
+        <input type="checkbox" name="MonsterAbilities" id="Union">
+        <label for="Union">Union  </label>
       </div>
 
       <div id="MonsterLinkArrows" style="line-height: 36px">
-        <h4 class="mono">Link arrows:    </h4>
+        <h4>Link arrows:    </h4>
         <input type="checkbox" id="UpLeft" name="MonsterLinkArrows">
         <label class="monoBig" for="UpLeft">↖ </label>
         <input type="checkbox" id="Up" name="MonsterLinkArrows">
@@ -237,11 +236,11 @@
         <h4><label for="IsPendulum">Pendulum</label></h4>
         <input type="checkbox" id="IsPendulum">
         <div id="PendulumDetail" class="indent">
-          <label for="PendulumScale" class="mono">Pendulum scale: </label>
+          <label for="PendulumScale">Pendulum scale: </label>
           <input id="PendulumScale" size="2" maxlength="2">
           <br>
-          <label for="PendulumEffect" class="mono">Pendulum effect:</label>
-          <textarea id="PendulumEffect" rows="3" cols="50" style="font-size: 24px"></textarea>
+          <label for="PendulumEffect">Pendulum effect:</label>
+          <textarea id="PendulumEffect" rows="4" cols="48" style="font-size: 24px"></textarea>
         </div>
       </div>
     </div>
@@ -310,56 +309,87 @@
       <div id="RenderKonamiCardID" class="cRenderKonamiCardID mono db"></div>
       <div id="RenderYearCreator" class="cRenderYearCreator mono db"></div>
 
-      <div id="testTextWidth" class="testText"></div>
-      <div id="testTextHeight" class="testText">
+      <div id="testTextWidth" class="cTestText"></div>
+      <div id="testTextHeight" class="cTestText">
       </div>
     </div>
   </div>
 
   <div class="colRight">
     <div class="sameWidthWrap">
-      <div>
-        <h3>Twitch card effect font</h3><br>
-        <div class="indent">
-          <h4>Auto font size:</h4>
-          <input id="AutoFont" disabled size="3">
-          <input id="ChosenEffectElementID" disabled style="visibility: hidden">
-          <br>
-          <h4>Your font size:</h4>
-          <input id="TwitchFont" onchange="twitchFontCardEffect()"
-                 type="number" min="1" max="99" step="0.5" size="3">
-          <button class="smallBtn" onclick="twitchFontCopyAuto()">
-            Copy auto font size
-          </button>
-          <br>
-          <h4>Your scaleY:   </h4>
-          <input id="TwitchFontScaleY" onchange="twitchFontCardEffect()"
-                 type="number" min="0" max="2" step="0.05" size="3">
+
+      <div style="display: flex; gap: 5%">
+        <div style="flex: 1 1 55%">
+          <h3>Card effect font</h3><br>
+          <div class="indent">
+            <h4>Auto font size:</h4>
+            <input id="AutoFont" disabled size="5" class="mono">
+            <button class="smallBtn" onclick="twitchFontCopyAuto()">Copy</button>
+            <!-- ChosenEffectElementID works as a global variable on the page,
+            value can be RenderSpellTrapEffect, RenderMonsterEffect or RenderMonsterEffectSmall -->
+            <input id="ChosenEffectElementID" style="display: none" disabled>
+            <br>
+            <h4>Your font size:</h4>
+            <input id="TwitchFont" onchange="twitchFontCardEffect()"
+                   type="number" min="1" max="64" step="0.2" size="5" class="mono">
+            <br>
+            <h4>Your scaleY:   </h4>
+            <input id="TwitchFontScaleY" onchange="twitchFontCardEffect()"
+                   type="number" min="0.5" max="2.0" step="0.02" size="5" class="mono">
+          </div>
+          <hr>
+
+          <div style="margin-top: 32px">
+            <span id="ExportCardJSONName" style="font-size: 20px; font-family: monospace"> </span>
+            <button id="ExportCardJSON" class="sameWidthElement bigBtn"
+                    onclick="exportCardJSON()">
+              Export card as JSON (without art)
+            </button>
+            <button class="sameWidthElement bigBtn">
+              <label for="ImportCardJSONFile">Import card JSON</label>
+            </button>
+            <input id="ImportCardJSONFile" type="file" accept=".json" hidden/>
+          </div>
+          <hr>
+
+          <div style="margin-top: 32px">
+            <button id="ExportCardPNG" class="sameWidthElement bigBtn"
+                    onclick="exportCardPNG()" disabled>
+              Export card as PNG
+            </button>
+            <span
+              class="smallNote">(not implemented, please right-click on the card, choose <b>Inspect</b>,
+              then right-click on the element code to <b>Capture node screenshot</b>)</span>
+          </div>
+        </div>
+
+
+        <div class="mono" style="flex: 1 1 40%; border-left: 2px solid black; padding-left: 5%">
+          <h3>Scale page width</h3><br>
+          <!-- Python helper
+          import math
+          t = 1.25  # text-scaling-factor
+          def S(z): return (1.0/t) / (z*z)
+          def Z(s): return math.sqrt((1.0/t) /s)
+          def W(z): return 3840.0 / z
+          -->
+          <label class="smallNote">choose your monitor width (work best with a 4K monitor, output card will be 1180x1720)</label><br>
+          <input type="radio" id="ScalePage02" name="PageScale" onclick="HandleClickScalePage(0.2)">
+          <label for="ScalePage02"> 768px (0.2)</label><br>        <!-- t=1.25 z=2.0 -->
+          <input type="radio" id="ScalePage025" name="PageScale" onclick="HandleClickScalePage(0.25)">
+          <label for="ScalePage025"> 960px (0.25)</label><br>      <!-- t=1.00 z=2.0 -->
+          <input type="radio" id="ScalePage03125" name="PageScale" onclick="HandleClickScalePage(0.3125)">
+          <label for="ScalePage03125">1200px (0.3125)</label><br>     <!-- t=1.25 z=1.6 -->
+          <input type="radio" id="ScalePage05" name="PageScale" onclick="HandleClickScalePage(0.5)">
+          <label for="ScalePage05">1920px (0.5)</label><br>           <!-- t=2.00 z=1.0 -->
+          <input type="radio" id="ScalePage08" name="PageScale" onclick="HandleClickScalePage(0.8)">
+          <label for="ScalePage08">3072px (0.8)</label><br>           <!-- t=1.25 z=1.0 -->
+          <input type="radio" id="ScalePage1" name="PageScale" onclick="HandleClickScalePage(1.0)">
+          <label for="ScalePage1">3840px (1.0)</label><br>
         </div>
       </div>
       <hr>
 
-      <div style="margin-top: 32px">
-        <button id="ExportCardJSON" class="sameWidthElement bigBtn"
-                onclick="exportCardJSON()">
-          Export card as JSON (without art)
-        </button>
-        <button class="sameWidthElement bigBtn">
-          <label for="ImportCardJSONFile">Import card JSON</label>
-        </button>
-        <input id="ImportCardJSONFile" type="file" accept=".json" hidden/>
-      </div>
-      <hr>
-
-      <div style="margin-top: 32px">
-        <button id="ExportCardPNG" class="sameWidthElement bigBtn"
-                onclick="exportCardPNG()" disabled>
-          Export card as PNG
-        </button>
-        (not implemented, please open browser's
-        <b>Inspect element to take Screenshot</b>)
-      </div>
-      <hr>
 
       <div class="sameWidthElement">
         <h3><label for="SearchCardQuery">Card database</label></h3><br>
@@ -367,12 +397,12 @@
         <div style="display: flex">
           <input id="SearchCardQuery"
                  style="width: 80%; box-sizing: border-box">
-          <button id="SearchCardDatabase" onclick="searchCardDatabase()"
+          <button id="SearchCardDatabase" onclick="SearchCardDatabase()"
                   class="smallBtn" style="flex-grow: 1">Search
           </button>
         </div>
-        <div style="font-size: 24px">(search indexed by word in card name)</div>
-        <div id="SearchCardResult" style="font-size: 30px"></div>
+        <div class="smallNote">(search full word in card name)</div>
+        <div id="SearchCardResult" class="searchCardResult"></div>
       </div>
 
 

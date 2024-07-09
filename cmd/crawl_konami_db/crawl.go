@@ -16,89 +16,70 @@ import (
 	"sync"
 
 	"github.com/daominah/yugioh_card_editor/internal/core"
+	"github.com/mywrap/gofast"
 )
 
 func main() {
 	log.SetFlags(log.Lshortfile | log.Lmicroseconds)
 
-	pwd, err := os.Getwd()
+	projectRoot, err := gofast.GetProjectRootGit()
 	if err != nil {
 		log.Fatalf("error os.Getwd: %v", err)
 	}
-	outputPath := filepath.Join(pwd, "web/konami_data/konami_db.json")
+	outputPath := filepath.Join(projectRoot, "web/konami_data/konami_db.json")
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
 		log.Fatalf("error os.OpenFile: %v", err)
 	}
+	log.Printf("output result file path: %v", outputPath)
 
 	cardLanguage := "en"
 	//cardLanguage := "ja"  // TODO: handle Japanese card text
 
-	isUseProxy := true
+	var httpClients []*http.Client
+	isUseProxy := false
+	if !isUseProxy {
+		httpClients = []*http.Client{&http.Client{}}
+	} else {
+		proxyURLs := []string{
+			"http://127.0.0.1:24001",
+			"http://127.0.0.1:24002",
+			"http://127.0.0.1:24003",
+			"http://127.0.0.1:24004",
+			"http://127.0.0.1:24005",
+			"http://127.0.0.1:24006",
+			"http://127.0.0.1:24007",
+			"http://127.0.0.1:24008",
+		}
+		for i := 0; i < len(proxyURLs); i++ {
+			proxyUrl, err := url.Parse(proxyURLs[i])
+			if err != nil {
+				log.Fatalf("error url.Parse proxyURLs: %v", err)
+			}
+			var hc *http.Client
+			if isUseProxy {
+				hc = &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
+			} else {
+				hc = &http.Client{}
+			}
+			httpClients = append(httpClients, hc)
+		}
+	}
 
 	var result []core.Card
-
-	var httpClients []*http.Client
-	proxyURLs := []string{
-		"http://127.0.0.1:24001",
-		"http://127.0.0.1:24002",
-		"http://127.0.0.1:24003",
-		"http://127.0.0.1:24004",
-		"http://127.0.0.1:24005",
-		"http://127.0.0.1:24006",
-		"http://127.0.0.1:24007",
-		"http://127.0.0.1:24008",
-		"http://127.0.0.1:24009",
-		"http://127.0.0.1:24010",
-		"http://127.0.0.1:24011",
-		"http://127.0.0.1:24012",
-		"http://127.0.0.1:24013",
-		"http://127.0.0.1:24014",
-		"http://127.0.0.1:24015",
-		"http://127.0.0.1:24016",
-		"http://127.0.0.1:24017",
-		"http://127.0.0.1:24018",
-		"http://127.0.0.1:24019",
-		"http://127.0.0.1:24020",
-		"http://127.0.0.1:24021",
-		"http://127.0.0.1:24022",
-		"http://127.0.0.1:24023",
-		"http://127.0.0.1:24024",
-		"http://127.0.0.1:24025",
-		"http://127.0.0.1:24026",
-		"http://127.0.0.1:24027",
-		"http://127.0.0.1:24028",
-		"http://127.0.0.1:24029",
-		"http://127.0.0.1:24030",
-	}
-	for i := 0; i < len(proxyURLs); i++ {
-		proxyUrl, err := url.Parse(proxyURLs[i])
-		if err != nil {
-			log.Fatalf("error url.Parse proxyURLs: %v", err)
-		}
-		var hc *http.Client
-		if isUseProxy {
-			hc = &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
-		} else {
-			hc = &http.Client{}
-		}
-		httpClients = append(httpClients, hc)
-	}
-
 	mu := &sync.Mutex{}
 	wg := &sync.WaitGroup{}
-	maxGoroutines := make(chan bool, 15)
+	maxGoroutines := make(chan bool, 8)
 
-	// first card I know: CardID 4007: "Blue-Eyes White Dragon"
-	// latest card I know: CardID 19507: "Promethean Princess, Bestower of Flames"
-	const maxCardID = 20000
+	// first card I know: CardID 4007: "Blue-Eyes White Dragon";
+	// latest card I know: CardID 19507: "Promethean Princess, Bestower of Flames";
+	// check latest card here: https://www.db.yugioh-card.com/yugiohdb/card_list.action?clm=3&wname=CardSearch
+	const (
+		cardIDMin = 4000
+		cardIDMax = 22000
+	)
 
-	for i := 4000; i < maxCardID; i++ {
-		//for i := 5000; i < maxCardID; i++ {
-		//for i := 18792; i < maxCardID; i++ {
-		if i > 19507 {
-			break
-		}
+	for i := cardIDMin; i < cardIDMax; i++ {
 		maxGoroutines <- true
 		wg.Add(1)
 		go func(i int) {

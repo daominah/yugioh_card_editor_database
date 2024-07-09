@@ -28,10 +28,12 @@ docker rm $dockerCtnName 2>/dev/null;
 
 
 echo "preparing envs"
-export envFile=configs/env.sh  # bash script has "export" commands
-export dockerRunEnv=configs/.env  # generated from the envFile with the following "sed" for "docker run"
+export envFile=config/env.sh  # bash script has "export" commands
+export dockerRunEnv=config/.env  # generated from the envFile with the following "sed" for "docker run"
 bash -x $envFile 2>$dockerRunEnv
-sed -i 's/+ //' ${dockerRunEnv}; sed -i '/^export /d' ${dockerRunEnv}; sed -i "s/'//g" ${dockerRunEnv}
+sed -i'.bak' 's/+ //' ${dockerRunEnv} && sed -i'.bak' '/^export /d' ${dockerRunEnv} && sed -i'.bak' "s/'//g" ${dockerRunEnv}
+rm "${dockerRunEnv}.bak"
+
 
 docker run -dit --name=$dockerCtnName --restart always \
     -p 20808:20808 \

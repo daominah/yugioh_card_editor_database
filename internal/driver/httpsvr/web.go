@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os/exec"
 	"path/filepath"
-	"strings"
+
+	"github.com/mywrap/gofast"
 )
 
 func NewHandlerGUI(webDirPath string) (http.Handler, error) {
 	if webDirPath == "" {
-		projectRoot, err := getProjectRootGit()
+		projectRoot, err := gofast.GetProjectRootGit()
 		if err != nil {
 			return nil, fmt.Errorf("empty webDirPath and cannot getProjectRootGit: %v", err)
 		}
@@ -21,14 +21,4 @@ func NewHandlerGUI(webDirPath string) (http.Handler, error) {
 	handler := http.NewServeMux()
 	handler.Handle("/", http.FileServer(http.Dir(webDirPath)))
 	return handler, nil
-}
-
-// getProjectRootGit returns absolute path of the project root dir (base on git)
-func getProjectRootGit() (string, error) {
-	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
-	stdout, err := cmd.CombinedOutput()
-	if err != nil {
-		return "", err
-	}
-	return strings.TrimSpace(string(stdout)), nil
 }

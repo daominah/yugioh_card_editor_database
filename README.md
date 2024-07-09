@@ -1,10 +1,13 @@
 # YuGiOh card editor
 
-This client web app can make YuGiOh custom card, output is a PNG image that has
-a resolution of 1180x1720 (because real YuGiOh card size is 59mm x 86mm, this
-resolution uses 20px to represent 1mm).
+This web app can load Konami card text then you can insert your card art, so you
+have a high resolution card. Or you can create a completely new custom card from
+scratch. Output is a PNG image that has a resolution of 1180x1720 or 590x860
+(based on real card size is 59mm x 86mm).
 
 Inspired by [DuelingBook](https://www.duelingbook.com/) custom card maker.
+
+Well tested on Firefox Linux.
 
 ## Feature
 
@@ -12,10 +15,8 @@ Inspired by [DuelingBook](https://www.duelingbook.com/) custom card maker.
 * Can work without network.
 * Auto choose font size for card effect, the font can be twitched manually for
   optimizing text space too.
-* Crawled Cards data from Konami card database, that can be searched easily
-  to be used on the editor.
-* TODO: save default card template, export/import card as JSON, save/load user  
-  cards gallery on server database.
+* Crawled cards data from Konami, that can be searched easily by card name to
+  be used on the editor.
 
 ## Usage
 

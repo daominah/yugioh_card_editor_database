@@ -1,6 +1,7 @@
 # coding app's project files
 .idea
 .vscode
+.DS_Store
 
 
 # Go testing output
@@ -15,8 +16,8 @@ cmd/main_yugioh_card_editor/main_yugioh_card_editor
 
 
 # config with real username, password...
-configs/*ignore*.sh
-configs/.*
+config/*ignore*.sh
+config/.env*
 
 
 # crawler Konami database result, need to rename before add to git
