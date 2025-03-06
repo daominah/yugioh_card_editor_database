@@ -24,4 +24,11 @@ The web app can be run by locally open file `web/index.html`.
 
 Alternatively, you can `go run cmd/main_yugioh_card_editor/main.go` then go to
 <http://localhost:20808/>. Or if you prefer Docker, run `build_run.sh` to build
-and run this app by Docker. 
+and run this app by Docker.
+
+## Card data sources
+
+* Konami official [card database](https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=4007&request_locale=en).
+* Additional data <https://ygocdb.com/api/v0/cards.zip> for card Password.
+  Password is 8-digit number that usually printed on the bottom left of the card.
+  Example: "Blue-Eyes White Dragon" has Password 89631139, and ID 4007 in Konami database.

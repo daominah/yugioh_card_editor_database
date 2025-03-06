@@ -382,7 +382,7 @@ You can also use 1 monster your opponent controls as material to Link Summon thi
 				MiscYear:         "2023",
 			}},
 	} {
-		got := ParseKonamiCardHTML(c.pageHTML, c.cardID)
+		got := ParseKonamiCardHTML(c.pageHTML, CardID(c.cardID))
 		if got.CardName != c.want.CardName {
 			t.Errorf(`error cardID %v CardName got "%v", want "%v"`, c.cardID, got.CardName, c.want.CardName)
 		}

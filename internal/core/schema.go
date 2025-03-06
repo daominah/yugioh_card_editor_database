@@ -1,5 +1,9 @@
 package core
 
+import (
+	"strconv"
+)
+
 // Card represent a YuGiOh card
 type Card struct {
 	CardName    string
@@ -27,18 +31,25 @@ type Card struct {
 	PendulumScale  int
 	PendulumEffect string
 
-	MiscKonamiSet    string
-	MiscKonamiCardID string
-	MiscYear         string
+	MiscKonamiSet    string // a.k.a. "Card Number", e.g. "LB-01", "LOB-001", "LOB-EN001"
+	MiscKonamiCardID CardID // cardID in Konami database, e.g. "Blue-Eyes White Dragon" has cid=4007
+	// 8-digit Password printed on the bottom left of a card,
+	// in the past was used to unlock cards in video games,
+	// Konami database does not show this information.
+	MiscCardPassword string // e.g. "89631139"
+	MiscYear         string // the year the card was released in the TCG (usually after the Japanese release)
 	MiscCreator      string
 }
 
-type CardType string
-type CardSubtype string
-type MonsterAttribute string
-type MonsterType string
-type MonsterAbility string
-type MonsterLinkArrow string
+type (
+	CardID           string
+	CardType         string
+	CardSubtype      string
+	MonsterAttribute string
+	MonsterType      string
+	MonsterAbility   string
+	MonsterLinkArrow string
+)
 
 const (
 	Monster CardType = "Monster"
@@ -115,3 +126,18 @@ const (
 	Down      MonsterLinkArrow = "Down"
 	DownRight MonsterLinkArrow = "DownRight"
 )
+
+// Int convert CardID (string) to int, return 0 if error
+func (id CardID) Int() int {
+	ret, err := strconv.Atoi(string(id))
+	if err != nil {
+		return 0
+	}
+	return ret
+}
+
+type SortCardIDs []CardID
+
+func (s SortCardIDs) Len() int           { return len(s) }
+func (s SortCardIDs) Less(i, j int) bool { return s[i].Int() < s[j].Int() }
+func (s SortCardIDs) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }

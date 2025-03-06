@@ -157,7 +157,9 @@ let DefaultCard = {
 	MonsterType: MonsterType.Warrior,
 	MonsterLevelRankLink: 0,
 	MonsterATK: 0,
+	MonsterATKStr: "",  // sometimes ATK can be "?" instead of 0
 	MonsterDEF: 0,
+	MonsterDEFStr: "-",  // sometimes DEF can be "?" instead of 0
 	MonsterAbilities: [],  // Ability.Tuner, Ability.Flip, ...
 	MonsterLinkArrows: [],  // LinkArrow.Up, LinkArrow.UpRight, ...
 
@@ -166,113 +168,14 @@ let DefaultCard = {
 	PendulumEffect: "",
 
 	MiscKonamiSet: "",
+	// e.g. "4007", "4960 errata>2017"
 	MiscKonamiCardID: "",
+	// e.g. "89631139"
+	MiscCardPassword: "",
+	// e.g. "89631139 #4007", depends on Password and CardID
+	DisplayPasswordAndCardID: "",
 	MiscYear: (new Date()).getFullYear(),
-	MiscCreator: "daominah",
-}
-
-let DefaultCardZeus = {
-// DefaultCard = {
-	CardName: testCNameL36,
-	CardType: CardType.Monster,
-	CardSubtype: CardSubtype.MonsterXyz,
-	CardEffect: testCEffectL514ME,
-	CardArt: "example/card_art/divine_zeus_15524.jpg",
-
-	MonsterAttribute: MonsterAttribute.LIGHT,
-	MonsterType: MonsterType.Machine,
-	MonsterLevelRankLink: 12,
-	MonsterATK: 3000,
-	MonsterDEF: 3000,
-	MonsterAbilities: [],  // Ability.Tuner, Ability.Flip, ...
-	MonsterLinkArrows: [],  // LinkArrow.Up, LinkArrow.UpRight, ...
-
-	IsPendulum: false,
-	PendulumScale: 0,
-	PendulumEffect: "",
-
-	MiscKonamiSet: "PHRA-EN045",
-	MiscKonamiCardID: "15524",
-	MiscYear: "2020",
-	MiscCreator: "daominah",
-}
-
-let DefaultCardBlueEyes = {
-// DefaultCard = {
-	CardName: "Blue-Eyes White Dragon",
-	CardType: "Monster",
-	CardSubtype: "MonsterNormal",
-	CardEffect: "This legendary dragon is a powerful engine of destruction. Virtually invincible, very few have faced this awesome creature and lived to tell the tale.",
-	CardArt: "example/card_art/blue_eyes_4007.jpg",
-	MonsterAttribute: "LIGHT",
-	MonsterType: "Dragon",
-	MonsterLevelRankLink: 8,
-	MonsterATK: 3000,
-	MonsterATKStr: "3000",
-	MonsterDEF: 2500,
-	MonsterDEFStr: "2500",
-	MonsterAbilities: null,
-	MonsterLinkArrows: null,
-	IsNonEffectMonster: true,
-	IsPendulum: false,
-	PendulumScale: 0,
-	PendulumEffect: "",
-	MiscKonamiSet: "LOB-001",
-	MiscKonamiCardID: "4007",
-	MiscYear: "2002",
-	MiscCreator: ""
-}
-
-let DefaultCardJet = {
-// DefaultCard = {
-	CardName: "Blue-Eyes Jet Dragon",
-	CardType: CardType.Monster,
-	CardSubtype: CardSubtype.MonsterEffect,
-	CardEffect: testCEffectL571MM,
-	CardArt: "example/card_art/blue_eyes_jet_16809.jpg",
-
-	MonsterAttribute: MonsterAttribute.LIGHT,
-	MonsterType: MonsterType.Dragon,
-	MonsterLevelRankLink: 8,
-	MonsterATK: 3000,
-	MonsterDEF: 0,
-	MonsterAbilities: [],  // Ability.Tuner, Ability.Flip, ...
-	MonsterLinkArrows: [],  // LinkArrow.Up, LinkArrow.UpRight, ...
-
-	IsPendulum: false,
-	PendulumScale: 0,
-	PendulumEffect: "",
-
-	MiscKonamiSet: "BACH-EN004",
-	MiscKonamiCardID: "16809",
-	MiscYear: "2022",
-	MiscCreator: "daominah",
-}
-
-const DefaultCardRelinquished = {
-// DefaultCard = {
-	CardName: "Relinquished Anima",
-	CardType: CardType.Monster,
-	CardSubtype: CardSubtype.MonsterLink,
-	CardEffect: testCEffectL264ME,
-	CardArt: "example/card_art/relinquished_anima_13841.jpg",
-
-	MonsterAttribute: MonsterAttribute.DARK,
-	MonsterType: MonsterType.Spellcaster,
-	MonsterLevelRankLink: 1,
-	MonsterATK: 0,
-	MonsterDEF: 0,
-	MonsterAbilities: [],  // Ability.Tuner, Ability.Flip, ...
-	MonsterLinkArrows: [LinkArrow.Up],  // LinkArrow.Up, LinkArrow.UpRight, ...
-
-	IsPendulum: false,
-	PendulumScale: 0,
-	PendulumEffect: "",
-
-	MiscKonamiSet: "DUOV-EN053",
-	MiscKonamiCardID: "13841",
-	MiscYear: "2020",
-	MiscCreator: "daominah",
+	MiscCreator: "daominah.github.io",
 }
 
 
@@ -325,6 +228,39 @@ const MapLinkMarker = {
 
 
 const StorageKeyScale = "StorageKeyScale"
+const StorageKeyArtResolution = "StorageKeyArtResolution"
+
+
+function toDisplayPasswordAndCardID(cardPassword, cardID) {
+	if (!cardID || cardID === "") {
+		return cardPassword
+	}
+	if (cardPassword && cardPassword.trim().length > 0) {
+		return `${cardPassword} #${cardID}`
+	}
+	return `#${cardID}`
+}
+
+// fromDisplayPasswordAndCardID always returns a list of 2 elements,
+// cardPassword and cardID, either of them can be empty string.
+function fromDisplayPasswordAndCardID(displayPasswordAndCardID) {
+	let cardPassword = ""
+	let cardID = ""
+	let parts = displayPasswordAndCardID.split("#")
+	if (parts.length === 1) {
+		tmp = parts[0].trim()
+		if (tmp.length === 8) {  // probably a card password
+			cardPassword = tmp
+		} else {
+			cardID = tmp  // in this repo old card, only cardID is displayed and exported
+		}
+	}
+	if (parts.length >= 2) {
+		cardPassword = parts[0].trim()
+		cardID = parts[1].trim()
+	}
+	return [cardPassword, cardID]
+}
 
 
 // declared in file `konami_data/konami_db_en.js`
@@ -333,8 +269,9 @@ console.log(`len CardDatabase: ${CardDatabase.length}`)
 
 // MapCardDatabase helps to access CardDatabase by cardID
 const MapCardDatabase = {}
-for (let v of CardDatabase) {
-	MapCardDatabase[v.MiscKonamiCardID] = v
+for (let card of CardDatabase) {
+	card.DisplayPasswordAndCardID = toDisplayPasswordAndCardID(card.MiscCardPassword, card.MiscKonamiCardID)
+	MapCardDatabase[card.MiscKonamiCardID] = card
 }
 
 
@@ -498,7 +435,7 @@ function calcTextWidth(text, styleFont) {
 // the text width will be scaled automatically if overflowed,
 // magic value scaleFont=1.5 and scaleH=1.15 helps to fit card name
 function fitTextOneLine(text, element, scaleFont = 1.0,
-						scaleH = 1.15, scaleW = 1.0) {
+                        scaleH = 1.15, scaleW = 1.0) {
 	if (!element) {
 		console.log(`error fitTextOneLine element: ${element}, should be unreachable`)
 		return
@@ -614,18 +551,10 @@ function readCardFromHTML() {
 	} else {
 		c.MonsterLevelRankLink = DefaultCard.MonsterLevelRankLink
 	}
-	c.MonsterATK = byId("MonsterATK").value
-	if (c.MonsterATK) {
-		c.MonsterATK = Math.floor(c.MonsterATK)
-	} else {
-		c.MonsterATK = DefaultCard.MonsterATK
-	}
-	c.MonsterDEF = byId("MonsterDEF").value
-	if (c.MonsterDEF) {
-		c.MonsterDEF = Math.floor(c.MonsterDEF)
-	} else {
-		c.MonsterDEF = DefaultCard.MonsterDEF
-	}
+	c.MonsterATKStr = byId("MonsterATK").value
+	c.MonsterATK = parseInt(c.MonsterATKStr) | DefaultCard.MonsterATK
+	c.MonsterDEFStr = byId("MonsterDEF").value
+	c.MonsterDEF = parseInt(c.MonsterDEFStr) | DefaultCard.MonsterDEF
 
 	c.MonsterAbilities = []
 	let abilitiesInputs = document.getElementsByName("MonsterAbilities")
@@ -668,15 +597,18 @@ function readCardFromHTML() {
 	}
 
 	c.MiscKonamiSet = byId("SetNumber").value
-	c.MiscKonamiCardID = byId("CardID").value
+	let arr = fromDisplayPasswordAndCardID(byId("CardID").value)
+	c.MiscCardPassword = arr[0]
+	c.MiscKonamiCardID = arr[1]
 	c.MiscYear = byId("Year").value
 	c.MiscCreator = byId("Creator").value
 
 	return c
 }
 
-// loadCardToHTML uses the input card object to fill HTML "colLeft" elements
+// loadCardToHTML uses the input card object to fill HTML elements on "colLeft"
 function loadCardToHTML(c) {
+	console.log("loadCardToHTML", c)
 	byId("CardName").value = c.CardName
 	byId(c.CardType).checked = true
 	let em = byId("CardSubtypeMonster")
@@ -700,8 +632,11 @@ function loadCardToHTML(c) {
 	}
 	byId(c.CardSubtype).checked = true
 	if (c.CardArt) {
+		byId("ImgRenderCardArtPendulum").className = "fitImgPendulum"
 		byId("ImgRenderCardArtPendulum").src = c.CardArt
 		byId("ImgRenderCardArt").src = c.CardArt
+	} else {
+		setCardArtSrcWithURL(c.MiscKonamiCardID)
 	}
 	byId("CardEffect").value = c.CardEffect
 	if (byId(c.MonsterAttribute)) {
@@ -709,8 +644,17 @@ function loadCardToHTML(c) {
 	}
 	byId("MonsterType").value = c.MonsterType
 	byId("MonsterLevelRankLink").value = c.MonsterLevelRankLink
-	byId("MonsterATK").value = c.MonsterATK
-	byId("MonsterDEF").value = c.MonsterDEF
+
+	if (!c.hasOwnProperty("MonsterATKStr")) {
+		byId("MonsterATK").value = c.MonsterATK.toString()
+	} else {
+		byId("MonsterATK").value = c.MonsterATKStr
+	}
+	if (!c.hasOwnProperty("MonsterDEFStr")) {
+		byId("MonsterDEF").value = c.MonsterDEF.toString()
+	} else {
+		byId("MonsterDEF").value = c.MonsterDEFStr
+	}
 
 	for (let k in Ability) {
 		let checkbox = byId(k)
@@ -751,7 +695,11 @@ function loadCardToHTML(c) {
 	}
 
 	byId("SetNumber").value = c.MiscKonamiSet
-	byId("CardID").value = c.MiscKonamiCardID
+	if (c.DisplayPasswordAndCardID && c.DisplayPasswordAndCardID.length > 0) {
+		byId("CardID").value = c.DisplayPasswordAndCardID
+	} else {
+		byId("CardID").value = toDisplayPasswordAndCardID(c.MiscCardPassword, c.MiscKonamiCardID)
+	}
 	byId("Year").value = c.MiscYear
 	if (c.MiscCreator) {  // keep "Creator"
 		byId("Creator").value = c.MiscCreator
@@ -963,10 +911,14 @@ function renderCardTypeLevelRank(card) {
 		if (card.CardSubtype !== CardSubtype.MonsterXyz) {
 			level.style.display = ""
 			for (let i = 1; i <= 12; i++) {
+				let e = byId(`StarWrap${i}`)
+				if (!e) {
+					continue
+				}
 				if (i <= card.MonsterLevelRankLink) {
-					byId(`StarWrap${i}`).style.visibility = "visible"
+					e.style.visibility = "visible"
 				} else {
-					byId(`StarWrap${i}`).style.visibility = "hidden"
+					e.style.visibility = "hidden"
 				}
 			}
 		} else if (card.MonsterLevelRankLink <= 12) {
@@ -1148,21 +1100,51 @@ function renderMonsterAtkDefLink(card) {
 	labelATK.style.display = ""
 	valueATK.style.display = ""
 	fitTextOneLine("ATK/", labelATK, 1.5, 1.15, 1.15)
-	if (!IsWindowsOS) {
-		fitTextOneLine(card.MonsterATK, valueATK, 1.5, 1.15, 1.2)
+	let displayStrATK = ""
+	if (card.hasOwnProperty("MonsterATKStr") && card.MonsterATKStr !== "" && card.MonsterATKStr !== "-") {
+		displayStrATK = card.MonsterATKStr
 	} else {
-		fitTextOneLine(card.MonsterATK, valueATK, 1.35, 1.35, 1.35)
+		displayStrATK = card.MonsterATK.toString()
+	}
+
+	const scaleStrQuestionMark = 1.2
+	if (!IsWindowsOS) {
+		let scaleH = 1.15
+		if (displayStrATK === "?") {
+			scaleH = scaleH * scaleStrQuestionMark
+		}
+		fitTextOneLine(displayStrATK, valueATK, 1.5, scaleH, 1.2)
+	} else {
+		let scaleH = 1.35
+		if (displayStrATK === "?") {
+			scaleH = scaleH * scaleStrQuestionMark
+		}
+		fitTextOneLine(displayStrATK, valueATK, 1.35, scaleH, 1.35)
 	}
 
 	labelDEF.style.display = ""
 	valueDEF.style.display = ""
 	labelLINK.style.display = "none"
 	valueLINK.style.display = "none"
+	let displayStrDEF = ""
+	if (card.hasOwnProperty("MonsterDEFStr") && card.MonsterDEFStr !== "" && card.MonsterDEFStr !== "-") {
+		displayStrDEF = card.MonsterDEFStr
+	} else {
+		displayStrDEF = card.MonsterDEF.toString()
+	}
 	fitTextOneLine("DEF/", labelDEF, 1.5, 1.15, 1.15)
 	if (!IsWindowsOS) {
-		fitTextOneLine(card.MonsterDEF, valueDEF, 1.5, 1.15, 1.2)
+		let scaleH = 1.15
+		if (displayStrDEF === "?") {
+			scaleH = scaleH * scaleStrQuestionMark
+		}
+		fitTextOneLine(displayStrDEF, valueDEF, 1.5, scaleH, 1.2)
 	} else {
-		fitTextOneLine(card.MonsterDEF, valueDEF, 1.35, 1.35, 1.35)
+		let scaleH = 1.35
+		if (displayStrDEF === "?") {
+			scaleH = scaleH * scaleStrQuestionMark
+		}
+		fitTextOneLine(displayStrDEF, valueDEF, 1.35, scaleH, 1.35)
 	}
 
 	// card.CardSubtype = CardSubtype.MonsterLink  // for testing
@@ -1200,16 +1182,21 @@ function renderMisc(card) {
 		for (let v of all) {v.style.color = "black"}
 	} else {
 		if (card.CardSubtype === CardSubtype.MonsterXyz) {
-			for (let v of all) {v.style.color = "Silver"}
+			for (let v of all) {v.style.color = "rgb(224,224,224)"}
 		} else {
 			for (let v of all) {v.style.color = "black"}
 		}
 	}
 
-	fitTextOneLine(card.MiscKonamiSet, kSet)
-	fitTextOneLine(card.MiscKonamiSet, kSetL)
-	fitTextOneLine(card.MiscKonamiSet, kSetP)
-	fitTextOneLine(card.MiscKonamiCardID, kCid)
+	let scaleFont = 1.0, scaleH = 1.15, scaleW = 1.0
+	fitTextOneLine(card.MiscKonamiSet, kSet, scaleFont, scaleH, 1.1)
+	fitTextOneLine(card.MiscKonamiSet, kSetL, scaleFont, scaleH, 1.1)
+	fitTextOneLine(card.MiscKonamiSet, kSetP, scaleFont, scaleH, 1.1)
+	let cardPasswordAndID = card.DisplayPasswordAndCardID
+	if (!cardPasswordAndID) {
+		cardPasswordAndID = toDisplayPasswordAndCardID(card.MiscCardPassword, card.MiscKonamiCardID)
+	}
+	fitTextOneLine(cardPasswordAndID, kCid, scaleFont, scaleH, 1.1)
 	let copyleft = `🄯`
 	if (IsNotLinuxOS) {
 		// workaround Windows and MacOS cannot show CopyLeft symbol in browsers
@@ -1394,6 +1381,16 @@ function importCardJSON(jsonDataURI) {
 	let binStringUnicode = Uint8Array.from(jsonStr, (m) => m.codePointAt(0))
 	let jsonStrUnicode = new TextDecoder().decode(binStringUnicode)
 	GlobalCard = JSON.parse(jsonStrUnicode)
+	if (GlobalCard.MiscKonamiCardID && GlobalCard.MiscKonamiCardID.length > 0) {
+		if (!GlobalCard.MiscCardPassword) {
+			// automatically fill card password from card ID
+			let cardInDB = MapCardDatabase[GlobalCard.MiscKonamiCardID]
+			console.log(`cardInDB: ${JSON.stringify(cardInDB)}`)
+			if (cardInDB && cardInDB.hasOwnProperty("MiscCardPassword")) {
+				GlobalCard.MiscCardPassword = cardInDB["MiscCardPassword"]
+			}
+		}
+	}
 	loadCardToHTML(GlobalCard)
 	renderCard(GlobalCard)
 }
@@ -1515,27 +1512,20 @@ function SearchCardDatabase() {
 }
 
 
-function HandleClickScalePage(scale) {
-	localStorage.setItem(StorageKeyScale, scale.toString())
-	scalePage()
-}
-
-function scalePage() {
-	let vpW = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+function HandleClickScalePage(scaleStr) {
+	let viewWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
 	let vpH = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
-	let docW = document.body.scrollWidth;
+	let documentWidth = document.body.scrollWidth;
 	let docH = document.body.scrollHeight;
-	let manualScale = localStorage.getItem(StorageKeyScale)
-	let time = (new Date()).toISOString()
-	let scale = 1.0
-	if (manualScale === null) {
-		if (docW / vpW >= 1.5) {scale = 0.5}
-	} else { // automatic scale base on view port width
-		scale = Number(manualScale)
-		if (scale < 0.1 || scale > 5.0) {scale = 1.0}  // should be unreachable
+	console.log(`${(new Date()).toISOString()} document: ${documentWidth}x${docH}, view: ${viewWidth}x${vpH}`)
+
+	if (!scaleStr) {
+		if (documentWidth / viewWidth >= 1.5) {
+			scaleStr = "0.5"
+		}
 	}
-	console.log(`${time} documentWH: ${docW}x${docH}, view: ${vpW}x${vpH}, StorageKeyScale: ${manualScale}, scale: ${scale}`)
-	switch (scale.toString()) {
+
+	switch (scaleStr) {
 		case "0.2":
 			document.getElementById("ScalePage02").checked = true
 			break
@@ -1551,12 +1541,15 @@ function scalePage() {
 		case "0.8":
 			document.getElementById("ScalePage08").checked = true
 			break
-		case "1":
+		default:
+			scaleStr = "1"
 			document.getElementById("ScalePage1").checked = true
 			break
 	}
-	if (scale !== 1.0) {
-		document.body.style.transform = `scale(${scale})`
+	localStorage.setItem(StorageKeyScale, scaleStr)
+	console.log(`StorageKeyScale: ${localStorage.getItem(StorageKeyScale)}`)
+	if (Number(scaleStr) !== "1") {
+		document.body.style.transform = `scale(${scaleStr})`
 		document.body.style.transformOrigin = "top left"
 	} else {
 		document.body.style.transform = ""
@@ -1564,8 +1557,44 @@ function scalePage() {
 }
 
 
+function HandleClickArtResolution(pxStr) {
+	switch (pxStr) {
+		case "2048":
+			localStorage.setItem(StorageKeyArtResolution, "2048")
+			document.getElementById("ArtResolution2048").checked = true
+
+			break
+		default:
+			localStorage.setItem(StorageKeyArtResolution, "512")
+			document.getElementById("ArtResolution512").checked = true
+			break
+	}
+	console.log(`StorageKeyArtResolution: ${localStorage.getItem(StorageKeyArtResolution)}, host: ${getArtHost()}`)
+	if (!GlobalCard.CardArt) {
+		setCardArtSrcWithURL(GlobalCard.MiscKonamiCardID)
+	}
+	renderCard(GlobalCard)
+}
+
+function getArtHost() {
+	// Cloudflared on SG1
+	if (localStorage.getItem(StorageKeyArtResolution) === "2048") {
+		return "https://mdygo2048.daominah.uk"
+	}
+	return "https://mdygo.daominah.uk"
+}
+
+function setCardArtSrcWithURL(cardID) {
+	let daominahArtURL = `${getArtHost()}/${cardID}.png`
+	byId("ImgRenderCardArtPendulum").className = "fitImgPendulumLong"
+	byId("ImgRenderCardArtPendulum").src = daominahArtURL
+	byId("ImgRenderCardArt").src = daominahArtURL
+}
+
+
 window.onload = () => {
-	scalePage()
+	HandleClickScalePage(localStorage.getItem(StorageKeyScale))
+	HandleClickArtResolution(localStorage.getItem(StorageKeyArtResolution))
 
 	loadMonsterTypeElements()
 	loadMonsterLevelRankElements()
@@ -1709,7 +1738,7 @@ window.onload = () => {
 			let newClass = oldClass + "Windows"
 			needCSSWindows[i].classList.remove(oldClass)
 			needCSSWindows[i].classList.add(newClass)
-			console.log(`replace class ${oldClass} with ${newClass}`)
+			// console.log(`replace class ${oldClass} with ${newClass}`)
 		}
 	}
 

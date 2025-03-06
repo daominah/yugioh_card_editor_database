@@ -1,12 +1,13 @@
 package core
 
 import (
-	"github.com/mywrap/textproc"
-	"golang.org/x/net/html"
 	"log"
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/mywrap/textproc"
+	"golang.org/x/net/html"
 )
 
 // MapCardType keys are strings on Konami website
@@ -60,6 +61,7 @@ var MapMonsterTypes = map[string]MonsterType{
 	"Fairy":         Fairy,
 	"Fiend":         Fiend,
 	"Fish":          Fish,
+	"Illusion":      Illusion,
 	"Illusion Type": Illusion,
 	"Insect":        Insect,
 	"Machine":       Machine,
@@ -101,7 +103,7 @@ var linkArrowOrder = map[MonsterLinkArrow]int{
 
 var SpecialATKDEF = map[string]bool{"?": true, "-": true}
 
-func ParseKonamiCardHTML(cardPageHTML []byte, cardID string) Card {
+func ParseKonamiCardHTML(cardPageHTML []byte, cardID CardID) Card {
 	c := Card{MiscKonamiCardID: cardID}
 	root := textproc.HTMLParseToNode(cardPageHTML)
 
@@ -190,13 +192,13 @@ func ParseKonamiCardHTML(cardPageHTML []byte, cardID string) Card {
 
 		if c.CardSubtype == MonsterLink {
 			linkNode := getNode(root, `//*[@alt="Link"]`)
-			//log.Printf("linkNode.Attr: %+v\n", linkNode.Attr)
+			// log.Printf("linkNode.Attr: %+v\n", linkNode.Attr)
 			for _, attr := range linkNode.Attr {
 				if attr.Key != "class" {
 					continue
 				}
-				//log.Printf("linkNode.Attr.class: %#v\n", attr.Val)
-				for _, char := range []rune(attr.Val) {
+				// log.Printf("linkNode.Attr.class: %#v\n", attr.Val)
+				for _, char := range attr.Val {
 					ar, found := MapLinkArrow[char]
 					if found {
 						c.MonsterLinkArrows = append(c.MonsterLinkArrows, ar)
@@ -218,7 +220,7 @@ func ParseKonamiCardHTML(cardPageHTML []byte, cardID string) Card {
 			}
 			levelRankLinkS := textproc.HTMLGetText(values[1])
 			var levelRankLinkA []rune
-			for _, char := range []rune(levelRankLinkS) {
+			for _, char := range levelRankLinkS {
 				if NumberChars[char] {
 					levelRankLinkA = append(levelRankLinkA, char)
 				}
@@ -255,9 +257,12 @@ func ParseKonamiCardHTML(cardPageHTML []byte, cardID string) Card {
 	}
 
 	konamiSets, err := textproc.HTMLXPath(root, `//*[@id="update_list"]//*[@class="t_row"]`)
+	if err != nil {
+		log.Printf("error cardID %v konamiSets: %v\n", cardID, err)
+	}
 	for i := len(konamiSets) - 1; i >= 0; i-- {
 		firstSet := konamiSets[i]
-		//log.Printf("debug cardID %v firstSet: %v\n", cardID, textproc.HTMLGetText(firstSet))
+		// log.Printf("debug cardID %v firstSet: %v\n", cardID, textproc.HTMLGetText(firstSet))
 		ymd := textproc.HTMLGetText(getNode(firstSet, `//*[@class="time"]`))
 		if len(ymd) >= 4 {
 			c.MiscYear = ymd[:4]

@@ -12,8 +12,8 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strconv"
 	"sync"
+	"time"
 
 	"github.com/daominah/yugioh_card_editor/internal/core"
 	"github.com/mywrap/gofast"
@@ -27,6 +27,10 @@ func main() {
 		log.Fatalf("error os.Getwd: %v", err)
 	}
 	outputPath := filepath.Join(projectRoot, "web/konami_data/konami_db.json")
+	if _, err := os.Stat(outputPath); err == nil { // file existed
+		backup := outputPath + ".backup"
+		copyFile(outputPath, backup)
+	}
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
 		log.Fatalf("error os.OpenFile: %v", err)
@@ -34,12 +38,12 @@ func main() {
 	log.Printf("output result file path: %v", outputPath)
 
 	cardLanguage := "en"
-	//cardLanguage := "ja"  // TODO: handle Japanese card text
+	// cardLanguage := "ja"  // TODO: handle Japanese card text
 
 	var httpClients []*http.Client
 	isUseProxy := false
 	if !isUseProxy {
-		httpClients = []*http.Client{&http.Client{}}
+		httpClients = []*http.Client{{}}
 	} else {
 		proxyURLs := []string{
 			"http://127.0.0.1:24001",
@@ -69,16 +73,15 @@ func main() {
 	var result []core.Card
 	mu := &sync.Mutex{}
 	wg := &sync.WaitGroup{}
-	maxGoroutines := make(chan bool, 8)
+	maxGoroutines := make(chan bool, 16)
+	beginFetchT := time.Now()
+	maxFoundCardID := 0
 
 	// first card I know: CardID 4007: "Blue-Eyes White Dragon";
-	// latest card I know: CardID 19507: "Promethean Princess, Bestower of Flames";
-	// check latest card here: https://www.db.yugioh-card.com/yugiohdb/card_list.action?clm=3&wname=CardSearch
-	const (
-		cardIDMin = 4000
-		cardIDMax = 22000
-	)
-
+	// latest card I know: CardID 21060: from "Supreme Darkness" English released in 2025-01;
+	// check latest set here: https://www.db.yugioh-card.com/yugiohdb/card_list.action?clm=3&wname=CardSearch
+	const cardIDMin = 4000
+	const cardIDMax = 24000
 	for i := cardIDMin; i < cardIDMax; i++ {
 		maxGoroutines <- true
 		wg.Add(1)
@@ -89,7 +92,7 @@ func main() {
 			}()
 			idxHC := rand.Intn(len(httpClients))
 			httpClient := httpClients[idxHC]
-			cardID := fmt.Sprintf("%v", i)
+			cardID := core.CardID(fmt.Sprintf("%v", i))
 			cardURL := `https://www.db.yugioh-card.com/yugiohdb/card_search.action` +
 				fmt.Sprintf(`?ope=2&request_locale=%v&cid=%v`, cardLanguage, cardID)
 			w, err := httpClient.Get(cardURL)
@@ -118,15 +121,21 @@ func main() {
 			log.Printf("ok cardID %v\n", cardID)
 			mu.Lock()
 			result = append(result, card)
+			if maxFoundCardID < i {
+				maxFoundCardID = i
+			}
 			mu.Unlock()
 		}(i)
 	}
 	wg.Wait()
 
+	log.Printf("fetching Konami database duration: %v", time.Since(beginFetchT))
+	// Output: 10m19s
+	log.Printf("maxFoundCardID: %v", maxFoundCardID)
+	// Output: 20719
+
 	sort.Slice(result, func(i, j int) bool {
-		cardI, _ := strconv.Atoi(result[i].MiscKonamiCardID)
-		cardJ, _ := strconv.Atoi(result[j].MiscKonamiCardID)
-		return cardI < cardJ
+		return result[i].MiscKonamiCardID.Int() < result[j].MiscKonamiCardID.Int()
 	})
 	beauty, err := json.MarshalIndent(result, "", "\t")
 	if err != nil {
@@ -144,5 +153,26 @@ func main() {
 	if err != nil {
 		log.Println("error outputFile.Close:", err)
 	}
-	log.Println("main returned")
+	log.Printf("main returned")
+	log.Printf("you may want to copy the fresh data file `konami_db.json` to `github.com/daominah/yugioh_master_duel_card_art/konami_db_en.json`")
+}
+
+// copyFile overwrite if target file existed
+func copyFile(sourceFullPath string, targetFullPath string) bool {
+	sourceFile, err := os.Open(sourceFullPath)
+	if err != nil {
+		log.Printf("error os.ReadFile: %v", err)
+		return false
+	}
+	targetFile, err := os.Create(targetFullPath)
+	if err != nil {
+		log.Printf("error os.Create: %v", err)
+		return false
+	}
+	_, err = io.Copy(targetFile, sourceFile)
+	if err != nil {
+		log.Printf("error io.Copy: %v", err)
+		return false
+	}
+	return true
 }
