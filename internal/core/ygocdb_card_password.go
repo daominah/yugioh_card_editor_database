@@ -3,11 +3,12 @@ package core
 import (
 	_ "embed"
 	"encoding/json"
+	"fmt"
 	"strconv"
 )
 
 //go:embed ygocdb_card_password.json
-var ygocdbData []byte
+var ygocdbData []byte // data is downloaded from https://ygocdb.com/api/v0/cards.zip
 
 // CardYgocdb data has addtional field Password (8-digit printed).
 // Example data:
@@ -79,7 +80,7 @@ func InitMapCardsPassword() (map[CardID]string, error) {
 		if v.Cid == 0 || v.Id == 0 {
 			continue
 		}
-		m[CardID(strconv.Itoa(v.Cid))] = strconv.Itoa(v.Id)
+		m[CardID(strconv.Itoa(v.Cid))] = fmt.Sprintf("%08d", v.Id) // pad with "0" to length 8
 	}
 	return m, nil
 }

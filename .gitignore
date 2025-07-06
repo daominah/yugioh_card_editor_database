@@ -13,6 +13,7 @@ profile*.pdf
 # binary exes
 cmd/*/*.exe
 cmd/main_yugioh_card_editor/main_yugioh_card_editor
+.~lock.*
 
 
 # config with real username, password...
@@ -24,3 +25,4 @@ config/.env*
 web/konami_db.json
 web/konami_data/konami_db.json
 web/konami_data/konami_db.json.backup
+internal/core/schema_test.csv

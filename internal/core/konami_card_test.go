@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"reflect"
 	"testing"
 )
 
@@ -18,13 +17,25 @@ func TestPrepareData(t *testing.T) {
 		t.Fatalf("error Getwd: %v", err)
 	}
 	for _, cardID := range []string{
-		"4007", "4343", "4386", "4960",
-		"6996",
-		"11232",
-		"12828",
-		"14356", "14439", "14491", "14496",
-		"15741", "15299", "15524",
-		"18792",
+		"4007",  // Blue-Eyes White Dragon, test Normal Monster
+		"4343",  // Raigeki, test Normal Spell
+		"4386",  // Blue-Eyes Ultimate Dragon, test Fusion Monster
+		"4960",  // Imperial Order, test Continuous Trap
+		"6341",  // King of the Skull Servants, test ATK ? DEF 0
+		"6996",  // Advanced Ritual Art, test Ritual Spell
+		"8409",  // Ally of Justice Cycle Reader, test Effect Monster, ability Tuner, card password with zero prefix "08233522"
+		"8933",  // Effect Veiler, test Effect Monster with ability Tuner and ATK and DEF as 0 (not "?")
+		"11232", // Shaddoll Falco, test multiple abilities Flip and Tuner
+		"12788", // Zoodiac Drident, test ATK and DEF as "?"
+		"12828", // Clear Wing Fast Dragon, test Pendulum and Synchro
+		"14356", // Time Thief Redoer, test Xyz Monster with effect has bullet points
+		"14439", // Endymion, the Mighty Master of Magic, test Pendulum Monster with long effect
+		"14491", // Monk of the Tenyi, test Link Monster that has no effect
+		"14496", // Apollousa, Bow of the Goddess, test ATK as "?"
+		"15741", // Underworld Goddess of the Closed World, test many link arrows
+		"15299", // Forbidden Droplet, test Quick-Play Spell
+		"15524", // Divine Arsenal AA-ZEUS - Sky Thunder, test high rank Xyz Monster
+		"18792", // Cornfield Coatl, test new Illusion monster type
 	} {
 		cardURL := `https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&request_locale=en&cid=` + cardID
 		w, err := http.Get(cardURL)
@@ -71,11 +82,23 @@ var (
 	//go:embed test_html/test_konami_4960.html
 	test_konami_4960 []byte
 
+	//go:embed test_html/test_konami_6341.html
+	test_konami_6341 []byte
+
 	//go:embed test_html/test_konami_6996.html
 	test_konami_6996 []byte
 
+	//go:embed test_html/test_konami_8409.html
+	test_konami_8409 []byte
+
+	//go:embed test_html/test_konami_8933.html
+	test_konami_8933 []byte
+
 	//go:embed test_html/test_konami_11232.html
 	test_konami_11232 []byte
+
+	//go:embed test_html/test_konami_12788.html
+	test_konami_12788 []byte
 
 	//go:embed test_html/test_konami_12828.html
 	test_konami_12828 []byte
@@ -172,6 +195,23 @@ func TestParseKonamiCardHTML(t *testing.T) {
 				MiscYear:         "2002",
 			}},
 
+		{pageHTML: test_konami_6341, cardID: "6341",
+			want: Card{
+				CardName:             "King of the Skull Servants",
+				CardType:             Monster,
+				CardSubtype:          MonsterEffect,
+				CardEffect:           `The original ATK of this card is the combined number of "King of the Skull Servants" and "Skull Servant" in your GY x 1000. When this card is destroyed by battle and sent to the GY: You can banish 1 other "King of the Skull Servants" or 1 "Skull Servant" from your GY; Special Summon this card.`,
+				MonsterAttribute:     DARK,
+				MonsterType:          Zombie,
+				MonsterLevelRankLink: 1,
+				MonsterATKStr:        "?",
+				MonsterDEFStr:        "0",
+				MiscKonamiSet:        "TLM-EN032",
+				MiscKonamiCardID:     "6341",
+				MiscCardPassword:     "36021814",
+				MiscYear:             "2005",
+			}},
+
 		{pageHTML: test_konami_6996, cardID: "6996",
 			want: Card{
 				CardName:    "Advanced Ritual Art",
@@ -182,6 +222,49 @@ func TestParseKonamiCardHTML(t *testing.T) {
 				MiscKonamiSet:    "STON-EN045",
 				MiscKonamiCardID: "6996",
 				MiscYear:         "2007",
+			}},
+
+		{pageHTML: test_konami_8409, cardID: "8409",
+			want: Card{
+				CardName:             "Ally of Justice Cycle Reader",
+				CardType:             Monster,
+				CardSubtype:          MonsterEffect,
+				CardEffect:           "(Quick Effect): You can discard this card to the GY, then target up to 2 LIGHT monsters in your opponent's GY; banish those targets.",
+				CardArt:              "",
+				MonsterAttribute:     DARK,
+				MonsterType:          Machine,
+				MonsterLevelRankLink: 3,
+				MonsterATK:           1000,
+				MonsterATKStr:        "1000",
+				MonsterDEF:           1000,
+				MonsterDEFStr:        "1000",
+				MonsterAbilities:     []MonsterAbility{Tuner},
+				MonsterLinkArrows:    []MonsterLinkArrow{},
+				IsPendulum:           false,
+				PendulumScale:        0,
+				PendulumEffect:       "",
+				MiscKonamiSet:        "DT03-EN080",
+				MiscKonamiCardID:     "8409",
+				MiscCardPassword:     "08233522",
+				MiscYear:             "2010",
+				MiscCreator:          "daominah.github.io",
+			}},
+
+		{pageHTML: test_konami_8933, cardID: "8933",
+			want: Card{
+				CardName:             "Effect Veiler",
+				CardType:             Monster,
+				CardSubtype:          MonsterEffect,
+				CardEffect:           `During your opponent's Main Phase (Quick Effect): You can send this card from your hand to the GY, then target 1 Effect Monster your opponent controls; negate the effects of that face-up monster your opponent controls, until the end of this turn.`,
+				MonsterAttribute:     LIGHT,
+				MonsterType:          Spellcaster,
+				MonsterLevelRankLink: 1,
+				MonsterATK:           0,
+				MonsterDEF:           0,
+				MonsterAbilities:     []MonsterAbility{Tuner},
+				MiscKonamiSet:        "DREV-EN002",
+				MiscKonamiCardID:     "8933",
+				MiscYear:             "2010",
 			}},
 
 		{pageHTML: test_konami_11232, cardID: "11232",
@@ -202,6 +285,25 @@ If this card is sent to the GY by a card effect: You can Special Summon it in fa
 				MiscKonamiSet:    "DUEA-EN023",
 				MiscKonamiCardID: "11232",
 				MiscYear:         "2014",
+			}},
+
+		{pageHTML: test_konami_12788, cardID: "12788",
+			want: Card{
+				CardName:    "Zoodiac Drident",
+				CardType:    Monster,
+				CardSubtype: MonsterXyz,
+				CardEffect: `4 Level 4 monsters
+Once per turn, you can also Xyz Summon "Zoodiac Drident" by using 1 "Zoodiac" monster you control with a different name as material. (Transfer its materials to this card.) Gains ATK/DEF equal to the ATK/DEF of all "Zoodiac" monsters attached to it as material. Once per turn (Quick Effect): You can detach 1 material from this card, then target 1 face-up card on the field; destroy it.`,
+				MonsterAttribute:     EARTH,
+				MonsterType:          BeastWarrior,
+				MonsterLevelRankLink: 4,
+				MonsterATK:           0,
+				MonsterATKStr:        "?",
+				MonsterDEF:           0,
+				MonsterDEFStr:        "?",
+				MiscKonamiSet:        "RATE-EN053",
+				MiscKonamiCardID:     "12788",
+				MiscYear:             "2017",
 			}},
 
 		{pageHTML: test_konami_12828, cardID: "12828",
@@ -236,7 +338,7 @@ If this card is sent to the GY by a card effect: You can Special Summon it in fa
 Once per turn, during the Standby Phase: You can attach the top card of your opponent's Deck to this card as material. (Quick Effect): You can detach up to 3 different types of materials from this card, then apply the following effect(s) depending on what was detached.
 ● Monster: Banish this card until the End Phase.
 ● Spell: Draw 1 card.
-● Trap: Place 1 face-up card your opponent controls on the top of the Deck.
+● Trap: Place 1 face-up card your opponent controls on top of the Deck.
 You can only use this effect of "Time Thief Redoer" once per turn.`,
 
 				MonsterAttribute:     DARK,
@@ -410,11 +512,11 @@ You can also use 1 monster your opponent controls as material to Link Summon thi
 		if got.MonsterDEF != c.want.MonsterDEF {
 			t.Errorf(`error cardID %v MonsterDEF got "%v", want "%v"`, c.cardID, got.MonsterDEF, c.want.MonsterDEF)
 		}
-		if !reflect.DeepEqual(got.MonsterAbilities, c.want.MonsterAbilities) {
-			t.Errorf(`error cardID %v MonsterAbilities got "%v", want "%v"`, c.cardID, got.MonsterAbilities, c.want.MonsterAbilities)
+		if !CheckEqualArray(got.MonsterAbilities, c.want.MonsterAbilities) {
+			t.Errorf(`error cardID %v MonsterAbilities got "%+v", want "%+v"`, c.cardID, got.MonsterAbilities, c.want.MonsterAbilities)
 		}
-		if !reflect.DeepEqual(got.MonsterLinkArrows, c.want.MonsterLinkArrows) {
-			t.Errorf(`error cardID %v MonsterLinkArrows got "%v", want "%v"`, c.cardID, got.MonsterLinkArrows, c.want.MonsterLinkArrows)
+		if !CheckEqualArray(got.MonsterLinkArrows, c.want.MonsterLinkArrows) {
+			t.Errorf(`error cardID %v MonsterLinkArrows got "%+v", want "%+v"`, c.cardID, got.MonsterLinkArrows, c.want.MonsterLinkArrows)
 		}
 		if got.IsNonEffectMonster != c.want.IsNonEffectMonster {
 			t.Errorf(`error cardID %v IsNonEffectMonster got "%v", want "%v"`, c.cardID, got.IsNonEffectMonster, c.want.IsNonEffectMonster)
@@ -443,6 +545,11 @@ You can also use 1 monster your opponent controls as material to Link Summon thi
 		if got.CardName == "Apollousa, Bow of the Goddess" &&
 			got.MonsterATKStr != c.want.MonsterATKStr {
 			t.Errorf(`error cardID %v MonsterATKStr got "%v", want "%v"`, c.cardID, got.MonsterATKStr, c.want.MonsterATKStr)
+		}
+
+		if got.CardName == "Effect Veiler" &&
+			got.MonsterATKStr == "?" {
+			t.Errorf(`error cardID %v MonsterATKStr got "%v", want "0" or empty`, c.cardID, got.MonsterATKStr)
 		}
 	}
 }

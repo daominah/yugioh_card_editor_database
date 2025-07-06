@@ -2,6 +2,7 @@ package core
 
 import (
 	"strconv"
+	"strings"
 )
 
 // Card represent a YuGiOh card
@@ -141,3 +142,74 @@ type SortCardIDs []CardID
 func (s SortCardIDs) Len() int           { return len(s) }
 func (s SortCardIDs) Less(i, j int) bool { return s[i].Int() < s[j].Int() }
 func (s SortCardIDs) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
+
+type SortCardNames []Card
+
+func (s SortCardNames) Len() int           { return len(s) }
+func (s SortCardNames) Less(i, j int) bool { return s[i].CardName < s[j].CardName }
+func (s SortCardNames) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
+
+// ToCSV output can be used for csv.Writer.WriteAll
+func ToCSV(cards []Card, mapSetsFullName map[string]string) [][]string {
+	outputFields := []string{
+		"ENName", "CardType", "CardSubtype",
+		"CardID", "CardPassword",
+		"Attribute", "Type", "Level", "ATK", "DEF", "IsTuner",
+		"ENYear", "ENSet", "ENSetFullName",
+	}
+	records := [][]string{outputFields}
+	for _, c := range cards {
+		isTuner := false
+		for _, ability := range c.MonsterAbilities {
+			if ability == Tuner {
+				isTuner = true
+				break
+			}
+		}
+		var isTunerStr string
+		if isTuner {
+			isTunerStr = "Tuner"
+		}
+
+		atkStr := c.MonsterATKStr
+		if atkStr == "" && c.CardType == Monster {
+			atkStr = strconv.Itoa(int(c.MonsterATK))
+		}
+		defStr := c.MonsterDEFStr
+		if defStr == "" && c.CardType == Monster {
+			defStr = strconv.Itoa(int(c.MonsterDEF))
+		}
+		levelStr := strconv.Itoa(c.MonsterLevelRankLink)
+		if c.CardType != Monster {
+			levelStr = ""
+		}
+
+		cardNumber := c.MiscKonamiSet // "LOB-001"
+		firstDash := strings.Index(cardNumber, "-")
+		if firstDash > -1 {
+			cardNumber = cardNumber[:firstDash] // "LOB"
+		}
+		setFullName, _ := mapSetsFullName[cardNumber]
+		record := []string{
+			c.CardName,
+			string(c.CardType),
+			strings.TrimPrefix(string(c.CardSubtype), string(c.CardType)),
+
+			string(c.MiscKonamiCardID),
+			c.MiscCardPassword,
+
+			string(c.MonsterAttribute),
+			string(c.MonsterType),
+			levelStr,
+			atkStr,
+			defStr,
+			isTunerStr,
+
+			c.MiscYear,
+			c.MiscKonamiSet,
+			setFullName,
+		}
+		records = append(records, record)
+	}
+	return records
+}

@@ -2,6 +2,7 @@ package core
 
 import (
 	"log"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -134,6 +135,8 @@ func ParseKonamiCardHTML(cardPageHTML []byte, cardID CardID) Card {
 	cardText1 = strings.TrimPrefix(cardText1, "Card Text")
 	cardText1 = strings.TrimSpace(cardText1)
 	cardText1 = strings.ReplaceAll(cardText1, "��", "● ") // workaround Konami text bug
+	// replace "●" immediately followed by normal character with an added space "● "
+	cardText1 = regexp.MustCompile(`(?m)^●([^\s])`).ReplaceAllString(cardText1, "● $1")
 	c.CardEffect = cardText1
 
 	es, _ := textproc.HTMLXPath(root, `//span[contains(@class,"item_box")]`)
@@ -246,6 +249,8 @@ func ParseKonamiCardHTML(cardPageHTML []byte, cardID CardID) Card {
 			if len(values) >= 5 {
 				c.IsPendulum = true
 				penScaleS := textproc.HTMLGetText(values[4])
+				penScaleS = strings.Trim(penScaleS, "Pendulum Scale")
+				penScaleS = strings.TrimSpace(penScaleS)
 				c.PendulumScale, err = strconv.Atoi(penScaleS)
 				if err != nil {
 					log.Printf("error cardID %v PendulumScale: %v\n", cardID, penScaleS)
@@ -256,7 +261,7 @@ func ParseKonamiCardHTML(cardPageHTML []byte, cardID CardID) Card {
 		}
 	}
 
-	konamiSets, err := textproc.HTMLXPath(root, `//*[@id="update_list"]//*[@class="t_row"]`)
+	konamiSets, err := textproc.HTMLXPath(root, `//*[@id="update_list"]//*[starts-with(@class,"t_row")]`)
 	if err != nil {
 		log.Printf("error cardID %v konamiSets: %v\n", cardID, err)
 	}
@@ -274,4 +279,17 @@ func ParseKonamiCardHTML(cardPageHTML []byte, cardID CardID) Card {
 	}
 
 	return c
+}
+
+// CheckEqualArray can check if MonsterAbilities or MonsterLinkArrows are equal
+func CheckEqualArray[T comparable](a, b []T) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
 }

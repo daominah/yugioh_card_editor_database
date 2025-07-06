@@ -73,12 +73,12 @@ func main() {
 	var result []core.Card
 	mu := &sync.Mutex{}
 	wg := &sync.WaitGroup{}
-	maxGoroutines := make(chan bool, 16)
+	maxGoroutines := make(chan bool, 32)
 	beginFetchT := time.Now()
 	maxFoundCardID := 0
 
 	// first card I know: CardID 4007: "Blue-Eyes White Dragon";
-	// latest card I know: CardID 21060: from "Supreme Darkness" English released in 2025-01;
+	// latest card I know: CardID 21639: from "DUelist's ADvance" English released in 2025-07-04;
 	// check latest set here: https://www.db.yugioh-card.com/yugiohdb/card_list.action?clm=3&wname=CardSearch
 	const cardIDMin = 4000
 	const cardIDMax = 24000
@@ -154,7 +154,7 @@ func main() {
 		log.Println("error outputFile.Close:", err)
 	}
 	log.Printf("main returned")
-	log.Printf("you may want to copy the fresh data file `konami_db.json` to `github.com/daominah/yugioh_master_duel_card_art/konami_db_en.json`")
+	log.Printf("you probably want to run 'cmd/add_card_password' to get final output 'web/konami_data/konami_db_en.js'")
 }
 
 // copyFile overwrite if target file existed

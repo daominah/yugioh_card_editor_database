@@ -32,3 +32,30 @@ and run this app by Docker.
 * Additional data <https://ygocdb.com/api/v0/cards.zip> for card Password.
   Password is 8-digit number that usually printed on the bottom left of the card.
   Example: "Blue-Eyes White Dragon" has Password 89631139, and ID 4007 in Konami database.
+
+## All cards list table
+
+Final result is file [yugioh_cards.pdf](internal\core\yugioh_cards.pdf).
+All cards shown as a table (without card effect text)
+
+Steps to generate this file:
+
+1. Run `cmd/add_card_password` to get file `yugioh_cards.csv`.
+2. Open it as XLSX file in LibreOffice Calc. Format rows color with
+   `Format`: `Conditional`, using `Formula is`:
+
+  ```excel
+  AND($B2="Monster", $C2="Normal", ISEVEN(ROW()))  // Yellow
+  AND($B2="Monster", $C2="Normal", ISODD(ROW()))   // Light Yellow
+  AND($B2="Monster", $C2<>"Normal", ISEVEN(ROW())) // Orange
+  AND($B2="Monster", $C2<>"Normal", ISODD(ROW()))  // Light Orange
+  AND($B2="Spell", ISEVEN(ROW()))                  // Green
+  AND($B2="Spell", ISODD(ROW()))                   // Light Green
+  AND($B2="Trap", ISEVEN(ROW()))                   // Purple
+  AND($B2="Trap", ISODD(ROW()))                    // Light Purple
+  ```
+
+3. Upload to Google Drive to Download as PDF
+   (LibreOffice hangs when exporting to PDF, probably because of file too large),
+   change page size to Height 19.9", Width 19", so 100 rows fit in 1 page.
+   The online [file](https://docs.google.com/spreadsheets/d/1EzqMmwNq6jc_4JbxjxvjK8EdCHBTTyal248kmG2BuZ0/edit?usp=sharing).

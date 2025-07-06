@@ -14,6 +14,7 @@ const CardType = {
 	Monster: "Monster",
 	Spell: "Spell",
 	Trap: "Trap",
+	Token: "Token"  // rendered similar to Monster
 }
 
 const CardSubtype = {
@@ -199,7 +200,8 @@ const MapImg = {
 	SpellQuickPlay: "icon/GUI_T_Icon1_Icon05.png",
 	SpellRitual: "icon/GUI_T_Icon1_Icon06.png",
 
-	Level: "icon/GUI_T_Icon1_Other_Level.png",
+	// Level: "icon/GUI_T_Icon1_Other_Level.png",
+	Level: "icon/GUI_T_Icon1_Other_Level_Yugipedia64.png",
 	Rank: "icon/GUI_T_Icon1_Other_Rank.png",
 }
 
@@ -238,6 +240,10 @@ function toDisplayPasswordAndCardID(cardPassword, cardID) {
 	if (cardPassword && cardPassword.trim().length > 0) {
 		return `${cardPassword} #${cardID}`
 	}
+	// if cardID starts with not a digit, then it is flavor text, keep it as is
+	if (!/^[0-9]/.test(cardID)) {
+		return cardID
+	}
 	return `#${cardID}`
 }
 
@@ -249,8 +255,10 @@ function fromDisplayPasswordAndCardID(displayPasswordAndCardID) {
 	let parts = displayPasswordAndCardID.split("#")
 	if (parts.length === 1) {
 		tmp = parts[0].trim()
-		if (tmp.length === 8) {  // probably a card password
-			cardPassword = tmp
+		if (6 <= tmp.length && tmp.length <= 8) {
+			// cardID only has 5 digits, so probably this is a card password,
+			// card password has exactly 8 digits, but can be mistaken missing prefix zeroes
+			cardPassword = tmp.padStart(8, "0")
 		} else {
 			cardID = tmp  // in this repo old card, only cardID is displayed and exported
 		}
@@ -291,6 +299,8 @@ let GlobalCard = NewCard();
 
 // LastUpdateCardState throttles func `updateCardState`
 let LastUpdateCardState = new Date(0)
+// LastCardName helps to only send log in renderCard when CardName changed
+let LastCardName = ""
 
 
 // IndexCardDatabase will be initialized in func `buildIndexCardDatabase`,
@@ -350,6 +360,7 @@ function handleClickCardType(cardType) {
 	let et = byId("CardSubtypeTrap")
 	let show = em
 	switch (cardType) {
+		case CardType.Token:  // JS switch case will fallthrough (if no "break")
 		case CardType.Monster:
 			em.style.display = ""
 			es.style.display = "none"
@@ -368,7 +379,7 @@ function handleClickCardType(cardType) {
 			show = et
 	}
 	show.getElementsByTagName("input")[0].checked = true
-	if (cardType === CardType.Monster) {
+	if (cardType === CardType.Monster || cardType === CardType.Token) {
 		byId("MonsterDetail").classList.remove("disabledElement")
 	} else {
 		byId("MonsterDetail").classList.add("disabledElement")
@@ -711,12 +722,22 @@ function loadCardToHTML(c) {
 
 // renderCard draw the card image by updating HTML "colMid"
 function renderCard(card) {
+	if (card.CardName !== LastCardName && card.CardName !== "") {
+		let cardNameNoSpace = card.CardName.replace(/ /g, "_");
+		logURLQuery = `?func=renderCard&cardName=${cardNameNoSpace}`;
+		console.log(logURLQuery);
+		fetch(`https://log.daominah.uk/log${logURLQuery}`, {method: 'GET'})
+			.then(response => console.log('log sent successfully'))
+			.catch(error => console.error('error sending log:', error));
+	}
+	LastCardName = card.CardName
+
 	renderCardFrame(card)
 	renderCardName(card)
 	renderCardAttribute(card)
 	renderCardTypeLevelRank(card)
 	renderLinkArrow(card)
-	renderMisc(card)
+	renderMiscFooter(card)
 	renderPendulum(card)
 
 	let [chosenEffectElement, autoFontSize] = renderCardEffect(card)
@@ -742,6 +763,8 @@ function renderCardFrame(card) {
 		s.backgroundImage = "url(card_frame/spell.png)"
 	} else if (card.CardType === CardType.Trap) {
 		s.backgroundImage = "url(card_frame/trap.png)"
+	} else if (card.CardType === CardType.Token) {
+		s.backgroundImage = "url(card_frame/monster_token.png)"
 	} else {  // CardType.Monster
 		if (!card.IsPendulum) {
 			switch (card.CardSubtype) {
@@ -823,19 +846,24 @@ function renderCardAttribute(card) {
 
 
 function loadMonsterLevelRankElements() {
+	let levelsElement = byId("RenderMonsterLevel")
+	let ranksElement = byId("RenderMonsterRank")
+	levelsElement.style.visibility = "visible"
+	ranksElement.style.visibility = "visible"
+	let levelsRanksWidth = Math.max(levelsElement.clientWidth, ranksElement.clientWidth)
+	let starWidth = Math.floor(levelsRanksWidth / 12 - 2) + "px"
+	console.log(`levelsRanksWidth: ${levelsRanksWidth}, starWidth: ${starWidth}`)
 	{ // red star elements to represent monster level
-		let mainElem = byId("RenderMonsterLevel")
-		let nStars = 12
 		let wrapStarStyle = function (style) {
 			style.visibility = "hidden"
 			style.display = "inline-block"
-			style.width = Math.floor((mainElem.clientWidth) / nStars - 2) + "px"
-			style.height = window.getComputedStyle(mainElem).height
+			style.width = starWidth
+			style.height = window.getComputedStyle(levelsElement).height
 			style.paddingLeft = "2px"
 		}
 		// star elements ID are StarWrap1, StarWrap2, ..., StarWrap12
 		// they will be used in func renderCardTypeLevelRank
-		for (let i = nStars; i >= 1; i--) {
+		for (let i = 12; i >= 1; i--) {
 			let starWrap = document.createElement("div")
 			starWrap.id = `StarWrap${i}`
 			wrapStarStyle(starWrap.style)
@@ -844,22 +872,21 @@ function loadMonsterLevelRankElements() {
 			star.style.width = "100%"
 			starWrap.innerHTML = ''
 			starWrap.appendChild(star)
-			mainElem.appendChild(starWrap)
+			levelsElement.appendChild(starWrap)
 		}
 	}
 	{ // black star elements to represent monster rank (upto rank 12)
-		let mainElem = byId("RenderMonsterRank")
-		let nStars = 12
+		ranksElement.style.visibility = "visible"
 		let wrapStarStyle = function (style) {
 			style.visibility = "hidden"
 			style.display = "inline-block"
-			style.width = Math.floor((mainElem.clientWidth) / nStars - 2) + "px"
-			style.height = window.getComputedStyle(mainElem).height
+			style.width = starWidth
+			style.height = window.getComputedStyle(ranksElement).height
 			style.paddingRight = "2px"
 		}
 		// star elements ID are BlackStarWrap1, BlackStarWrap2, ..., BlackStarWrap12
 		// they will be used in func renderCardTypeLevelRank
-		for (let i = 1; i <= nStars; i++) {
+		for (let i = 1; i <= 12; i++) {
 			let starWrap = document.createElement("div")
 			starWrap.id = `BlackStarWrap${i}`
 			wrapStarStyle(starWrap.style)
@@ -868,21 +895,21 @@ function loadMonsterLevelRankElements() {
 			star.style.width = "100%"
 			starWrap.innerHTML = ''
 			starWrap.appendChild(star)
-			mainElem.appendChild(starWrap)
+			ranksElement.appendChild(starWrap)
 		}
 	}
 	{ // now YuGiOh only has 2 monsters that have rank 13:
 		// * Raidraptor - Rising Rebellion Falcon
 		// * Number iC1000: Numerounius Numerounia
 		let mainElem = byId("RenderMonsterRank13")
-		let nStars = 13
+		mainElem.style.visibility = "visible"
 		let wrapStarStyle = function (style) {
 			style.display = "inline-block"
-			style.width = Math.floor((mainElem.clientWidth) / nStars - 1) + "px"
+			style.width = starWidth
 			style.height = window.getComputedStyle(mainElem).height
 			style.paddingRight = "1px"
 		}
-		for (let i = 1; i <= nStars; i++) {
+		for (let i = 1; i <= 13; i++) {
 			let starWrap = document.createElement("div")
 			wrapStarStyle(starWrap.style)
 			let staticStar = document.createElement("img")
@@ -904,12 +931,13 @@ function renderCardTypeLevelRank(card) {
 	for (let v of [level, rank, rank13, cardType, subType]) {
 		v.style.display = "none"
 	}
-	if (card.CardType === CardType.Monster) {
+	if (card.CardType === CardType.Monster || card.CardType === CardType.Token) {
 		if (card.CardSubtype === CardSubtype.MonsterLink) {
 			return
 		}
 		if (card.CardSubtype !== CardSubtype.MonsterXyz) {
 			level.style.display = ""
+			level.style.visibility = "visible";
 			for (let i = 1; i <= 12; i++) {
 				let e = byId(`StarWrap${i}`)
 				if (!e) {
@@ -923,6 +951,7 @@ function renderCardTypeLevelRank(card) {
 			}
 		} else if (card.MonsterLevelRankLink <= 12) {
 			rank.style.display = ""
+			rank.style.visibility = "visible";
 			for (let i = 1; i <= 12; i++) {
 				if (i <= card.MonsterLevelRankLink) {
 					byId(`BlackStarWrap${i}`).style.visibility = "visible"
@@ -932,6 +961,7 @@ function renderCardTypeLevelRank(card) {
 			}
 		} else {
 			rank13.style.display = ""
+			rank13.style.visibility = "visible";
 		}
 	} else { // Spell or Trap
 		cardType.style.display = ""
@@ -1158,7 +1188,7 @@ function renderMonsterAtkDefLink(card) {
 	}
 }
 
-function renderMisc(card) {
+function renderMiscFooter(card) {
 	let kSet = byId("RenderKonamiSet")
 	let kSetL = byId("RenderKonamiSetLink")
 	let kSetP = byId("RenderKonamiSetPendulum")
@@ -1381,9 +1411,11 @@ function importCardJSON(jsonDataURI) {
 	let binStringUnicode = Uint8Array.from(jsonStr, (m) => m.codePointAt(0))
 	let jsonStrUnicode = new TextDecoder().decode(binStringUnicode)
 	GlobalCard = JSON.parse(jsonStrUnicode)
+
+	// automatically fill cardPassword from cardID in imported card JSON
+	// (if cardID exists in cards database konami_data/konami_db_en.js)
 	if (GlobalCard.MiscKonamiCardID && GlobalCard.MiscKonamiCardID.length > 0) {
 		if (!GlobalCard.MiscCardPassword) {
-			// automatically fill card password from card ID
 			let cardInDB = MapCardDatabase[GlobalCard.MiscKonamiCardID]
 			console.log(`cardInDB: ${JSON.stringify(cardInDB)}`)
 			if (cardInDB && cardInDB.hasOwnProperty("MiscCardPassword")) {
@@ -1391,6 +1423,16 @@ function importCardJSON(jsonDataURI) {
 			}
 		}
 	}
+	if (GlobalCard.MiscCardPassword && GlobalCard.MiscCardPassword.length < 8) {
+		GlobalCard.MiscCardPassword = GlobalCard.MiscCardPassword.padStart(8, "0");
+	}
+
+	// automatically change Creator "daominah" to "daominah.github.io"
+	// so people know where to find this card editor
+	if (GlobalCard.MiscCreator === "daominah") {
+		GlobalCard.MiscCreator = "daominah.github.io"
+	}
+
 	loadCardToHTML(GlobalCard)
 	renderCard(GlobalCard)
 }
@@ -1421,6 +1463,15 @@ function konamiDatabaseURL(cardID, language = "ja") {
 
 function SearchCardDatabase() {
 	let searchQuery = document.getElementById("SearchCardQuery").value
+
+	if (searchQuery) {
+		logURLQuery = `?func=SearchCardDatabase&searchQuery=${searchQuery}`;
+		console.log(logURLQuery);
+		fetch(`https://log.daominah.uk/log${logURLQuery}`, {method: 'GET'})
+			.then(response => console.log('log sent successfully'))
+			.catch(error => console.error('error sending log:', error));
+	}
+
 	let searchResult = [] // []Card
 	let limit = 16, offset = 0  // TODO: paginate search result
 	// search: https://github.com/olivernn/lunr.js
@@ -1585,6 +1636,13 @@ function getArtHost() {
 }
 
 function setCardArtSrcWithURL(cardID) {
+	if (!cardID || cardID.length === 0) {
+		// prevent browser try "daominah.uk/.png" when cardID is empty,
+		// which will show a red 404 error in console
+		byId("ImgRenderCardArtPendulum").src = ""
+		byId("ImgRenderCardArt").src = ""
+		return
+	}
 	let daominahArtURL = `${getArtHost()}/${cardID}.png`
 	byId("ImgRenderCardArtPendulum").className = "fitImgPendulumLong"
 	byId("ImgRenderCardArtPendulum").src = daominahArtURL
