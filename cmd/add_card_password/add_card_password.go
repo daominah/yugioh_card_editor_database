@@ -8,8 +8,10 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"time"
 
 	"github.com/daominah/yugioh_card_editor/internal/core"
+	"github.com/daominah/yugioh_card_editor/internal/driver/ygocdb"
 	"github.com/mywrap/gofast"
 )
 
@@ -24,8 +26,6 @@ import (
 //   - `web/konami_data/konami_db_en.js`: all cards data as a JavaScript variable, for web asset
 //   - `internal/core/yugioh_cards.csv`: cards data (without effect), for human view and search
 func main() {
-	log.SetFlags(log.Lshortfile)
-
 	projectRoot, err := gofast.GetProjectRootGit()
 	if err != nil {
 		log.Fatalf("error GetProjectRootGit: %v", err)
@@ -33,10 +33,17 @@ func main() {
 	}
 	log.Printf("projectRoot: %v", projectRoot)
 
-	// read the card embedded cards passwords
-	cardPasswords, err := core.InitMapCardsPassword()
+	// read the card cards passwords, static or fresh download
+	var passwordsSource core.MapCardsPasswordInitiator
+	if false {
+		passwordsSource = &core.YgocdbStaticData{}
+	} else {
+		passwordsSource = &ygocdb.YgocdbDownloadFreshData{}
+	}
+	log.Printf("using passwordsSource: %#v", passwordsSource)
+	cardPasswords, err := passwordsSource.InitMapCardsPassword()
 	if err != nil {
-		log.Fatalf("error InitMapCardsPassword: %v", err)
+		log.Fatalf("error %#v InitMapCardsPassword: %v", passwordsSource, err)
 		return
 	}
 	log.Printf("len(cardPasswords): %v", len(cardPasswords))
@@ -68,8 +75,10 @@ func main() {
 	var cards []core.Card
 	err = json.Unmarshal(cardsDatabaseB, &cards)
 	if err != nil {
-		log.Fatalf("Failed to unmarshal JSON data: %v", err)
+		log.Fatalf("error json.Unmarshal file %v data: %v", crawledOutputPath, err)
 	}
+	// this log line will be captured by the GitHub action to its summary and commit message,
+	// do not change it without updating the GitHub action too.
 	log.Printf("len(cards): %v", len(cards))
 
 	// add the card password based on the card ID
@@ -83,13 +92,20 @@ func main() {
 
 	// the final output will be a JavaScript file that has a variable named CardDatabase,
 	// which contains the updated data.
-	finalOutputData := fmt.Sprintf("const CardDatabase = %s\n", updatedData)
+	lastUpdated := time.Now().In(core.VietnamTimezone).Format(time.RFC3339)
+	thisFileAction := `github.com/daominah/yugioh_card_editor/cmd/add_card_password`
+	commentLine := fmt.Sprintf("// CardDatabase was updated at %s\n// by %v\n", lastUpdated, thisFileAction)
+	log.Printf("commentLine:\n%s", commentLine)
+
+	constLine := fmt.Sprintf("const CardDatabase = %s\n", updatedData)
+	finalOutputData := commentLine + constLine
+
 	finalOutputPath := filepath.Join(projectRoot, "web/konami_data/konami_db_en.js")
 	err = os.WriteFile(finalOutputPath, []byte(finalOutputData), 0644)
 	if err != nil {
 		log.Fatalf("Failed to write final output: %v", err)
 	}
-	log.Printf("successfully updated the card database to %s", finalOutputPath)
+	log.Printf("SUCCESSFULLY UPDATED THE CARD DATABASE to %s", finalOutputPath)
 
 	// write all cards data to csv too, but sort by name (instead of id in the JS file)
 	outputFileShortCardsData := filepath.Join(projectRoot, "internal/core/yugioh_cards.csv")
@@ -116,7 +132,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to write updated card database: %v", err)
 	} else {
-		log.Printf("added passwords to crawled JSON file: %v", crawledOutputPath)
+		log.Printf("added passwords to crawled JSON file (gitignored): %v", crawledOutputPath)
 	}
 
 	log.Printf("main returned")

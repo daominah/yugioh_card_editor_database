@@ -5,7 +5,10 @@ import (
 )
 
 func TestInitMapCardsPassword(t *testing.T) {
-	cardPasswords, err := InitMapCardsPassword()
+	var passwordsSource MapCardsPasswordInitiator
+	passwordsSource = &YgocdbStaticData{}
+	t.Logf("testing %#v", passwordsSource)
+	cardPasswords, err := passwordsSource.InitMapCardsPassword()
 	if err != nil {
 		t.Fatal(err)
 	}

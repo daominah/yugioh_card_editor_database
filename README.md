@@ -20,11 +20,11 @@ Well tested on Firefox Linux.
 
 ## Usage
 
-The web app can be run by locally open file `web/index.html`.
+The web app is hosted on [GitHub Page daominah.github.io](https://daominah.github.io/).
+To update the site, run `copy_to_daominah.github.io.sh` to sync the `web/`
+directory to the local `daominah.github.io` repo, then push the changes.
 
-Alternatively, you can `go run cmd/main_yugioh_card_editor/main.go` then go to
-<http://localhost:20808/>. Or if you prefer Docker, run `build_run.sh` to build
-and run this app by Docker.
+You can also open `web/index.html` locally in a browser.
 
 ## Card data sources
 
@@ -33,10 +33,47 @@ and run this app by Docker.
   Password is 8-digit number that usually printed on the bottom left of the card.
   Example: "Blue-Eyes White Dragon" has Password 89631139, and ID 4007 in Konami database.
 
+A [GitHub Actions workflow](.github/workflows/update_cards_database_from_konami.yml)
+runs daily to crawl the Konami database (`cmd/crawl_konami_db`), enrich it with
+card passwords and set info (`cmd/add_card_password`), then push the updated
+`konami_db_en.js` to the GitHub Pages repo automatically.
+
+## Frontend development with Claude Code
+
+[Playwright MCP](https://github.com/microsoft/playwright-mcp)
+lets Claude Code edit `web/` code and open the card editor in a real browser.
+Both you and Claude can see the rendered card,
+making the edit-preview feedback loop smooth.
+
+Setup (requires Node.js 18+):
+
+```bash
+claude mcp add --scope project playwright -- \
+  npx -y @playwright/mcp@latest --browser firefox --allow-unrestricted-file-access
+```
+
+Install Firefox for Playwright (separate from your system Firefox):
+
+```bash
+npx -y playwright install firefox
+```
+
+On Windows, manually edit `.mcp.json` to change `"command"` to `"cmd"`
+and prepend `"/c"` to the `"args"` array (see [.mcp.json](.mcp.json)).
+
+The `--allow-unrestricted-file-access` flag lets the browser open `web/index.html`
+directly via `file://` URL without running a server.
+Note that this grants access to any file on the machine.
+Alternatively, remove that flag and run `go run cmd/main_yugioh_card_editor/main.go`
+to serve on `http://localhost:20808`.
+
 ## All cards list table
 
-Final result is file [yugioh_cards.pdf](internal\core\yugioh_cards.pdf).
-All cards shown as a table (without card effect text)
+Final result is file [yugioh_cards.pdf](internal/core/yugioh_cards.pdf).
+All cards shown as a table (without card effect text).
+
+The [Google Drive file yugioh_cards.gsheet](
+https://docs.google.com/spreadsheets/d/1EzqMmwNq6jc_4JbxjxvjK8EdCHBTTyal248kmG2BuZ0/edit?usp=sharing).
 
 Steps to generate this file:
 
@@ -45,17 +82,16 @@ Steps to generate this file:
    `Format`: `Conditional`, using `Formula is`:
 
   ```excel
-  AND($B2="Monster", $C2="Normal", ISEVEN(ROW()))  // Yellow
-  AND($B2="Monster", $C2="Normal", ISODD(ROW()))   // Light Yellow
-  AND($B2="Monster", $C2<>"Normal", ISEVEN(ROW())) // Orange
-  AND($B2="Monster", $C2<>"Normal", ISODD(ROW()))  // Light Orange
-  AND($B2="Spell", ISEVEN(ROW()))                  // Green
-  AND($B2="Spell", ISODD(ROW()))                   // Light Green
-  AND($B2="Trap", ISEVEN(ROW()))                   // Purple
-  AND($B2="Trap", ISODD(ROW()))                    // Light Purple
+  AND($C2="Monster", $D2="Normal", ISEVEN(ROW()))  // Yellow
+  AND($C2="Monster", $D2="Normal", ISODD(ROW()))   // Light Yellow
+  AND($C2="Monster", $D2<>"Normal", ISEVEN(ROW())) // Orange
+  AND($C2="Monster", $D2<>"Normal", ISODD(ROW()))  // Light Orange
+  AND($C2="Spell", ISEVEN(ROW()))                  // Green
+  AND($C2="Spell", ISODD(ROW()))                   // Light Green
+  AND($C2="Trap", ISEVEN(ROW()))                   // Purple
+  AND($C2="Trap", ISODD(ROW()))                    // Light Purple
   ```
 
 3. Upload to Google Drive to Download as PDF
    (LibreOffice hangs when exporting to PDF, probably because of file too large),
    change page size to Height 19.9", Width 19", so 100 rows fit in 1 page.
-   The online [file](https://docs.google.com/spreadsheets/d/1EzqMmwNq6jc_4JbxjxvjK8EdCHBTTyal248kmG2BuZ0/edit?usp=sharing).

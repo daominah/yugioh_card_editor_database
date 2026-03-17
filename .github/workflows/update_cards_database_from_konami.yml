@@ -1,0 +1,99 @@
+name: Update cards database from Konami
+
+on:
+  schedule:
+    # Run daily at 04:00 UTC (11:00 Indo China Time)
+    # Note: GitHub Actions can delay scheduled workflows by up to 30 minutes
+    - cron: '0 4 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  update-database:
+    runs-on: ubuntu-24.04
+    environment: DAOMINAH_GITHUB_IO_PERSONAL_ACCESS_TOKEN
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.21.3'
+        cache-dependency-path: go.sum
+
+    - name: Run crawl_konami_db
+      id: crawl
+      run: |
+        echo "Starting Konami database crawl..."
+        go run ./cmd/crawl_konami_db
+        echo "Crawl completed successfully"
+
+    - name: Run add_card_password
+      id: add_password
+      run: |
+        echo "Starting card password processing..."
+        go run ./cmd/add_card_password 2>&1 | tee add_password_output.log
+        CARD_COUNT=$(grep 'len(cards):' add_password_output.log | sed -n 's/.*len(cards): \([0-9]*\).*/\1/p' | head -1)
+        if [ -n "$CARD_COUNT" ]; then
+          echo "card_count=$CARD_COUNT" >> $GITHUB_OUTPUT
+          echo "Card count: $CARD_COUNT"
+        fi
+        echo "Card password processing completed successfully"
+
+    - name: Check if file was generated
+      id: check_file
+      run: |
+        if [ -f "web/konami_data/konami_db_en.js" ]; then
+          echo "file_exists=true" >> $GITHUB_OUTPUT
+          echo "Generated file found"
+        else
+          echo "file_exists=false" >> $GITHUB_OUTPUT
+          echo "Generated file not found"
+          exit 1
+        fi
+
+    - name: Checkout target repository
+      if: steps.check_file.outputs.file_exists == 'true'
+      uses: actions/checkout@v4
+      with:
+        repository: daominah/daominah.github.io
+        token: ${{ secrets.DAOMINAH_GITHUB_IO_PERSONAL_ACCESS_TOKEN }}
+        path: target-repo
+
+    - name: Copy file to target repository
+      if: steps.check_file.outputs.file_exists == 'true'
+      run: |
+        mkdir -p target-repo/konami_data
+        cp web/konami_data/konami_db_en.js target-repo/konami_data/konami_db_en.js
+        echo "File copied to target repository"
+
+    - name: Commit and push to target repository
+      id: commit
+      if: steps.check_file.outputs.file_exists == 'true'
+      working-directory: target-repo
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add konami_data/konami_db_en.js
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+          echo "changed=false" >> $GITHUB_OUTPUT
+        else
+          COMMIT_TIME=$(TZ='Asia/Ho_Chi_Minh' date +'%Y-%m-%d %H:%M:%S.%3N %:z')
+          CARD_COUNT_MSG=""
+          if [ -n "${{ steps.add_password.outputs.card_count }}" ]; then
+            CARD_COUNT_MSG="${{ steps.add_password.outputs.card_count }} cards"
+          fi
+          git commit -m "Auto updated ${CARD_COUNT_MSG}, by daominah/yugioh_card_editor GitHub action at $COMMIT_TIME"
+          git push
+          echo "changed=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Summary
+      run: |
+        CARD_COUNT_MSG=""
+        if [ -n "${{ steps.add_password.outputs.card_count }}" ]; then
+          CARD_COUNT_MSG="${{ steps.add_password.outputs.card_count }} cards"
+        fi
+        echo "View updated $CARD_COUNT_MSG at https://github.dev/daominah/daominah.github.io/blob/master/konami_data/konami_db_en.js. Target repo: https://github.com/daominah/daominah.github.io/commits/master" >> $GITHUB_STEP_SUMMARY

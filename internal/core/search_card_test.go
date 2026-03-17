@@ -25,6 +25,28 @@ func init() {
 	if err != nil {
 		log.Fatalf("error os.ReadFile: %v", err)
 	}
+	// testCardsData looks like:
+	_ = `
+// CardDatabase was updated at 2026-01-28T08:24:06+07:00
+// by github.com/daominah/yugioh_card_editor/cmd/add_card_password
+const CardDatabase = [
+	...
+]
+`
+	// remove comment lines and the prefix
+	lines := bytes.Split(testCardsData, []byte{'\n'})
+	var dataLines [][]byte
+	for _, line := range lines {
+		trimmedLine := bytes.TrimSpace(line)
+		if len(trimmedLine) == 0 {
+			continue
+		}
+		if bytes.HasPrefix(trimmedLine, []byte("//")) {
+			continue
+		}
+		dataLines = append(dataLines, line)
+	}
+	testCardsData = bytes.Join(dataLines, []byte{'\n'})
 	testCardsData = bytes.TrimPrefix(testCardsData, []byte(`const CardDatabase = `))
 }
 
@@ -139,7 +161,7 @@ func TestCardDatabase_SearchHandTrap(t *testing.T) {
 		t.Fatalf("error NewCardDatabase: %v", err)
 	}
 
-	queryConditionOR := []string{
+	queryActivationConditionOR := []string{
 		`Quick Effect`,
 		`during either player`,
 		`When.*opponent.*declare.*attack`,
@@ -151,7 +173,7 @@ func TestCardDatabase_SearchHandTrap(t *testing.T) {
 		`Special Summon this card from your hand`,
 	}
 	queriesAND := []string{
-		strings.Join(queryConditionOR, "|"),
+		strings.Join(queryActivationConditionOR, "|"),
 		strings.Join(queryCostOR, "|"),
 	}
 
@@ -170,6 +192,8 @@ func TestCardDatabase_SearchHandTrap(t *testing.T) {
 	}
 	var ids []CardID
 	for id := range mergeResults {
+		// the following line is kind of set intersection,
+		// only store cardID that match both activation condition and cost
 		if mergeResults[id] == len(queriesAND) {
 			ids = append(ids, id)
 		}

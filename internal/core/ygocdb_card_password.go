@@ -10,6 +10,11 @@ import (
 //go:embed ygocdb_card_password.json
 var ygocdbData []byte // data is downloaded from https://ygocdb.com/api/v0/cards.zip
 
+// MapCardsPasswordInitiator is an interface for initializing the map of cardID to password.
+type MapCardsPasswordInitiator interface {
+	InitMapCardsPassword() (map[CardID]string, error)
+}
+
 // CardYgocdb data has addtional field Password (8-digit printed).
 // Example data:
 //
@@ -68,19 +73,32 @@ type CardYgocdb struct {
 	} `json:"data"`
 }
 
-// InitMapCardsPassword initializes the map of cardID to password.
-func InitMapCardsPassword() (map[CardID]string, error) {
+// YgocdbStaticData implements MapCardsPasswordInitiator using embedded file static data.
+type YgocdbStaticData struct{}
+
+// InitMapCardsPassword returns the map of cardID to password from embedded static data.
+func (s *YgocdbStaticData) InitMapCardsPassword() (map[CardID]string, error) {
+	return ParseYGOCDBData(ygocdbData)
+}
+
+// ParseYGOCDBData parses YGOCDB JSON data and returns a map of cardID to password.
+// This function is exported for use by driver implementations.
+func ParseYGOCDBData(data []byte) (map[CardID]string, error) {
 	ygocdb := make(map[CardID]CardYgocdb)
-	err := json.Unmarshal(ygocdbData, &ygocdb)
+	err := json.Unmarshal(data, &ygocdb)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("json.Unmarshal: %w", err)
 	}
+
 	m := make(map[CardID]string)
 	for _, v := range ygocdb {
 		if v.Cid == 0 || v.Id == 0 {
 			continue
 		}
 		m[CardID(strconv.Itoa(v.Cid))] = fmt.Sprintf("%08d", v.Id) // pad with "0" to length 8
+	}
+	if len(m) < 1000 { // expected about 14000 cards
+		return nil, fmt.Errorf("parsed too few card passwords: %d", len(m))
 	}
 	return m, nil
 }

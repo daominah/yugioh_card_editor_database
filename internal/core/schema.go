@@ -152,13 +152,14 @@ func (s SortCardNames) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 // ToCSV output can be used for csv.Writer.WriteAll
 func ToCSV(cards []Card, mapSetsFullName map[string]string) [][]string {
 	outputFields := []string{
+		"Row",
 		"ENName", "CardType", "CardSubtype",
-		"CardID", "CardPassword",
-		"Attribute", "Type", "Level", "ATK", "DEF", "IsTuner",
+		"CardID", "CardPasswd",
+		"Attribute", "Type", "Level", "ATK", "DEF", "Tuner",
 		"ENYear", "ENSet", "ENSetFullName",
 	}
 	records := [][]string{outputFields}
-	for _, c := range cards {
+	for i, c := range cards {
 		isTuner := false
 		for _, ability := range c.MonsterAbilities {
 			if ability == Tuner {
@@ -191,6 +192,8 @@ func ToCSV(cards []Card, mapSetsFullName map[string]string) [][]string {
 		}
 		setFullName, _ := mapSetsFullName[cardNumber]
 		record := []string{
+			strconv.Itoa(i + 1), // so we can see the row count in PDF
+
 			c.CardName,
 			string(c.CardType),
 			strings.TrimPrefix(string(c.CardSubtype), string(c.CardType)),

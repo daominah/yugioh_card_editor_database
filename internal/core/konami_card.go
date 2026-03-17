@@ -139,7 +139,7 @@ func ParseKonamiCardHTML(cardPageHTML []byte, cardID CardID) Card {
 	cardText1 = regexp.MustCompile(`(?m)^●([^\s])`).ReplaceAllString(cardText1, "● $1")
 	c.CardEffect = cardText1
 
-	es, _ := textproc.HTMLXPath(root, `//span[contains(@class,"item_box")]`)
+	es, _ := textproc.HTMLXPath(root, `//div[@class="frame"]//span[contains(@class,"item_box")]`)
 	if len(es) == 2 { // Spell or Trap
 		konamiCardSubtype := textproc.HTMLGetText(es[1])
 		found := false
