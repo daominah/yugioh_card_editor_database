@@ -1,0 +1,5 @@
+# Python 3.14.3
+cairosvg==2.9.0
+numpy==2.4.3
+pillow==12.1.1
+scipy==1.17.1

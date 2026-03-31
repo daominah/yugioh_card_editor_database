@@ -1,6 +1,6 @@
 ---
 name: test-card-by-name
-description: Open the card editor in Playwright, search for a card by name, click the first result, and screenshot the rendered card. Use when you need to visually verify how a card renders after code changes, or when the user asks to test a specific card.
+description: Steps to take screenshot of a named card, rendered by this card editor. Use when user asks to visually verify how a card renders after code changes, or when the user asks to test a specific card.
 ---
 
 # Test Card by Name

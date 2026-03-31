@@ -72,60 +72,79 @@ func TestPrepareData(t *testing.T) {
 var (
 	//go:embed test_html/test_konami_4007.html
 	test_konami_4007 []byte
+	// 4007: Blue-Eyes White Dragon (Normal Monster)
 
 	//go:embed test_html/test_konami_4343.html
 	test_konami_4343 []byte
+	// 4343: Raigeki (Normal Spell)
 
 	//go:embed test_html/test_konami_4386.html
 	test_konami_4386 []byte
+	// 4386: Blue-Eyes Ultimate Dragon (Fusion)
 
 	//go:embed test_html/test_konami_4960.html
 	test_konami_4960 []byte
+	// 4960: Imperial Order (Continuous Trap)
 
 	//go:embed test_html/test_konami_6341.html
 	test_konami_6341 []byte
+	// 6341: King of the Skull Servants (Effect Monster)
 
 	//go:embed test_html/test_konami_6996.html
 	test_konami_6996 []byte
+	// 6996: Advanced Ritual Art (Ritual Spell)
 
 	//go:embed test_html/test_konami_8409.html
 	test_konami_8409 []byte
+	// 8409: Ally of Justice Cycle Reader (Effect Monster/Tuner)
 
 	//go:embed test_html/test_konami_8933.html
 	test_konami_8933 []byte
+	// 8933: Effect Veiler (Effect Monster/Tuner)
 
 	//go:embed test_html/test_konami_11232.html
 	test_konami_11232 []byte
+	// 11232: Shaddoll Falco (Effect Monster/Flip)
 
 	//go:embed test_html/test_konami_12788.html
 	test_konami_12788 []byte
+	// 12788: Zoodiac Drident (Xyz Monster)
 
 	//go:embed test_html/test_konami_12828.html
 	test_konami_12828 []byte
+	// 12828: Clear Wing Fast Dragon (Synchro Monster)
 
 	//go:embed test_html/test_konami_14356.html
 	test_konami_14356 []byte
+	// 14356: Time Thief Redoer (Xyz Monster)
 
 	//go:embed test_html/test_konami_14439.html
 	test_konami_14439 []byte
+	// 14439: Endymion, the Mighty Master of Magic (Pendulum Monster)
 
 	//go:embed test_html/test_konami_14491.html
 	test_konami_14491 []byte
+	// 14491: Monk of the Tenyi (Link Monster/non-effect)
 
 	//go:embed test_html/test_konami_14496.html
 	test_konami_14496 []byte
+	// 14496: Apollousa, Bow of the Goddess (Link Monster)
 
 	//go:embed test_html/test_konami_15299.html
 	test_konami_15299 []byte
+	// 15299: Forbidden Droplet (Quick-Play Spell)
 
 	//go:embed test_html/test_konami_15524.html
 	test_konami_15524 []byte
+	// 15524: Divine Arsenal AA-ZEUS - Sky Thunder (Xyz Monster)
 
 	//go:embed test_html/test_konami_15741.html
 	test_konami_15741 []byte
+	// 15741: Underworld Goddess of the Closed World (Link Monster)
 
 	//go:embed test_html/test_konami_18792.html
 	test_konami_18792 []byte
+	// 18792: Cornfield Coatl (Effect Monster)
 )
 
 func TestParseKonamiCardHTML(t *testing.T) {

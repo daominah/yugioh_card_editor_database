@@ -5,6 +5,7 @@
 .claude/settings.local.json
 
 .playwright-mcp
+.superpowers
 
 
 # Go testing output
@@ -29,3 +30,5 @@ web/konami_db.json
 web/konami_data/konami_db.json
 web/konami_data/konami_db.json.backup
 internal/core/schema_test.csv
+web/card_frame_rushduel/upscayl_*
+python/removed_black/*.png
