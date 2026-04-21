@@ -19,18 +19,6 @@
 		  d="M0,0 H1180 V1720 H0 Z M40,40 H1140 V1680 H40 Z"/>
 
 
-	<circle cx="1040" cy="140" r="76"
-			fill="#00ff00" stroke="black" stroke-width="2">
-		<title>Attribute icon (top-right)</title>
-	</circle>
-
-
-	<circle cx="160" cy="1148" r="76"
-			fill="none" stroke="black" stroke-width="2">
-		<title>Level badge (bottom-left of art)</title>
-	</circle>
-
-
 	<polyline points="
 		  62,176
 		 930,176
@@ -55,6 +43,10 @@
 		<title>Effect box outer</title>
 		<desc>Aligned to art. L=62 T=1232 R=1118 B=1614</desc>
 	</rect>
+
+	<!-- Lime zone between Effect box outer and Effect box inner -->
+	<path fill-rule="evenodd" fill="#00ff00"
+		  d="M62,1232 H1118 V1614 H62 Z M70,1300 V1606 H1110 V1240 H990 L930,1300 Z"/>
 
 	<polyline points="
 		  70,1300

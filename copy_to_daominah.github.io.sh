@@ -24,6 +24,7 @@ files=(
 # directories to copy all files inside
 directories=(
     "card_frame"
+    "card_frame_rushduel"
     "external_lib"
     "font"
     "icon"

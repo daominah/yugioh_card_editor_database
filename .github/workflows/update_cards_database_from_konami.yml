@@ -19,21 +19,21 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
-        go-version: '1.21.3'
+        go-version-file: 'go.mod'
         cache-dependency-path: go.sum
 
-    - name: Run crawl_konami_db
+    - name: Run crawl-konami-db
       id: crawl
       run: |
         echo "Starting Konami database crawl..."
-        go run ./cmd/crawl_konami_db
+        go run ./cmd/crawl-konami-db
         echo "Crawl completed successfully"
 
-    - name: Run add_card_password
+    - name: Run add-card-password
       id: add_password
       run: |
         echo "Starting card password processing..."
-        go run ./cmd/add_card_password 2>&1 | tee add_password_output.log
+        go run ./cmd/add-card-password 2>&1 | tee add_password_output.log
         CARD_COUNT=$(grep 'len(cards):' add_password_output.log | sed -n 's/.*len(cards): \([0-9]*\).*/\1/p' | head -1)
         if [ -n "$CARD_COUNT" ]; then
           echo "card_count=$CARD_COUNT" >> $GITHUB_OUTPUT

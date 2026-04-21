@@ -1,0 +1,6 @@
+Row,ENName,CardType,CardSubtype,CardID,CardPasswd,Attribute,Type,Level,ATK,DEF,Tuner,ENYear,ENSet,ENSetFullName
+1,Blue-Eyes White Dragon,Monster,Normal,4007,89631139,LIGHT,Dragon,8,3000,2500,,2002,LOB-001,Legend of Blue Eyes White Dragon
+2,Maiden of White,Monster,Effect,20602,17947697,LIGHT,Spellcaster,1,0,0,Tuner,2025,SDWD-EN041,Structure Deck: Blue-Eyes White Destiny
+3,Blue-Eyes Spirit Dragon,Monster,Synchro,12324,59822133,,Dragon,9,2500,3000,,2016,SHVI-EN052,
+4,Wishes for Eyes of Blue,Spell,Normal,20604,80326401,,,,,,,2025,SDWD-EN042,Structure Deck: Blue-Eyes White Destiny
+5,True Light,Trap,Continuous,16653,62089826,,,,,,,2021,MP21-EN255,

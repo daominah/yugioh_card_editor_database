@@ -1,0 +1,28 @@
+{
+  "name": "yugioh_card_editor",
+  "version": "1.0.0",
+  "description": "This web app can load Konami card text then you can insert your card art, so you have a high resolution card. Or you can create a completely new custom card from scratch. Output is a PNG image that has a resolution of 1180x1720 or 590x860 (based on real card size is 59mm x 86mm).",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daominah/yugioh_card_editor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/daominah/yugioh_card_editor/issues"
+  },
+  "homepage": "https://github.com/daominah/yugioh_card_editor#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.5.2"
+  }
+}

@@ -1,14 +1,25 @@
 module github.com/daominah/yugioh_card_editor
 
-go 1.21.3
-
-require github.com/mywrap/textproc v0.3.2
+go 1.26
 
 require (
-	github.com/antchfx/htmlquery v1.3.0 // indirect
-	github.com/antchfx/xpath v1.2.4 // indirect
-	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/mywrap/gofast v0.1.6 // indirect
-	golang.org/x/net v0.8.0 // indirect
-	golang.org/x/text v0.8.0 // indirect
+	github.com/mywrap/textproc v0.4.1
+	golang.org/x/net v0.53.0
+	modernc.org/sqlite v1.48.2
+)
+
+require (
+	github.com/antchfx/htmlquery v1.3.6 // indirect
+	github.com/antchfx/xpath v1.3.6 // indirect
+	github.com/dustin/go-humanize v1.0.1 // indirect
+	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
+	github.com/google/uuid v1.6.0 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/ncruces/go-strftime v1.0.0 // indirect
+	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
+	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/text v0.36.0 // indirect
+	modernc.org/libc v1.70.0 // indirect
+	modernc.org/mathutil v1.7.1 // indirect
+	modernc.org/memory v1.11.0 // indirect
 )

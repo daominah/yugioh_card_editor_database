@@ -7,7 +7,7 @@ scratch. Output is a PNG image that has a resolution of 1180x1720 or 590x860
 
 Inspired by [DuelingBook](https://www.duelingbook.com/) custom card maker.
 
-Well tested on Firefox Linux.
+Well tested on Firefox.
 
 ## Feature
 
@@ -34,8 +34,8 @@ You can also open `web/index.html` locally in a browser.
   Example: "Blue-Eyes White Dragon" has Password 89631139, and ID 4007 in Konami database.
 
 A [GitHub Actions workflow](.github/workflows/update_cards_database_from_konami.yml)
-runs daily to crawl the Konami database (`cmd/crawl_konami_db`), enrich it with
-card passwords and set info (`cmd/add_card_password`), then push the updated
+runs daily to crawl the Konami database (`cmd/crawl-konami-db`), enrich it with
+card passwords and set info (`cmd/add-card-password`), then push the updated
 `konami_db_en.js` to the GitHub Pages repo automatically.
 
 ## Frontend development with Claude Code
@@ -64,12 +64,12 @@ and prepend `"/c"` to the `"args"` array (see [.mcp.json](.mcp.json)).
 The `--allow-unrestricted-file-access` flag lets the browser open `web/index.html`
 directly via `file://` URL without running a server.
 Note that this grants access to any file on the machine.
-Alternatively, remove that flag and run `go run cmd/main_yugioh_card_editor/main.go`
+Alternatively, remove that flag and run `go run cmd/main-yugioh-card-editor/main.go`
 to serve on `http://localhost:20808`.
 
 ## All cards list table
 
-Final result is file [yugioh_cards.pdf](internal/core/yugioh_cards.pdf).
+Final result is file [yugioh_cards.pdf](pkg/core/yugioh_cards.pdf).
 All cards shown as a table (without card effect text).
 
 The [Google Drive file yugioh_cards.gsheet](
@@ -77,7 +77,7 @@ https://docs.google.com/spreadsheets/d/1EzqMmwNq6jc_4JbxjxvjK8EdCHBTTyal248kmG2B
 
 Steps to generate this file:
 
-1. Run `cmd/add_card_password` to get file `yugioh_cards.csv`.
+1. Run `cmd/add-card-password` to get file `yugioh_cards.csv`.
 2. Open it as XLSX file in LibreOffice Calc. Format rows color with
    `Format`: `Conditional`, using `Formula is`:
 

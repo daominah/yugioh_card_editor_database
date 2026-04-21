@@ -1,0 +1,22 @@
+{
+	"printWidth": 100,
+	"arrowParens": "always",
+	"bracketSpacing": false,
+	"overrides": [
+		{
+			"files": "*.js",
+			"options": {
+				"useTabs": true,
+				"tabWidth": 4,
+				"semi": false,
+				"singleQuote": false
+			}
+		},
+		{
+			"files": "*.html",
+			"options": {
+				"printWidth": 160
+			}
+		}
+	]
+}

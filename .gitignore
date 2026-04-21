@@ -6,6 +6,17 @@
 
 .playwright-mcp
 .superpowers
+web_tests/node_modules/
+web_tests/test-results/
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+.venv
 
 
 # Go testing output
@@ -29,6 +40,6 @@ config/.env*
 web/konami_db.json
 web/konami_data/konami_db.json
 web/konami_data/konami_db.json.backup
-internal/core/schema_test.csv
 web/card_frame_rushduel/upscayl_*
 python/removed_black/*.png
+python/__pycache__/

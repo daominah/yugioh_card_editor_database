@@ -1,20 +1,22 @@
-# Code Style
+# HTML Comments
 
-- Use explicit `if`/`else` blocks; avoid ternary expressions.
+- For elements with begin/end tags (`<div>`, `<svg>`, etc.):
+  place describing comments inside, between the tags.
+- For self-closing elements (`<img>`, `<input>`, etc.):
+  place describing comments before the element.
 
-# Writing Style
+# Pixel Values
 
-- Avoid dashes (`-` or `—`) in the middle of sentences;
-  rephrase or use colons instead.
-  Compound words are allowed: "real-time", "back-end".
-- Use standard straight quotes (`'` and `"`) instead of curly quotes.
+- Use even numbers for all pixel values in CSS and SVG
+  (points, positions, dimensions, stroke widths),
+  so scaling down by 0.5 produces no half-pixel artifacts.
+
+# Dev Server
+
+- Run `go run cmd/main-yugioh-card-editor/main.go` to start the server at http://localhost:20808
 
 # Testing
 
-Do not weaken or remove test assertions when the error looks like an environment issue;
-ask the user to fix the environment setup instead.
-
-# Skills
-
-- `commit-messages`: ALWAYS invoke this skill before ANY git commit,
-  including short requests like "commit", "git commit", "commit push", "git commit push", etc.
+- Playwright tests live in `web_tests/` (including `package.json`,
+  `package-lock.json`, `playwright.config.ts`, and `node_modules/`).
+  Run tests with `cd web_tests && npx playwright test`.
