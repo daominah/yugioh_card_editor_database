@@ -20,10 +20,6 @@ var (
 )
 
 func TestParseKonamiCardHTML_JA(t *testing.T) {
-	// ParseKonamiCardHTML was designed for EN pages: its type/subtype/attribute
-	// lookup maps contain only English strings. JA pages still produce
-	// CardType "Monster" (inferred from ATK/DEF presence), level, ATK/DEF,
-	// and set code, but CardSubtype, MonsterAttribute, MonsterType are empty.
 	for _, c := range []struct {
 		cardID   string
 		pageHTML []byte
@@ -114,43 +110,53 @@ func TestParseCardLocaleText_JA(t *testing.T) {
 		pageHTML []byte
 		want     CardLocaleText
 	}{
-		// GIVEN a JA monster page with kanji name and katakana pronunciation
+		// GIVEN a JA monster page with kanji name, katakana ruby, and EN-name span
 		{cardID: "4007", pageHTML: test_konami_ja_4007, want: CardLocaleText{
 			Name:              "青眼の白龍",
-			NamePronunciation: "ブルーアイズ・ホワイト・ドラゴン Blue-Eyes White Dragon",
+			NamePronunciation: "ブルーアイズ・ホワイト・ドラゴン",
+			NameEnglishOnPage: "Blue-Eyes White Dragon",
 			Effect:            "高い攻撃力を誇る伝説のドラゴン。どんな相手でも粉砕する、その破壊力は計り知れない。",
 			AttributeText:     "光属性",
+			MonsterTypeText:   "ドラゴン族",
 		}},
 
-		// GIVEN a JA spell page
+		// GIVEN a JA spell page (no monster slots, so attribute/type text stay empty)
 		{cardID: "4343", pageHTML: test_konami_ja_4343, want: CardLocaleText{
 			Name:              "サンダー・ボルト",
-			NamePronunciation: "サンダー・ボルト Raigeki",
+			NamePronunciation: "サンダー・ボルト",
+			NameEnglishOnPage: "Raigeki",
 			Effect:            "1:相手フィールドのモンスターを全て破壊する。",
 		}},
 
 		// GIVEN a JA trap page
 		{cardID: "4960", pageHTML: test_konami_ja_4960, want: CardLocaleText{
 			Name:              "王宮の勅命",
-			NamePronunciation: "おうきゅうのちょくめい Imperial Order",
+			NamePronunciation: "おうきゅうのちょくめい",
+			NameEnglishOnPage: "Imperial Order",
 			Effect:            "このカードのコントローラーはお互いのスタンバイフェイズ毎に700LPを払う。700LP払えない場合このカードを破壊する。1:このカードが魔法&罠ゾーンに存在する限り、フィールドの全ての魔法カードの効果は無効化される。",
 		}},
 	} {
 		// WHEN parsing locale text from the JA page
 		got := ParseCardLocaleText(c.pageHTML, CardID(c.cardID))
 
-		// THEN the name, pronunciation, effect, and attribute text match
+		// THEN every locale field matches: name, kana pronunciation, EN-name span, effect, attribute, type
 		if got.Name != c.want.Name {
 			t.Errorf("cardID %v Name got %q, want %q", c.cardID, got.Name, c.want.Name)
 		}
 		if got.NamePronunciation != c.want.NamePronunciation {
 			t.Errorf("cardID %v NamePronunciation got %q, want %q", c.cardID, got.NamePronunciation, c.want.NamePronunciation)
 		}
+		if got.NameEnglishOnPage != c.want.NameEnglishOnPage {
+			t.Errorf("cardID %v NameEnglishOnPage got %q, want %q", c.cardID, got.NameEnglishOnPage, c.want.NameEnglishOnPage)
+		}
 		if got.Effect != c.want.Effect {
 			t.Errorf("cardID %v Effect got %q, want %q", c.cardID, got.Effect, c.want.Effect)
 		}
 		if got.AttributeText != c.want.AttributeText {
 			t.Errorf("cardID %v AttributeText got %q, want %q", c.cardID, got.AttributeText, c.want.AttributeText)
+		}
+		if got.MonsterTypeText != c.want.MonsterTypeText {
+			t.Errorf("cardID %v MonsterTypeText got %q, want %q", c.cardID, got.MonsterTypeText, c.want.MonsterTypeText)
 		}
 	}
 }

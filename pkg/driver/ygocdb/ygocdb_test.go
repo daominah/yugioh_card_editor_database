@@ -27,8 +27,8 @@ func TestYgocdbDownloadData_InitMapCardsPassword(t *testing.T) {
 		"19372": "15005145", // Centur-Ion Primera
 		"20500": "42141493", // Mulcharmy Fuwalos
 	} {
-		if cardPasswords[cid] != password {
-			t.Errorf("cardPasswords[%v] = %v, want %v", cid, cardPasswords[cid], password)
+		if cardPasswords[cid].Password != password {
+			t.Errorf("cardPasswords[%v].Password = %v, want %v", cid, cardPasswords[cid].Password, password)
 		}
 	}
 }

@@ -30,48 +30,50 @@ type CardRushDuel struct {
 }
 
 // rushDuelSpellTrapType returns the CardType and CardSubtype for a localized
-// Rush Duel spell/trap category label (e.g. "通常魔法"), or empty strings when
-// the label is a monster attribute instead. Rush Duel only has JA pages.
+// Rush Duel spell/trap category label (e.g. "通常魔法", "일반 마법"), or empty
+// strings when the label is a monster attribute instead.
 func rushDuelSpellTrapType(s string) (CardType, CardSubtype) {
 	switch s {
-	case "通常魔法":
+	case "通常魔法", "일반 마법":
 		return Spell, SpellNormal
-	case "速攻魔法":
+	case "速攻魔法", "속공 마법":
 		return Spell, SpellQuickPlay
-	case "フィールド魔法":
+	case "フィールド魔法", "필드 마법":
 		return Spell, SpellField
-	case "装備魔法":
+	case "装備魔法", "장착 마법":
 		return Spell, SpellEquip
-	case "永続魔法":
+	case "永続魔法", "지속 마법":
 		return Spell, SpellContinuous
-	case "通常罠":
+	case "リチュアル魔法", "리추얼 마법":
+		return Spell, SpellRitual
+	case "通常罠", "일반 함정":
 		return Trap, TrapNormal
-	case "永続罠":
+	case "永続罠", "지속 함정":
 		return Trap, TrapContinuous
-	case "カウンター罠":
+	case "カウンター罠", "카운터 함정":
 		return Trap, TrapCounter
 	default:
 		return "", ""
 	}
 }
 
-// rushDuelMonsterAttribute translates a Rush Duel JA attribute label to the
-// canonical MonsterAttribute. Unrecognized labels are passed through as-is.
+// rushDuelMonsterAttribute translates a Rush Duel JA or KO attribute label to
+// the canonical MonsterAttribute. Unrecognized labels are passed through as-is.
 func rushDuelMonsterAttribute(s string) MonsterAttribute {
 	switch s {
-	case "光属性":
+	case "光属性", "빛":
 		return LIGHT
-	case "闇属性":
+	case "闇属性", "어둠":
 		return DARK
-	case "地属性":
+	case "地属性", "땅":
 		return EARTH
-	case "炎属性":
+	case "炎属性", "화염":
 		return FIRE
-	case "水属性":
+	case "水属性", "물":
 		return WATER
-	case "風属性":
+	case "風属性", "바람":
 		return WIND
-	case "神属性":
+	case "神属性", "신":
 		return DIVINE
 	default:
 		return MonsterAttribute(s)

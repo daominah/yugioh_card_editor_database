@@ -20,10 +20,6 @@ var (
 )
 
 func TestParseKonamiCardHTML_KO(t *testing.T) {
-	// ParseKonamiCardHTML was designed for EN pages: its type/subtype/attribute
-	// lookup maps contain only English strings. KO pages still produce
-	// CardType "Monster" (inferred from ATK/DEF presence), level, ATK/DEF,
-	// and set code, but CardSubtype, MonsterAttribute, MonsterType are empty.
 	for _, c := range []struct {
 		cardID   string
 		pageHTML []byte
@@ -114,43 +110,54 @@ func TestParseCardLocaleText_KO(t *testing.T) {
 		pageHTML []byte
 		want     CardLocaleText
 	}{
-		// GIVEN a KO monster page with Hangul name and EN pronunciation
+		// GIVEN a KO monster page (Hangul name + EN-name span; no kana ruby on KO)
 		{cardID: "4007", pageHTML: test_konami_ko_4007, want: CardLocaleText{
 			Name:              "푸른 눈의 백룡",
-			NamePronunciation: "Blue-Eyes White Dragon",
+			NamePronunciation: "",
+			NameEnglishOnPage: "Blue-Eyes White Dragon",
 			Effect:            "높은 공격력을 자랑하는 전설의 드래곤. 어떠한 상대라도 분쇄해 버리는 파괴력은 상상을 초월한다.",
 			AttributeText:     "빛",
+			MonsterTypeText:   "드래곤족",
 		}},
 
 		// GIVEN a KO spell page
 		{cardID: "4343", pageHTML: test_konami_ko_4343, want: CardLocaleText{
 			Name:              "번개",
-			NamePronunciation: "Raigeki",
+			NamePronunciation: "",
+			NameEnglishOnPage: "Raigeki",
 			Effect:            "1: 상대 필드의 몬스터를 전부 파괴한다.",
 		}},
 
 		// GIVEN a KO trap page
 		{cardID: "4960", pageHTML: test_konami_ko_4960, want: CardLocaleText{
 			Name:              "왕궁의 칙명",
-			NamePronunciation: "Imperial Order",
+			NamePronunciation: "",
+			NameEnglishOnPage: "Imperial Order",
 			Effect:            "이 카드의 컨트롤러는 서로의 스탠바이 페이즈마다 700 LP를 지불한다. 700 LP 지불할 수 없을 경우 이 카드를 파괴한다. 1: 이 카드가 마법 & 함정 존에 존재하는 한, 필드의 모든 마법 카드의 효과는 무효화된다.",
 		}},
 	} {
 		// WHEN parsing locale text from the KO page
 		got := ParseCardLocaleText(c.pageHTML, CardID(c.cardID))
 
-		// THEN the name, pronunciation, effect, and attribute text match
+		// THEN every locale field matches; KO has no kana so NamePronunciation is empty,
+		// and the EN-name span is captured separately in NameEnglishOnPage
 		if got.Name != c.want.Name {
 			t.Errorf("cardID %v Name got %q, want %q", c.cardID, got.Name, c.want.Name)
 		}
 		if got.NamePronunciation != c.want.NamePronunciation {
 			t.Errorf("cardID %v NamePronunciation got %q, want %q", c.cardID, got.NamePronunciation, c.want.NamePronunciation)
 		}
+		if got.NameEnglishOnPage != c.want.NameEnglishOnPage {
+			t.Errorf("cardID %v NameEnglishOnPage got %q, want %q", c.cardID, got.NameEnglishOnPage, c.want.NameEnglishOnPage)
+		}
 		if got.Effect != c.want.Effect {
 			t.Errorf("cardID %v Effect got %q, want %q", c.cardID, got.Effect, c.want.Effect)
 		}
 		if got.AttributeText != c.want.AttributeText {
 			t.Errorf("cardID %v AttributeText got %q, want %q", c.cardID, got.AttributeText, c.want.AttributeText)
+		}
+		if got.MonsterTypeText != c.want.MonsterTypeText {
+			t.Errorf("cardID %v MonsterTypeText got %q, want %q", c.cardID, got.MonsterTypeText, c.want.MonsterTypeText)
 		}
 	}
 }

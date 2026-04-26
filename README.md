@@ -38,6 +38,42 @@ runs daily to crawl the Konami database (`cmd/crawl-konami-db`), enrich it with
 card passwords and set info (`cmd/add-card-password`), then push the updated
 `konami_db_en.js` to the GitHub Pages repo automatically.
 
+## Full card database (SQLite)
+
+[`data/yugioh.db`](data/yugioh.db) is a self-contained SQLite snapshot covering
+Standard (TCG / OCG) and Rush Duel cards across en, ja, ko locales, plus every
+Konami set and print. Schema lives in
+[`init_schema.sql`](pkg/driver/sqlite/init_schema.sql).
+
+Contents from the latest crawl:
+
+| Table | Rows | Notes |
+|-------|------|-------|
+| `cards` | 14,037 | Standard cards (TCG / OCG / Master Duel) |
+| `cards_rush` | 2,931 | Rush Duel / Duel Links cards |
+| `card_texts` | 46,894 | per-locale name and effect (en: 13,640 / ja: 16,968 / ko: 16,286) |
+| `card_passwords` | 14,055 | 8-digit passwords from ygocdb.com (Konami's DB does not expose this) |
+| `sets` | 1,535 | every Konami set across all locales |
+| `set_cards` | 96,749 | every print of every card |
+| `monster_types`, `monster_types_rush` | 26 + 29 | enum to localized text (e.g. Dragon → ドラゴン族 / 드래곤족) |
+| `monster_attributes`, `monster_attributes_rush` | 7 + 6 | enum to localized text (e.g. LIGHT → 光属性 / 빛) |
+
+Of the 14,037 Standard cards, 99.7% have a YGOCDB password match. Rush cards
+do not, since YGOCDB only tracks Standard. 341 cards are flagged as
+Special-Summon-only (Nomi / Semi-Nomi monsters).
+
+To refresh:
+
+```bash
+go run cmd/crawl-konami-db-full/crawl_konami_db_full.go
+go run cmd/audit-langs-type-attribute/main.go
+```
+
+The crawler caches every Konami HTML page under `data/html_cache/`
+(gitignored), so re-runs do not re-hit Konami's servers. To query the DB
+without the `sqlite3` CLI, modify and run
+[`cmd/query-sqlite-cardid`](cmd/query-sqlite-cardid/query_sqlite_cardid.go).
+
 ## Frontend development with Claude Code
 
 [Playwright MCP](https://github.com/microsoft/playwright-mcp)

@@ -12,9 +12,18 @@ import (
 //go:embed ygocdb_card_password.json
 var ygocdbData []byte // data is downloaded from https://ygocdb.com/api/v0/cards.zip
 
-// MapCardsPasswordInitiator is an interface for initializing the map of cardID to password.
+// CardPassword is the YGOCDB-derived password row keyed by Konami cardID.
+// CardName is en_name with jp_name fallback so the row stays human-friendly
+// when the card has not been released to TCG yet (no en_name).
+type CardPassword struct {
+	Password string
+	CardName string
+}
+
+// MapCardsPasswordInitiator is an interface for initializing the map of
+// Konami cardID to YGOCDB CardPassword (8-digit password and a name).
 type MapCardsPasswordInitiator interface {
-	InitMapCardsPassword() (map[konami.CardID]string, error)
+	InitMapCardsPassword() (map[konami.CardID]CardPassword, error)
 }
 
 // CardYgocdb data has addtional field Password (8-digit printed).
@@ -78,26 +87,34 @@ type CardYgocdb struct {
 // YgocdbStaticData implements MapCardsPasswordInitiator using embedded file static data.
 type YgocdbStaticData struct{}
 
-// InitMapCardsPassword returns the map of cardID to password from embedded static data.
-func (s *YgocdbStaticData) InitMapCardsPassword() (map[konami.CardID]string, error) {
+// InitMapCardsPassword returns the map of cardID to CardPassword from embedded static data.
+func (s *YgocdbStaticData) InitMapCardsPassword() (map[konami.CardID]CardPassword, error) {
 	return ParseYGOCDBData(ygocdbData)
 }
 
-// ParseYGOCDBData parses YGOCDB JSON data and returns a map of cardID to password.
+// ParseYGOCDBData parses YGOCDB JSON data and returns a map of cardID to CardPassword.
+// CardName is en_name when present, otherwise jp_name.
 // This function is exported for use by driver implementations.
-func ParseYGOCDBData(data []byte) (map[konami.CardID]string, error) {
+func ParseYGOCDBData(data []byte) (map[konami.CardID]CardPassword, error) {
 	ygocdb := make(map[konami.CardID]CardYgocdb)
 	err := json.Unmarshal(data, &ygocdb)
 	if err != nil {
 		return nil, fmt.Errorf("json.Unmarshal: %w", err)
 	}
 
-	m := make(map[konami.CardID]string)
+	m := make(map[konami.CardID]CardPassword)
 	for _, v := range ygocdb {
 		if v.Cid == 0 || v.Id == 0 {
 			continue
 		}
-		m[konami.CardID(strconv.Itoa(v.Cid))] = fmt.Sprintf("%08d", v.Id) // pad with "0" to length 8
+		name := v.EnName
+		if name == "" {
+			name = v.JpName
+		}
+		m[konami.CardID(strconv.Itoa(v.Cid))] = CardPassword{
+			Password: fmt.Sprintf("%08d", v.Id), // pad with "0" to length 8
+			CardName: name,
+		}
 	}
 	if len(m) < 1000 { // expected about 14000 cards
 		return nil, fmt.Errorf("parsed too few card passwords: %d", len(m))

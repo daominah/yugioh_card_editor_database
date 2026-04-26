@@ -13,7 +13,8 @@ func TestUpsertCard(t *testing.T) {
 
 	// WHEN upserting a TCG/OCG monster card with all fields populated
 	card := konami.Card{
-		CardName:             "Blue-Eyes White Dragon",
+		CardName:             "青眼の白龍",
+		CardNameEN:           "Blue-Eyes White Dragon",
 		CardType:             konami.Monster,
 		CardSubtype:          konami.MonsterNormal,
 		MonsterAttribute:     konami.LIGHT,
@@ -39,14 +40,17 @@ func TestUpsertCard(t *testing.T) {
 	}
 
 	// THEN the card row can be read back with matching values
-	var gotType, gotAttr, gotYear string
+	var gotNameEN, gotType, gotAttr, gotYear string
 	var gotLevel, gotATK int
 	err = db.sql.QueryRow(
-		`SELECT card_type, attribute, level_rank_link, atk, year FROM cards WHERE card_id = ?`,
+		`SELECT card_name_en, card_type, attribute, level_rank_link, atk, year FROM cards WHERE card_id = ?`,
 		"4007",
-	).Scan(&gotType, &gotAttr, &gotLevel, &gotATK, &gotYear)
+	).Scan(&gotNameEN, &gotType, &gotAttr, &gotLevel, &gotATK, &gotYear)
 	if err != nil {
 		t.Fatalf("error SELECT cards: %v", err)
+	}
+	if gotNameEN != "Blue-Eyes White Dragon" {
+		t.Errorf("card_name_en got %q, want %q", gotNameEN, "Blue-Eyes White Dragon")
 	}
 	if gotType != "Monster" {
 		t.Errorf("card_type got %q, want %q", gotType, "Monster")
@@ -109,27 +113,64 @@ func TestUpsertCardRush(t *testing.T) {
 	}
 }
 
+func TestUpsertCardPassword(t *testing.T) {
+	db := openTestDB(t)
+
+	// WHEN upserting a YGOCDB password row
+	err := db.UpsertCardPassword("4007", "89631139", "Blue-Eyes White Dragon")
+	if err != nil {
+		t.Fatalf("error UpsertCardPassword: %v", err)
+	}
+
+	// THEN the row round-trips and is keyed by card_id
+	var gotPassword, gotName string
+	err = db.sql.QueryRow(
+		`SELECT password, card_name FROM card_passwords WHERE card_id = ?`, "4007",
+	).Scan(&gotPassword, &gotName)
+	if err != nil {
+		t.Fatalf("error SELECT card_passwords: %v", err)
+	}
+	if gotPassword != "89631139" {
+		t.Errorf("password got %q, want %q", gotPassword, "89631139")
+	}
+	if gotName != "Blue-Eyes White Dragon" {
+		t.Errorf("card_name got %q, want %q", gotName, "Blue-Eyes White Dragon")
+	}
+
+	// AND a re-upsert of the same card_id replaces the existing row
+	err = db.UpsertCardPassword("4007", "89631139", "Blue-Eyes White Dragon (updated)")
+	if err != nil {
+		t.Fatalf("error second UpsertCardPassword: %v", err)
+	}
+	var n int
+	_ = db.sql.QueryRow(`SELECT COUNT(*) FROM card_passwords WHERE card_id = ?`, "4007").Scan(&n)
+	if n != 1 {
+		t.Errorf("after re-upsert got %d rows, want 1", n)
+	}
+}
+
 func TestUpsertCardText(t *testing.T) {
 	db := openTestDB(t)
 
-	// WHEN upserting JA locale text with katakana pronunciation
+	// WHEN upserting JA locale text with katakana pronunciation and a localized type
 	text := konami.CardLocaleText{
 		Name:              "青眼の白龍",
 		NamePronunciation: "ブルーアイズ・ホワイト・ドラゴン",
 		Effect:            "高い攻撃力を誇る伝説のドラゴン。",
 		AttributeText:     "光属性",
+		MonsterTypeText:   "ドラゴン族",
 	}
 	err := db.UpsertCardText("4007", "ja", text)
 	if err != nil {
 		t.Fatalf("error UpsertCardText: %v", err)
 	}
 
-	// THEN the name_katakana column stores the pronunciation
-	var gotName, gotKatakana, gotAttrText string
+	// THEN the per-locale text columns round-trip
+	var gotName, gotKatakana, gotAttrText, gotTypeText string
 	err = db.sql.QueryRow(
-		`SELECT name, name_katakana, attribute_text FROM card_texts WHERE card_id = ? AND lang = ?`,
+		`SELECT name, name_katakana, attribute_text, monster_type_text FROM card_texts WHERE card_id = ? AND lang = ?`,
 		"4007", "ja",
-	).Scan(&gotName, &gotKatakana, &gotAttrText)
+	).Scan(&gotName, &gotKatakana, &gotAttrText, &gotTypeText)
 	if err != nil {
 		t.Fatalf("error SELECT card_texts: %v", err)
 	}
@@ -141,6 +182,9 @@ func TestUpsertCardText(t *testing.T) {
 	}
 	if gotAttrText != "光属性" {
 		t.Errorf("attribute_text got %q, want %q", gotAttrText, "光属性")
+	}
+	if gotTypeText != "ドラゴン族" {
+		t.Errorf("monster_type_text got %q, want %q", gotTypeText, "ドラゴン族")
 	}
 }
 

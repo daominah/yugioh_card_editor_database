@@ -44,24 +44,28 @@ func (db *DB) Close() error {
 	return db.sql.Close()
 }
 
-// UpsertCard writes TCG/OCG card stats. Later crawls overwrite earlier ones,
-// so crawling EN after JA corrects stats that JA could not parse (e.g.
-// MonsterAttribute, which uses EN strings in the existing lookup maps).
+// UpsertCard writes TCG/OCG card stats. The crawler gates this call to only
+// the "ja" locale pass (see crawl-konami-db-full), so card stats are written
+// once per card from the JA page and never overwritten by EN/KO crawls.
+// INSERT OR REPLACE is therefore used for re-runnability of the JA pass
+// itself (e.g. after a parser fix), not for cross-locale corrections.
 func (db *DB) UpsertCard(c konami.Card) error {
 	abilities := jsonSlice(c.MonsterAbilities)
 	linkArrows := jsonSlice(c.MonsterLinkArrows)
 	_, err := db.sql.Exec(`
         INSERT OR REPLACE INTO cards
-            ( card_id,  card_type,  card_subtype,  attribute,  monster_type,
+            ( card_id,  card_name_en,  card_type,  card_subtype,  attribute,  monster_type,
               level_rank_link,  atk,  atk_str,  def,  def_str,
               abilities,  link_arrows,  is_pendulum,  pendulum_scale,  is_non_effect,
-              password,  year,  creator)
+              is_special_summon_only,
+              year,  creator)
         VALUES
-            (?, ?, ?, ?, ?,
+            (?, ?, ?, ?, ?, ?,
              ?, ?, ?, ?, ?,
              ?, ?, ?, ?, ?,
-             ?, ?, ?)`,
-		string(c.MiscKonamiCardID),
+             ?,
+             ?, ?)`,
+		string(c.MiscKonamiCardID), c.CardNameEN,
 		string(c.CardType), string(c.CardSubtype),
 		string(c.MonsterAttribute), string(c.MonsterType),
 		c.MonsterLevelRankLink,
@@ -69,7 +73,8 @@ func (db *DB) UpsertCard(c konami.Card) error {
 		int(c.MonsterDEF), c.MonsterDEFStr,
 		abilities, linkArrows,
 		boolToInt(c.IsPendulum), c.PendulumScale, boolToInt(c.IsNonEffectMonster),
-		c.MiscCardPassword, c.MiscYear, c.MiscCreator,
+		boolToInt(c.IsSpecialSummonOnly),
+		c.MiscYear, c.MiscCreator,
 	)
 	if err != nil {
 		return fmt.Errorf("error UpsertCard %v: %w", c.MiscKonamiCardID, err)
@@ -77,7 +82,11 @@ func (db *DB) UpsertCard(c konami.Card) error {
 	return nil
 }
 
-// UpsertCardRush writes Rush Duel / Duel Links card stats.
+// UpsertCardRush writes Rush Duel / Duel Links card stats. Like UpsertCard
+// the crawler gates this to the "ja" pass only; KO crawls produce no writes
+// to cards_rush. The Card.CardNameEN field on the embedded struct is ignored
+// here — Konami's Rush JA pages have no EN <span>, so the value is always
+// empty for Rush, and cards_rush has no card_name_en column.
 func (db *DB) UpsertCardRush(c konami.CardRushDuel) error {
 	abilities := jsonSlice(c.MonsterAbilities)
 	_, err := db.sql.Exec(`
@@ -104,17 +113,35 @@ func (db *DB) UpsertCardRush(c konami.CardRushDuel) error {
 	return nil
 }
 
+// UpsertCardPassword writes the YGOCDB password row for one cardID.
+// card_passwords is its own table because passwords come from a third-party
+// source (ygocdb.com) on a different lifecycle than the Konami crawl.
+func (db *DB) UpsertCardPassword(cardID, password, cardName string) error {
+	_, err := db.sql.Exec(`
+        INSERT OR REPLACE INTO card_passwords
+            (card_id, password, card_name)
+        VALUES (?, ?, ?)`,
+		cardID, password, cardName,
+	)
+	if err != nil {
+		return fmt.Errorf("error UpsertCardPassword %v: %w", cardID, err)
+	}
+	return nil
+}
+
 // UpsertCardText writes locale-specific name and effect text for one card.
+// Called once per locale per card; rows in card_texts are keyed by
+// (card_id, lang) so the three locale crawls coexist without conflict.
 func (db *DB) UpsertCardText(cardID, lang string, t konami.CardLocaleText) error {
 	_, err := db.sql.Exec(`
         INSERT OR REPLACE INTO card_texts
-            ( card_id,  lang,  name,  name_katakana,  effect,  pendulum_effect,  attribute_text)
+            ( card_id,  lang,  name,  name_katakana,  effect,  pendulum_effect,  attribute_text,  monster_type_text)
         VALUES
-            (?, ?, ?, ?, ?, ?, ?)`,
+            (?, ?, ?, ?, ?, ?, ?, ?)`,
 		cardID, lang,
 		t.Name, t.NamePronunciation,
 		t.Effect, t.PendulumEffect,
-		t.AttributeText,
+		t.AttributeText, t.MonsterTypeText,
 	)
 	if err != nil {
 		return fmt.Errorf("error UpsertCardText %v/%v: %w", cardID, lang, err)

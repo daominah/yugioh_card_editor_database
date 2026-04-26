@@ -84,7 +84,7 @@ func main() {
 
 	// add the card password based on the card ID
 	for i, card := range cards {
-		cards[i].MiscCardPassword = cardPasswords[card.MiscKonamiCardID]
+		cards[i].MiscCardPassword = cardPasswords[card.MiscKonamiCardID].Password
 	}
 	updatedData, err := json.MarshalIndent(cards, "", "\t")
 	if err != nil {

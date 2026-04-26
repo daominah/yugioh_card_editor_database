@@ -16,7 +16,15 @@ const (
 
 // Card represent a YuGiOh card
 type Card struct {
-	CardName    string
+	CardName string
+	// CardNameEN is the English card name as printed on the Japanese card
+	// page <h1> (the bare <span> next to the kanji title). It is parsed and
+	// written only during the "ja" crawl pass; the EN crawl page itself does
+	// not source it. Stored on the cards row as a viewer convenience so the
+	// DB can be browsed without joining card_texts. The authoritative
+	// localized EN name still lives in card_texts where lang='en'.
+	// Always empty for Rush Duel cards (Konami's Rush JA pages have no EN span).
+	CardNameEN  string
 	CardType    CardType
 	CardSubtype CardSubtype
 	CardEffect  string
@@ -37,12 +45,28 @@ type Card struct {
 	// Gemini monsters) and certain Ritual, Fusion, Synchro, Xyz, and Link monster).
 	IsNonEffectMonster bool
 
+	// IsSpecialSummonOnly marks "Nomi" / "Semi-Nomi" monsters that cannot be
+	// Normal Summoned or Set; they can only be Special Summoned via the
+	// conditions printed on the card text. Detected from the JA token "特殊召喚"
+	// (or KO "특수 소환") in the species line. Konami's EN page omits this flag
+	// from the species block, so the value is sourced from the JA parse pass.
+	IsSpecialSummonOnly bool
+
 	IsPendulum     bool
 	PendulumScale  int
 	PendulumEffect string
 
-	MiscKonamiSet    string // a.k.a. "Card Number", e.g. "LB-01", "LOB-001", "LOB-EN001"
-	MiscKonamiCardID CardID // cardID in Konami database, e.g. "Blue-Eyes White Dragon" has cid=4007
+	MiscKonamiSet string // a.k.a. "Card Number", e.g. "LB-01", "LOB-001", "LOB-EN001"
+	// MiscKonamiCardID is the card's numeric ID in Konami's online database,
+	// taken from the cid= URL parameter, e.g. "Blue-Eyes White Dragon" has 4007.
+	// The same numeric ID identifies the card across Standard (TCG/OCG) and is
+	// disjoint from Rush Duel IDs, so it is used as the INTEGER primary key in
+	// the cards / cards_rush tables (see init_schema.sql).
+	// Although CardID is a string type for ergonomics at parse boundaries,
+	// any ordering or range comparison must go through CardID.Int() — the IDs
+	// are numeric, and lexicographic string compare gives the wrong order
+	// (e.g. "10000" < "4007" as strings).
+	MiscKonamiCardID CardID
 	// 8-digit Password printed on the bottom left of a card,
 	// in the past was used to unlock cards in video games,
 	// Konami database does not show this information.

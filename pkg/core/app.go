@@ -13,6 +13,7 @@ type App struct {
 type Database interface {
 	UpsertCard(c konami.Card) error
 	UpsertCardRush(c konami.CardRushDuel) error
+	UpsertCardPassword(cardID, password, cardName string) error
 	UpsertCardText(cardID, lang string, t konami.CardLocaleText) error
 	UpsertSet(setCode, gameVersion, date, setName, locale string) error
 	UpsertSetCard(position, setCode, cardID string, p konami.CardPrint) error

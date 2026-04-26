@@ -19,8 +19,8 @@ const ygocdbURL = "https://ygocdb.com/api/v0/cards.zip"
 // YgocdbDownloadFreshData implements MapCardsPasswordInitiator by downloading fresh data from YGOCDB API.
 type YgocdbDownloadFreshData struct{}
 
-// InitMapCardsPassword downloads and returns the map of cardID to password from YGOCDB API.
-func (d *YgocdbDownloadFreshData) InitMapCardsPassword() (map[konami.CardID]string, error) {
+// InitMapCardsPassword downloads and returns the map of cardID to CardPassword from YGOCDB API.
+func (d *YgocdbDownloadFreshData) InitMapCardsPassword() (map[konami.CardID]core.CardPassword, error) {
 	beginT := time.Now()
 	log.Printf("begin downloading card passwords data %s", ygocdbURL)
 	resp, err := http.Get(ygocdbURL)

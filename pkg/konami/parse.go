@@ -106,7 +106,7 @@ func toMonsterType(s string) MonsterType {
 		return Cyberse
 	case "Dinosaur", "恐竜族", "공룡족":
 		return Dinosaur
-	case "Divine-Beast", "幻神獣族", "환신수족":
+	case "Divine-Beast", "幻神獣族", "환신야수족":
 		return DivineBeast
 	case "Dragon", "ドラゴン族", "드래곤족":
 		return Dragon
@@ -202,6 +202,20 @@ func isSkipAbilityKeyword(s string) bool {
 	case "Normal", "Effect", "Pendulum",
 		"通常", "効果", "ペンデュラム",
 		"일반", "효과", "펜듈럼":
+		return true
+	default:
+		return false
+	}
+}
+
+// isSpecialSummonOnlyKeyword reports whether the species token marks the
+// monster as Special Summon-only ("Nomi" / "Semi-Nomi"): cannot be Normal
+// Summoned or Set, can only be Special Summoned via card-text conditions.
+// Konami's EN page omits this token from the species line, so only JA and KO
+// values are listed.
+func isSpecialSummonOnlyKeyword(s string) bool {
+	switch s {
+	case "特殊召喚", "특수 소환":
 		return true
 	default:
 		return false
@@ -310,13 +324,15 @@ func ParseKonamiCardHTML(cardPageHTML []byte, cardID CardID) Card {
 		relationNode.Parent.RemoveChild(relationNode)
 	}
 
-	// Extract the localized card name from the h1 inside #cardname.
-	// On JA pages the h1 contains: <span class="ruby">katakana</span> kanji
-	// <span>EN name</span>, and on KO pages: Hangul <span>EN name</span>.
-	// Using only direct text-node children gives the localized name for all locales.
+	// Extract names from the h1 inside #cardname. parseCardNameAndPronunciation
+	// returns three parts (see its docstring): localized printed name from
+	// text nodes, kana pronunciation from <span class="ruby">, and the EN
+	// name from the bare <span>. Only the JA crawl pass actually persists
+	// CardNameEN to cards.card_name_en (gated in the crawler); for EN/KO
+	// pages this field is parsed but the crawler does not call UpsertCard.
 	h1NameNode := getNode(root, `//*[@id="cardname"]//h1`)
 	if h1NameNode.Parent != nil {
-		c.CardName, _ = parseCardNameAndPronunciation(h1NameNode)
+		c.CardName, _, c.CardNameEN = parseCardNameAndPronunciation(h1NameNode)
 	}
 
 	cardTexts, err := textproc.HTMLXPath(root, `//*[@class="CardText"]`)
@@ -370,6 +386,10 @@ func ParseKonamiCardHTML(cardPageHTML []byte, cardID CardID) Card {
 				matched = true
 			}
 			if isSkipAbilityKeyword(v) {
+				matched = true
+			}
+			if isSpecialSummonOnlyKeyword(v) {
+				c.IsSpecialSummonOnly = true
 				matched = true
 			}
 			if !matched && v != "" {

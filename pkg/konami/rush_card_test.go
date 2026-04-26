@@ -30,6 +30,7 @@ func TestPrepareRushDuelData(t *testing.T) {
 			"19342", // Negate Attack
 			"20453", // Elemental HERO Flame Wingman
 			"21588", // Magician of Black Chaos (Ritual Monster)
+			"21597", // Ritual of Black Chaos (Ritual Spell — pairs with 21588)
 		} {
 			cardURL := `https://www.db.yugioh-card.com/rushdb/card_search.action?ope=2` +
 				fmt.Sprintf(`&request_locale=%v&cid=%v`, locale, cardID)
@@ -100,6 +101,10 @@ var (
 	//go:embed test_rushduel_html_ja/test_konami_21588.html
 	test_rushduel_21588 []byte
 	// 21588: Magician of Black Chaos (Ritual Monster)
+
+	//go:embed test_rushduel_html_ja/test_konami_21597.html
+	test_rushduel_21597 []byte
+	// 21597: Ritual of Black Chaos (Ritual Spell — pairs with 21588)
 )
 
 func TestParseRushDuelCardHTML(t *testing.T) {
@@ -300,6 +305,20 @@ func TestParseRushDuelCardHTML(t *testing.T) {
 				},
 				RushIsLegend:   false,
 				RushMaximumATK: "",
+			}},
+
+		{pageHTML: test_rushduel_21597, cardID: "21597",
+			want: CardRushDuel{
+				// Ritual Spell card. Currently the Rush parser misclassifies it as
+				// a Monster with attribute "リチュアル魔法"; this case is a
+				// regression test for that bug (cards_rush had 32 such rows).
+				Card: Card{
+					CardName:    "カオス－黒魔術の儀式", // Ritual of Black Chaos
+					CardType:    Spell,
+					CardSubtype: SpellRitual,
+
+					MiscKonamiCardID: "21597",
+				},
 			}},
 	} {
 		got := ParseRushDuelCardHTML(c.pageHTML, CardID(c.cardID))

@@ -36,6 +36,12 @@ config/*ignore*.sh
 config/.env*
 
 
+# local crawl output: raw HTML cache
+data/html_cache
+# keep SQLite data/yugioh.db (but ignore temporary files)
+data/yugioh.db-shm
+data/yugioh.db-wal
+
 # crawler Konami database result, need to rename before add to git
 web/konami_db.json
 web/konami_data/konami_db.json
