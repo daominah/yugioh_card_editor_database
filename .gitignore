@@ -42,6 +42,10 @@ data/html_cache
 data/yugioh.db-shm
 data/yugioh.db-wal
 
+# generated lookup files (run cmd to regenerate)
+cmd/export-set-number-card-name/set_number_card_name_lookup.go
+cmd/export-set-number-card-name/set_number_card_name_lookup.json
+
 # crawler Konami database result, need to rename before add to git
 web/konami_db.json
 web/konami_data/konami_db.json

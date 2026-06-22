@@ -47,16 +47,17 @@ Konami set and print. Schema lives in
 
 Contents from the latest crawl:
 
-| Table | Rows | Notes |
-|-------|------|-------|
-| `cards` | 14,037 | Standard cards (TCG / OCG / Master Duel) |
-| `cards_rush` | 2,931 | Rush Duel / Duel Links cards |
-| `card_texts` | 46,894 | per-locale name and effect (en: 13,640 / ja: 16,968 / ko: 16,286) |
-| `card_passwords` | 14,055 | 8-digit passwords from ygocdb.com (Konami's DB does not expose this) |
-| `sets` | 1,535 | every Konami set across all locales |
-| `set_cards` | 96,749 | every print of every card |
-| `monster_types`, `monster_types_rush` | 26 + 29 | enum to localized text (e.g. Dragon → ドラゴン族 / 드래곤족) |
-| `monster_attributes`, `monster_attributes_rush` | 7 + 6 | enum to localized text (e.g. LIGHT → 光属性 / 빛) |
+| Table                                           | Rows    | Notes                                                                                                                       |
+|-------------------------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------|
+| `cards`                                         | 14,037  | Standard cards (TCG / OCG / Master Duel)                                                                                    |
+| `cards_rush`                                    | 2,933   | Rush Duel / Duel Links cards                                                                                                |
+| `card_texts`                                    | 46,896  | per-locale name and effect (ja: 16,970 / ko: 16,286 / en: 13,640)                                                           |
+| `card_passwords`                                | 14,071  | 8-digit passwords from ygocdb.com (Konami's DB does not expose this)                                                        |
+| `sets`                                          | 1,536   | every Konami set across all locales                                                                                         |
+| `set_cards`                                     | 121,497 | every print of every card; PK is composite (`card_set_code`, `rarity_code`) so one print can be listed at multiple rarities |
+| `rarities`                                      | 49      | canonical rarity_code → localized rarity name lookup, seeded by `cmd/aggregate-type-attr-rarity`                            |
+| `monster_types`, `monster_types_rush`           | 26 + 29 | enum to localized text (e.g. Dragon → ドラゴン族 / 드래곤족)                                                                         |
+| `monster_attributes`, `monster_attributes_rush` | 7 + 6   | enum to localized text (e.g. LIGHT → 光属性 / 빛)                                                                               |
 
 Of the 14,037 Standard cards, 99.7% have a YGOCDB password match. Rush cards
 do not, since YGOCDB only tracks Standard. 341 cards are flagged as
@@ -66,7 +67,7 @@ To refresh:
 
 ```bash
 go run cmd/crawl-konami-db-full/crawl_konami_db_full.go
-go run cmd/audit-langs-type-attribute/main.go
+go run cmd/aggregate-type-attr-rarity/aggregate_type_attr_rarity.go
 ```
 
 The crawler caches every Konami HTML page under `data/html_cache/`

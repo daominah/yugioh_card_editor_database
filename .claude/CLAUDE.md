@@ -35,3 +35,10 @@
 - `konami.CardID` is a string type, but its values are numeric IDs.
   For any ordering or comparison logic (sorting, range checks, thresholds),
   use the `Int()` method instead of comparing the strings lexicographically.
+
+# TODO: Investigate Suspicious Empty Fields
+
+- The `--- suspicious empty fields ---` section of `cmd/query-sqlite-cardid` flags
+  parser misses worth investigating, notably ~462 MonsterLink rows with empty
+  `link_arrows`, ~27 Pendulum rows with `pendulum_scale=0`, and 18 cards_rush
+  rows with empty `card_subtype`.

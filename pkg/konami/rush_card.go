@@ -156,10 +156,15 @@ func rushDuelMonsterTypeJP(s string) MonsterType {
 }
 
 // ParseRushDuelCardHTML parses a Rush Duel card detail page from the Konami
-// Rush Duel card database (db.yugioh-card.com/rushdb) and returns a CardRushDuel.
+// Rush Duel card database (db.yugioh-card.com/rushdb) and returns a
+// CardRushDuel. Convenience wrapper; for the bulk crawl, use Parser to share
+// one parsed DOM tree across LocaleText / Prints / Card / RushCard.
 func ParseRushDuelCardHTML(cardPageHTML []byte, cardID CardID) CardRushDuel {
+	return NewParser(cardPageHTML, cardID).RushCard()
+}
+
+func parseRushDuelCardFromNode(root *html.Node, cardID CardID) CardRushDuel {
 	c := CardRushDuel{Card: Card{MiscKonamiCardID: cardID}}
-	root := textproc.HTMLParseToNode(cardPageHTML)
 
 	// getNode returns the first matched node or an empty node on no match
 	getNode := func(parent *html.Node, xpath string) *html.Node {
@@ -168,12 +173,6 @@ func ParseRushDuelCardHTML(cardPageHTML []byte, cardID CardID) CardRushDuel {
 			return &html.Node{}
 		}
 		return nodes[0]
-	}
-
-	// Remove related-card section to avoid picking up their item_box values
-	relationNode := getNode(root, `//*[@id="relationCard"]`)
-	if relationNode.Parent != nil {
-		relationNode.Parent.RemoveChild(relationNode)
 	}
 
 	// Card name: h1 contains a <span class="ruby"> with an alternate reading

@@ -305,9 +305,15 @@ func linkArrowSortOrder(arrow MonsterLinkArrow) int {
 	}
 }
 
+// ParseKonamiCardHTML parses a Konami yugiohdb card detail page and returns
+// a Card. Convenience wrapper; for the bulk crawl, use Parser to share one
+// parsed DOM tree across LocaleText / Prints / Card / RushCard.
 func ParseKonamiCardHTML(cardPageHTML []byte, cardID CardID) Card {
+	return NewParser(cardPageHTML, cardID).Card()
+}
+
+func parseKonamiCardFromNode(root *html.Node, cardID CardID) Card {
 	c := Card{MiscKonamiCardID: cardID}
-	root := textproc.HTMLParseToNode(cardPageHTML)
 
 	// getNode always return one non-empty node, ignores error
 	getNode := func(parent *html.Node, xpath string) *html.Node {
@@ -316,12 +322,6 @@ func ParseKonamiCardHTML(cardPageHTML []byte, cardID CardID) Card {
 			return &html.Node{}
 		}
 		return node[0]
-	}
-
-	// data of cards related to the parsing card, unused so remove
-	relationNode := getNode(root, `//*[@id="relationCard"]`)
-	if relationNode.Parent != nil {
-		relationNode.Parent.RemoveChild(relationNode)
 	}
 
 	// Extract names from the h1 inside #cardname. parseCardNameAndPronunciation
@@ -408,7 +408,10 @@ func ParseKonamiCardHTML(cardPageHTML []byte, cardID CardID) Card {
 		slices.Sort(c.MonsterAbilities)
 
 		if c.CardSubtype == MonsterLink {
-			linkNode := getNode(root, `//*[@alt="Link"]`)
+			// Match by class prefix instead of alt: alt is localized
+			// ("Link" / "リンク" / "링크"), the "icon_img_set link<digits>"
+			// class string is identical across locale pages.
+			linkNode := getNode(root, `//*[starts-with(@class, "icon_img_set link")]`)
 			// log.Printf("linkNode.Attr: %+v\n", linkNode.Attr)
 			for _, attr := range linkNode.Attr {
 				if attr.Key != "class" {

@@ -10,11 +10,61 @@ import (
 
 // CardPrint is one printed appearance of a card in a specific regional set.
 type CardPrint struct {
+	CardID     CardID // Konami card ID, the parent card this print belongs to
 	Date       string // "YYYY-MM-DD" as scraped from the Konami card page
 	Position   string // full card number, e.g. "LOB-001", "LOCH-JP077"
 	SetName    string // e.g. "Legend of Blue-Eyes White Dragon"
 	RarityCode string // short code, e.g. "UL", "SE"
 	RarityName string // full name, e.g. "Ultimate Rare"
+}
+
+// SetCode extracts the set abbreviation from Position by taking the prefix
+// before the first '-'. "LOCH-JP077" → "LOCH", "LOB-001" → "LOB",
+// "OP28-EN001" → "OP28". Returns Position unchanged if there is no '-'.
+func (p CardPrint) SetCode() string {
+	if i := strings.Index(p.Position, "-"); i > 0 {
+		return p.Position[:i]
+	}
+	return p.Position
+}
+
+// DedupCardPrints collapses CardPrints that share the same (Position,
+// RarityCode) into a single entry, preferring the shortest non-empty
+// RarityName. Konami's per-card pages occasionally list the same code/rarity
+// twice with a base name and a "(SPECIAL Ver.)" subvariant; the shorter
+// string is the canonical rarity name. Output preserves the original order
+// of the kept entries.
+func DedupCardPrints(prints []CardPrint) []CardPrint {
+	type key struct{ position, rarityCode string }
+	chosen := make(map[key]int, len(prints))
+	for i, p := range prints {
+		k := key{p.Position, p.RarityCode}
+		prev, ok := chosen[k]
+		if !ok {
+			chosen[k] = i
+			continue
+		}
+		// Prefer non-empty over empty; among non-empty, prefer shorter.
+		prevName := prints[prev].RarityName
+		currName := p.RarityName
+		switch {
+		case prevName == "" && currName != "":
+			chosen[k] = i
+		case prevName != "" && currName != "" && len(currName) < len(prevName):
+			chosen[k] = i
+		}
+	}
+	keep := make([]bool, len(prints))
+	for _, idx := range chosen {
+		keep[idx] = true
+	}
+	out := make([]CardPrint, 0, len(chosen))
+	for i, p := range prints {
+		if keep[i] {
+			out = append(out, p)
+		}
+	}
+	return out
 }
 
 // CardLocaleText holds locale-specific text for one card in one language.
@@ -49,8 +99,13 @@ type CardLocaleText struct {
 
 // ParseCardPrints extracts all prints from the #update_list section of a
 // Konami card page (yugiohdb or rushdb). One t_row per regional set print.
+// Convenience wrapper; for the bulk crawl, use Parser to share one parsed
+// DOM tree across LocaleText / Prints / Card / RushCard.
 func ParseCardPrints(cardPageHTML []byte, cardID CardID) []CardPrint {
-	root := textproc.HTMLParseToNode(cardPageHTML)
+	return NewParser(cardPageHTML, cardID).Prints()
+}
+
+func parseCardPrintsFromNode(root *html.Node, cardID CardID) []CardPrint {
 	getNode := func(parent *html.Node, xpath string) *html.Node {
 		nodes, _ := textproc.HTMLXPath(parent, xpath)
 		if len(nodes) == 0 {
@@ -77,6 +132,7 @@ func ParseCardPrints(cardPageHTML []byte, cardID CardID) []CardPrint {
 		rarityName := strings.TrimSpace(
 			textproc.HTMLGetText(getNode(row, `.//*[contains(@class,"lr_icon")]//span`)))
 		prints = append(prints, CardPrint{
+			CardID:     cardID,
 			Date:       date,
 			Position:   position,
 			SetName:    setName,
@@ -90,9 +146,14 @@ func ParseCardPrints(cardPageHTML []byte, cardID CardID) []CardPrint {
 // ParseCardLocaleText extracts locale-specific name and effect text from a
 // Konami card page. For JA pages, NamePronunciation holds the katakana from
 // the ruby span and Name holds the printed kanji. For EN/KO pages
-// NamePronunciation is empty.
+// NamePronunciation is empty. Convenience wrapper; for the bulk crawl, use
+// Parser to share one parsed DOM tree across LocaleText / Prints / Card /
+// RushCard.
 func ParseCardLocaleText(cardPageHTML []byte, cardID CardID) CardLocaleText {
-	root := textproc.HTMLParseToNode(cardPageHTML)
+	return NewParser(cardPageHTML, cardID).LocaleText()
+}
+
+func parseCardLocaleTextFromNode(root *html.Node, _ CardID) CardLocaleText {
 	getNode := func(parent *html.Node, xpath string) *html.Node {
 		nodes, _ := textproc.HTMLXPath(parent, xpath)
 		if len(nodes) == 0 {

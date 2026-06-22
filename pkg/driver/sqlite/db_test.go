@@ -192,41 +192,52 @@ func TestUpsertSetAndSetCard(t *testing.T) {
 	db := openTestDB(t)
 
 	// WHEN upserting a set from JA locale, then updating it from EN locale
-	err := db.UpsertSet("LOB", "OCG", "2002-02-04", "青眼の白龍伝説", "ja")
+	err := db.UpsertSet(konami.KonamiSet{
+		Abbreviation:  "LOB",
+		YuGiOhVersion: konami.OCG,
+		ReleaseDate:   "2002-02-04",
+		NameJA:        "青眼の白龍伝説",
+	})
 	if err != nil {
 		t.Fatalf("error UpsertSet JA: %v", err)
 	}
-	err = db.UpsertSet("LOB", "TCG", "2002-03-08", "Legend of Blue Eyes White Dragon", "en")
+	err = db.UpsertSet(konami.KonamiSet{
+		Abbreviation:  "LOB",
+		YuGiOhVersion: konami.TCG,
+		ReleaseDate:   "2002-03-08",
+		NameEN:        "Legend of Blue Eyes White Dragon",
+	})
 	if err != nil {
 		t.Fatalf("error UpsertSet EN: %v", err)
 	}
 
 	// THEN both locale names are preserved
-	var gotNameEN, gotNameJA string
+	var gotNameJA, gotNameEN string
 	err = db.sql.QueryRow(
-		`SELECT name_en, name_ja FROM sets WHERE set_code = ?`, "LOB",
-	).Scan(&gotNameEN, &gotNameJA)
+		`SELECT name_ja, name_en FROM sets WHERE set_code = ?`, "LOB",
+	).Scan(&gotNameJA, &gotNameEN)
 	if err != nil {
 		t.Fatalf("error SELECT sets: %v", err)
-	}
-	if gotNameEN != "Legend of Blue Eyes White Dragon" {
-		t.Errorf("name_en got %q, want %q", gotNameEN, "Legend of Blue Eyes White Dragon")
 	}
 	if gotNameJA != "青眼の白龍伝説" {
 		t.Errorf("name_ja got %q, want %q", gotNameJA, "青眼の白龍伝説")
 	}
+	if gotNameEN != "Legend of Blue Eyes White Dragon" {
+		t.Errorf("name_en got %q, want %q", gotNameEN, "Legend of Blue Eyes White Dragon")
+	}
 
 	// WHEN upserting a set_card entry
 	p := konami.CardPrint{
+		CardID:     "4007",
 		Date:       "2002-02-04",
 		Position:   "LOB-001",
 		SetName:    "Legend of Blue Eyes White Dragon",
 		RarityCode: "UL",
 		RarityName: "Ultimate Rare",
 	}
-	err = db.UpsertSetCard("LOB-001", "LOB", "4007", p)
+	err = db.UpsertSetCards([]konami.CardPrint{p})
 	if err != nil {
-		t.Fatalf("error UpsertSetCard: %v", err)
+		t.Fatalf("error UpsertSetCards: %v", err)
 	}
 
 	// THEN the card_set_code column stores the full card number
@@ -242,6 +253,131 @@ func TestUpsertSetAndSetCard(t *testing.T) {
 	}
 	if gotRarityCode != "UL" {
 		t.Errorf("rarity_code got %q, want %q", gotRarityCode, "UL")
+	}
+}
+
+func TestUpsertSetCardsBatch(t *testing.T) {
+	db := openTestDB(t)
+
+	// GIVEN the parser produced 5 prints for cardID 17403 / POTE-JP001 from
+	// the JA Konami page (SR and PSE each appear twice because Konami lists
+	// the same print once for the main release and again for the
+	// "+1ボーナスパック" bonus pack release), plus 1 simulated bad-data row with
+	// an empty Position. The crawler's pipeline runs DedupCardPrints first,
+	// then hands the result to UpsertSetCards which skips empty-Position
+	// entries.
+	rawPrints := []konami.CardPrint{ // Elemental HERO Spirit of Neos
+		{CardID: "17403", Position: "POTE-JP001", RarityCode: "SR", RarityName: "スーパーレア仕様",
+			Date: "2022-04-23", SetName: "パワー・オブ・ジ・エレメンツ[ POWER OF THE ELEMENTS ]"},
+		{CardID: "17403", Position: "POTE-JP001", RarityCode: "SR", RarityName: "スーパーレア仕様",
+			Date: "2022-04-23", SetName: "パワー・オブ・ジ・エレメンツ +1ボーナスパック"},
+		{CardID: "17403", Position: "POTE-JP001", RarityCode: "SE", RarityName: "シークレットレア仕様",
+			Date: "2022-04-23", SetName: "パワー・オブ・ジ・エレメンツ[ POWER OF THE ELEMENTS ]"},
+		{CardID: "17403", Position: "POTE-JP001", RarityCode: "PSE", RarityName: "プリズマティックシークレットレア仕様",
+			Date: "2022-04-23", SetName: "パワー・オブ・ジ・エレメンツ[ POWER OF THE ELEMENTS ]"},
+		{CardID: "17403", Position: "POTE-JP001", RarityCode: "PSE", RarityName: "プリズマティックシークレットレア仕様",
+			Date: "2022-04-23", SetName: "パワー・オブ・ジ・エレメンツ +1ボーナスパック"},
+		{CardID: "17403", Position: "", RarityCode: "N", RarityName: "bad data, no position"},
+	}
+
+	// WHEN the crawler dedups and upserts the batch
+	deduped := konami.DedupCardPrints(rawPrints)
+	if err := db.UpsertSetCards(deduped); err != nil {
+		t.Fatalf("error UpsertSetCards: %v", err)
+	}
+
+	// THEN exactly 3 rows land in set_cards (one per distinct rarity_code)
+	var n int
+	if err := db.sql.QueryRow(
+		`SELECT COUNT(*) FROM set_cards WHERE card_set_code = ?`, "POTE-JP001",
+	).Scan(&n); err != nil {
+		t.Fatalf("error COUNT set_cards: %v", err)
+	}
+	if n != 3 {
+		t.Errorf("set_cards count got %d, want 3", n)
+	}
+
+	// AND each rarity_code carries the canonical localized name
+	rows, err := db.sql.Query(
+		`SELECT rarity_code, rarity_name FROM set_cards WHERE card_set_code = ?`, "POTE-JP001",
+	)
+	if err != nil {
+		t.Fatalf("error SELECT set_cards: %v", err)
+	}
+	defer rows.Close()
+	got := map[string]string{}
+	for rows.Next() {
+		var code, name string
+		if err := rows.Scan(&code, &name); err != nil {
+			t.Fatalf("error rows.Scan: %v", err)
+		}
+		got[code] = name
+	}
+	wantNames := map[string]string{
+		"SR":  "スーパーレア仕様",
+		"SE":  "シークレットレア仕様",
+		"PSE": "プリズマティックシークレットレア仕様",
+	}
+	for code, wantName := range wantNames {
+		if got[code] != wantName {
+			t.Errorf("rarity_code %q rarity_name got %q, want %q", code, got[code], wantName)
+		}
+	}
+}
+
+func TestUpsertSetCardsFirstWriteWinsOnConflict(t *testing.T) {
+	db := openTestDB(t)
+
+	// GIVEN the JA crawl pass writes WCPS-EN602/UR with the JA rarity_name first
+	jaPrint := konami.CardPrint{
+		CardID: "6959", Position: "WCPS-EN602", RarityCode: "UR",
+		RarityName: "ウルトラレア仕様", Date: "2006-07-02",
+	}
+	if err := db.UpsertSetCards([]konami.CardPrint{jaPrint}); err != nil {
+		t.Fatalf("error UpsertSetCards JA pass: %v", err)
+	}
+
+	// WHEN a later EN crawl pass tries to write the same (card_set_code, rarity_code)
+	// with a different (English) rarity_name
+	enPrint := konami.CardPrint{
+		CardID: "6959", Position: "WCPS-EN602", RarityCode: "UR",
+		RarityName: "Ultra Rare", Date: "2006-07-02",
+	}
+	if err := db.UpsertSetCards([]konami.CardPrint{enPrint}); err != nil {
+		t.Fatalf("error UpsertSetCards EN pass: %v", err)
+	}
+
+	// THEN the JA name is preserved (first-write-wins via the ON CONFLICT clause)
+	var gotName string
+	if err := db.sql.QueryRow(
+		`SELECT rarity_name FROM set_cards WHERE card_set_code = ? AND rarity_code = ?`,
+		"WCPS-EN602", "UR",
+	).Scan(&gotName); err != nil {
+		t.Fatalf("error SELECT set_cards: %v", err)
+	}
+	if gotName != "ウルトラレア仕様" {
+		t.Errorf("rarity_name got %q, want %q (JA first-write-wins)", gotName, "ウルトラレア仕様")
+	}
+}
+
+func TestUpsertSetCardsEmptyBatch(t *testing.T) {
+	db := openTestDB(t)
+
+	// WHEN upserting with no prints
+	if err := db.UpsertSetCards(nil); err != nil {
+		t.Fatalf("error UpsertSetCards nil: %v", err)
+	}
+	if err := db.UpsertSetCards([]konami.CardPrint{}); err != nil {
+		t.Fatalf("error UpsertSetCards empty: %v", err)
+	}
+
+	// THEN the call is a no-op (no rows inserted, no error)
+	var n int
+	if err := db.sql.QueryRow(`SELECT COUNT(*) FROM set_cards`).Scan(&n); err != nil {
+		t.Fatalf("error COUNT set_cards: %v", err)
+	}
+	if n != 0 {
+		t.Errorf("set_cards count got %d, want 0", n)
 	}
 }
 

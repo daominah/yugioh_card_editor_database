@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -8,7 +9,10 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"time"
+
+	_ "modernc.org/sqlite"
 
 	"github.com/daominah/yugioh_card_editor/pkg/base"
 	"github.com/daominah/yugioh_card_editor/pkg/core"
@@ -22,6 +26,15 @@ import (
 //   - cards data from Konami database: `web/konami_data/konami_db.json`
 //   - cards password: `pkg/core/ygocdb_card_password.json`
 //   - card set name: `pkg/core/yugioh_sets.csv`
+//   - JA-only fields snapshot: `data/yugioh.db`
+//     (CardNameEN, IsSpecialSummonOnly).
+//     The daily EN crawl that produces `konami_db.json`
+//     cannot source these two fields from the EN page;
+//     they are read from the SQLite snapshot instead.
+//     The snapshot is refreshed manually by `cmd/crawl-konami-db-full`,
+//     so values can be stale,
+//     and brand-new cards may be missing from the snapshot entirely
+//     (left empty).
 //
 // * output files:
 //   - `web/konami_data/konami_db_en.js`: all cards data as a JavaScript variable, for web asset
@@ -61,7 +74,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("error csvReader.ReadAll: %v", err)
 	}
-	mapKonamiSetsFullName := core.UnmarshalCSVToMapSetAbbreviationToName(records)
+	mapKonamiSetsFullName := konami.UnmarshalCSVToMapSetAbbreviationToName(records)
 	log.Printf("len(mapKonamiSetsFullName): %v", len(mapKonamiSetsFullName))
 	if len(mapKonamiSetsFullName) == 0 {
 		log.Fatalf("error empty mapKonamiSetsFullName")
@@ -82,9 +95,53 @@ func main() {
 	// do not change it without updating the GitHub action too.
 	log.Printf("len(cards): %v", len(cards))
 
-	// add the card password based on the card ID
+	// read JA-only Card fields from the SQLite snapshot.
+	// The daily EN crawl cannot source these from Konami's EN page
+	// (CardNameEN: no <span> in the h1;
+	// IsSpecialSummonOnly: token absent from the species line),
+	// so values are taken from `data/yugioh.db`,
+	// which is refreshed manually by `cmd/crawl-konami-db-full`.
+	// Cards added since the last full re-crawl will be missing here
+	// and keep the empty defaults from the EN crawl.
+	sqliteDBPath := filepath.Join(projectRoot, "data/yugioh.db")
+	sqliteDB, err := sql.Open("sqlite", sqliteDBPath)
+	if err != nil {
+		log.Fatalf("error sql.Open %v: %v", sqliteDBPath, err)
+	}
+	defer sqliteDB.Close()
+	type cardJaFields struct {
+		CardNameEN          string
+		IsSpecialSummonOnly bool
+	}
+	mapCardJaFields := make(map[konami.CardID]cardJaFields)
+	rows, err := sqliteDB.Query(`SELECT card_id, card_name_en, is_special_summon_only FROM cards`)
+	if err != nil {
+		log.Fatalf("error sqliteDB.Query: %v", err)
+	}
+	for rows.Next() {
+		var cardID, isSpecialSummonOnly int
+		var cardNameEN string
+		if err := rows.Scan(&cardID, &cardNameEN, &isSpecialSummonOnly); err != nil {
+			log.Fatalf("error rows.Scan: %v", err)
+		}
+		mapCardJaFields[konami.CardID(strconv.Itoa(cardID))] = cardJaFields{
+			CardNameEN:          cardNameEN,
+			IsSpecialSummonOnly: isSpecialSummonOnly != 0,
+		}
+	}
+	if err := rows.Err(); err != nil {
+		log.Fatalf("error rows.Err: %v", err)
+	}
+	rows.Close()
+	log.Printf("len(mapCardJaFields): %v (from %v)", len(mapCardJaFields), sqliteDBPath)
+
+	// add the card password and JA-only fields based on the card ID
 	for i, card := range cards {
 		cards[i].MiscCardPassword = cardPasswords[card.MiscKonamiCardID].Password
+		if jaFields, ok := mapCardJaFields[card.MiscKonamiCardID]; ok {
+			cards[i].CardNameEN = jaFields.CardNameEN
+			cards[i].IsSpecialSummonOnly = jaFields.IsSpecialSummonOnly
+		}
 	}
 	updatedData, err := json.MarshalIndent(cards, "", "\t")
 	if err != nil {
