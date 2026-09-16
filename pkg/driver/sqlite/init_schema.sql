@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS sets
 -- crawl pass; for the rare promo/Asia codes that appear on multiple locale
 -- pages, first-write-wins (crawl order ja→en→ko, so JA — usually the earliest
 -- release — wins). UpsertSetCards relies on the ON CONFLICT clause below
--- and does not log conflicts; run cmd/query-sqlite-cardid to audit.
+-- and does not log conflicts; run cmd/read-yugiohdb-stats to audit.
 CREATE TABLE IF NOT EXISTS set_cards
 (
     card_set_code TEXT    NOT NULL,            -- full card number, e.g. "LOCH-JP077", "DBLE-KRS03"

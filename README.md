@@ -45,21 +45,21 @@ Standard (TCG / OCG) and Rush Duel cards across en, ja, ko locales, plus every
 Konami set and print. Schema lives in
 [`init_schema.sql`](pkg/driver/sqlite/init_schema.sql).
 
-Contents from the latest crawl:
+Contents from the 2026-07 crawl:
 
 | Table                                           | Rows    | Notes                                                                                                                       |
 |-------------------------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------|
-| `cards`                                         | 14,037  | Standard cards (TCG / OCG / Master Duel)                                                                                    |
-| `cards_rush`                                    | 2,933   | Rush Duel / Duel Links cards                                                                                                |
-| `card_texts`                                    | 46,896  | per-locale name and effect (ja: 16,970 / ko: 16,286 / en: 13,640)                                                           |
-| `card_passwords`                                | 14,071  | 8-digit passwords from ygocdb.com (Konami's DB does not expose this)                                                        |
-| `sets`                                          | 1,536   | every Konami set across all locales                                                                                         |
-| `set_cards`                                     | 121,497 | every print of every card; PK is composite (`card_set_code`, `rarity_code`) so one print can be listed at multiple rarities |
+| `cards`                                         | 14,139  | Standard cards (TCG / OCG / Master Duel)                                                                                    |
+| `cards_rush`                                    | 3,044   | Rush Duel / Duel Links cards                                                                                                |
+| `card_texts`                                    | 47,378  | per-locale name and effect (ja: 17,183 / ko: 16,415 / en: 13,780)                                                           |
+| `card_passwords`                                | 14,206  | 8-digit passwords from ygocdb.com (Konami's DB does not expose this)                                                        |
+| `sets`                                          | 1,549   | every Konami set across all locales                                                                                         |
+| `set_cards`                                     | 123,141 | every print of every card; PK is composite (`card_set_code`, `rarity_code`) so one print can be listed at multiple rarities |
 | `rarities`                                      | 49      | canonical rarity_code → localized rarity name lookup, seeded by `cmd/aggregate-type-attr-rarity`                            |
 | `monster_types`, `monster_types_rush`           | 26 + 29 | enum to localized text (e.g. Dragon → ドラゴン族 / 드래곤족)                                                                         |
 | `monster_attributes`, `monster_attributes_rush` | 7 + 6   | enum to localized text (e.g. LIGHT → 光属性 / 빛)                                                                               |
 
-Of the 14,037 Standard cards, 99.7% have a YGOCDB password match. Rush cards
+Of the 14,139 Standard cards, 99.7% have a YGOCDB password match. Rush cards
 do not, since YGOCDB only tracks Standard. 341 cards are flagged as
 Special-Summon-only (Nomi / Semi-Nomi monsters).
 
@@ -71,9 +71,20 @@ go run cmd/aggregate-type-attr-rarity/aggregate_type_attr_rarity.go
 ```
 
 The crawler caches every Konami HTML page under `data/html_cache/`
-(gitignored), so re-runs do not re-hit Konami's servers. To query the DB
-without the `sqlite3` CLI, modify and run
-[`cmd/query-sqlite-cardid`](cmd/query-sqlite-cardid/query_sqlite_cardid.go).
+(gitignored), so re-runs do not re-hit Konami's servers.
+
+Two read-only commands query the DB without the `sqlite3` CLI:
+
+- [`cmd/read-yugiohdb-stats`](cmd/read-yugiohdb-stats/read_yugiohdb_stats.go)
+  prints the table counts above, plus audit checks for fields the parser failed to fill.
+  Modify it freely to add one-off queries.
+- [`cmd/read-yugiohdb-by-cardid`](cmd/read-yugiohdb-by-cardid/read_yugiohdb_by_cardid.go)
+  takes a card ID and dumps every stored field of that card,
+  joining `card_texts` for all locales, the password, and every print with its set and rarity:
+
+```bash
+go run cmd/read-yugiohdb-by-cardid/read_yugiohdb_by_cardid.go 4007
+```
 
 ## Frontend development with Claude Code
 

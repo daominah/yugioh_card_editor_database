@@ -1,6 +1,8 @@
 package core
 
 import (
+	"encoding/json"
+	"os"
 	"testing"
 
 	"github.com/daominah/yugioh_card_editor/pkg/konami"
@@ -27,4 +29,64 @@ func TestInitMapCardsPassword(t *testing.T) {
 			t.Errorf("cardPasswords[%v].Password = %v, want %v", cid, cardPasswords[cid].Password, password)
 		}
 	}
+}
+
+func TestBuildCardNameToPassword(t *testing.T) {
+	t.Skip("one-off: outputs already generated at ygocdb_card_name_to_password.json and ygocdb_card_name_to_main_or_extra.json")
+
+	// GIVEN the static YGOCDB card password data
+	cardPasswords, err := (&YgocdbStaticData{}).InitMapCardsPassword()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// WHEN building the reverse map from card name to password
+	nameToPassword := make(map[string]string, len(cardPasswords))
+	for _, cp := range cardPasswords {
+		nameToPassword[cp.CardName] = cp.Password
+	}
+
+	// THEN write the map to a JSON file
+	data, err := json.MarshalIndent(nameToPassword, "", "  ")
+	if err != nil {
+		t.Fatal(err)
+	}
+	outputPath := "ygocdb_card_name_to_password.json"
+	if err := os.WriteFile(outputPath, data, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("wrote %d entries to %v", len(nameToPassword), outputPath)
+
+	// GIVEN the Konami card database with card subtypes
+	var cards []konami.Card
+	if err := json.Unmarshal(testCardsData, &cards); err != nil {
+		t.Fatalf("error json.Unmarshal cards: %v", err)
+	}
+
+	// WHEN building the map from card name to main/extra deck placement
+	extraSubtypes := map[konami.CardSubtype]bool{
+		konami.MonsterFusion:  true,
+		konami.MonsterSynchro: true,
+		konami.MonsterXyz:     true,
+		konami.MonsterLink:    true,
+	}
+	nameToMainOrExtra := make(map[string]string, len(cards))
+	for _, card := range cards {
+		placement := "MAIN"
+		if extraSubtypes[card.CardSubtype] {
+			placement = "EXTRA"
+		}
+		nameToMainOrExtra[card.CardName] = placement
+	}
+
+	// THEN write the map to a JSON file
+	data2, err := json.MarshalIndent(nameToMainOrExtra, "", "  ")
+	if err != nil {
+		t.Fatal(err)
+	}
+	outputPath2 := "ygocdb_card_name_to_main_or_extra.json"
+	if err := os.WriteFile(outputPath2, data2, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("wrote %d entries to %v", len(nameToMainOrExtra), outputPath2)
 }

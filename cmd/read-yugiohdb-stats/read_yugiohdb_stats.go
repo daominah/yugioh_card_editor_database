@@ -28,13 +28,21 @@ func main() {
 	}{
 		{"cards total", "SELECT COUNT(*) FROM cards"},
 		{"cards empty (card_type='')", "SELECT COUNT(*) FROM cards WHERE card_type = ''"},
+		{"cards special summon only", "SELECT COUNT(*) FROM cards WHERE is_special_summon_only = 1"},
 		{"cards_rush total", "SELECT COUNT(*) FROM cards_rush"},
 		{"cards_rush empty (card_type='')", "SELECT COUNT(*) FROM cards_rush WHERE card_type = ''"},
 		{"card_texts total", "SELECT COUNT(*) FROM card_texts"},
 		{"card_texts empty (name='')", "SELECT COUNT(*) FROM card_texts WHERE name = ''"},
+		{"card_texts lang='ja'", "SELECT COUNT(*) FROM card_texts WHERE lang = 'ja'"},
+		{"card_texts lang='ko'", "SELECT COUNT(*) FROM card_texts WHERE lang = 'ko'"},
+		{"card_texts lang='en'", "SELECT COUNT(*) FROM card_texts WHERE lang = 'en'"},
 		{"card_passwords total", "SELECT COUNT(*) FROM card_passwords"},
+		// card_passwords comes from ygocdb.com, which also lists card ids absent from
+		// the Konami crawl, so the matched count is the meaningful coverage number.
+		{"card_passwords matched to cards", "SELECT COUNT(DISTINCT card_id) FROM card_passwords WHERE card_id IN (SELECT card_id FROM cards)"},
 		{"sets total", "SELECT COUNT(*) FROM sets"},
 		{"set_cards total", "SELECT COUNT(*) FROM set_cards"},
+		{"rarities total", "SELECT COUNT(*) FROM rarities"},
 		{"monster_types total", "SELECT COUNT(*) FROM monster_types"},
 		{"monster_types_rush total", "SELECT COUNT(*) FROM monster_types_rush"},
 		{"monster_attributes total", "SELECT COUNT(*) FROM monster_attributes"},

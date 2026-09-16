@@ -1,10 +1,12 @@
 package sqlite
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"testing"
 
+	"github.com/daominah/yugioh_card_editor/pkg/base"
 	"github.com/daominah/yugioh_card_editor/pkg/konami"
 )
 
@@ -392,5 +394,23 @@ func openTestDB(t *testing.T) *DB {
 		db.Close()
 		os.Remove(dbPath)
 	})
+	return db
+}
+
+func openRealDB(t *testing.T) *DB {
+	t.Helper()
+	projectRoot, err := base.GetProjectRootDir()
+	if err != nil {
+		t.Skipf("skip: cannot find project root: %v", err)
+	}
+	dbPath := filepath.Join(projectRoot, "data/yugioh.db")
+	if _, err := os.Stat(dbPath); errors.Is(err, os.ErrNotExist) {
+		t.Skipf("skip: %s not found (run cmd/crawl-konami-db-full first)", dbPath)
+	}
+	db, err := Open(dbPath)
+	if err != nil {
+		t.Fatalf("error Open %s: %v", dbPath, err)
+	}
+	t.Cleanup(func() { db.Close() })
 	return db
 }

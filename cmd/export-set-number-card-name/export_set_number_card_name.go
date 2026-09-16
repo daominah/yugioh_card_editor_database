@@ -1,14 +1,13 @@
 package main
 
 import (
-	"database/sql"
 	"encoding/json"
 	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/daominah/yugioh_card_editor/pkg/base"
-	_ "modernc.org/sqlite"
+	"github.com/daominah/yugioh_card_editor/pkg/driver/sqlite"
 )
 
 // Adjustable knobs (edit before running):
@@ -20,36 +19,15 @@ func main() {
 		log.Fatalf("error base.GetProjectRootDir: %v", err)
 	}
 
-	db, err := sql.Open("sqlite", filepath.Join(projectRoot, "data/yugioh.db"))
+	db, err := sqlite.Open(filepath.Join(projectRoot, "data/yugioh.db"))
 	if err != nil {
-		log.Fatalf("error sql.Open: %v", err)
+		log.Fatalf("error sqlite.Open: %v", err)
 	}
 	defer db.Close()
 
-	rows, err := db.Query(`
-		SELECT set_cards.card_set_code, cards.card_name_en
-		FROM set_cards
-		JOIN cards ON set_cards.card_id = cards.card_id
-		ORDER BY set_cards.card_set_code
-	`)
+	lookup, err := db.GetMapSetNumberToCardName()
 	if err != nil {
-		log.Fatalf("error db.Query: %v", err)
-	}
-	defer rows.Close()
-
-	lookup := make(map[string]string)
-
-	for rows.Next() {
-		var setCode, cardNameEN string
-		if err := rows.Scan(&setCode, &cardNameEN); err != nil {
-			log.Fatalf("error rows.Scan: %v", err)
-		}
-		if _, exists := lookup[setCode]; !exists {
-			lookup[setCode] = cardNameEN
-		}
-	}
-	if err := rows.Err(); err != nil {
-		log.Fatalf("error rows.Err: %v", err)
+		log.Fatalf("error db.GetMapSetNumberToCardName: %v", err)
 	}
 
 	outputPath := filepath.Join(projectRoot, "cmd", "export-set-number-card-name", outputFileName)

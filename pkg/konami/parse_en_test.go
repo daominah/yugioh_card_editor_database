@@ -60,6 +60,7 @@ func TestPrepareData(t *testing.T) {
 			"18177", // Evigishki Neremanas, test Ritual Monster
 			"18792", // Cornfield Coatl, test new Illusion monster type
 			"19188", // S:P Little Knight, test Link Monster LINK-2
+			"19375", // Centur-Ion Legatia, test Synchro Monster generic Lv12
 			"19376", // Stand Up Centur-Ion!, test Field Spell
 			"19521", // Prayers of the Voiceless Voice, test Ritual Spell
 			"20536", // Primite Drillbeam, test Quick-Play Spell
@@ -247,6 +248,10 @@ var (
 	//go:embed test_html_en/test_konami_19188.html
 	test_konami_19188 []byte
 	// 19188: S:P Little Knight (Link Monster, LINK-2)
+
+	//go:embed test_html_en/test_konami_19375.html
+	test_konami_19375 []byte
+	// 19375: Centur-Ion Legatia (Synchro Monster, Lv-12)
 
 	//go:embed test_html_en/test_konami_19376.html
 	test_konami_19376 []byte
@@ -892,6 +897,26 @@ If this card is Link Summoned using a Fusion, Synchro, Xyz, or Link Monster as m
 
 				MiscKonamiSet:    "AGOV-EN046",
 				MiscKonamiCardID: "19188",
+				MiscYear:         "2023",
+			}},
+
+		{pageHTML: test_konami_19375, cardID: "19375",
+			want: Card{
+				CardName:    "Centur-Ion Legatia",
+				CardNameEN:  "Centur-Ion Legatia",
+				CardType:    Monster,
+				CardSubtype: MonsterSynchro,
+				CardEffect: `1 Tuner + 1+ non-Tuner monsters
+Your monsters with 2000 or less ATK cannot be destroyed by battle. You can only use each of the following effects of "Centur-Ion Legatia" once per turn. If this card is Special Summoned: You can draw 1 card, then you can destroy the monster your opponent controls with the highest ATK (your choice, if tied). During the End Phase: You can place 1 non-Synchro "Centur-Ion" monster from your hand or GY in your Spell & Trap Zone as a face-up Continuous Trap.`,
+
+				MonsterAttribute:     LIGHT,
+				MonsterType:          Machine,
+				MonsterLevelRankLink: 12,
+				MonsterATK:           3500,
+				MonsterDEF:           2000,
+
+				MiscKonamiSet:    "VASM-EN019",
+				MiscKonamiCardID: "19375",
 				MiscYear:         "2023",
 			}},
 

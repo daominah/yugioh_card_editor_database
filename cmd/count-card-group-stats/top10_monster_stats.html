@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  width: 2400px;
+  height: 2000px;
+  overflow: hidden;
+  background: #eef0f6;
+  color: #202040;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+}
+h1 {
+  font-size: 54px;
+  font-weight: 700;
+  color: #1a2a80;
+  text-align: center;
+  letter-spacing: 2px;
+  line-height: 1.2;
+}
+.subtitle {
+  text-align: center;
+  font-size: 26px;
+  color: #8090b8;
+  margin-top: 10px;
+  margin-bottom: 28px;
+}
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 480px);
+  grid-template-rows: repeat(2, 1fr);
+  column-gap: 120px;
+  row-gap: 24px;
+  justify-content: center;
+  min-height: 0;
+}
+.panel {
+  background: #ffffff;
+  border: 1px solid #d0d4e8;
+  border-radius: 14px;
+  padding: 26px 30px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(20, 30, 80, 0.06);
+}
+.panel-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a2a80;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 2px solid #e0e4f0;
+  flex-shrink: 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th {
+  font-size: 20px;
+  color: #9098c0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0 14px 10px;
+  border-bottom: 1px solid #e0e4f0;
+}
+th:first-child {
+  text-align: left;
+}
+th:not(:first-child) {
+  text-align: right;
+}
+td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f0f2f8;
+  font-size: 24px;
+}
+tr:last-child td {
+  border-bottom: none;
+}
+td:first-child {
+  font-weight: 700;
+  color: #202040;
+  text-align: left;
+}
+td.count {
+  text-align: right;
+  color: #5068b0;
+  font-variant-numeric: tabular-nums;
+}
+td.share {
+  text-align: right;
+  color: #1a8050;
+  font-variant-numeric: tabular-nums;
+  font-size: 22px;
+}
+.panel-note {
+  margin-top: auto;
+  padding-top: 14px;
+  font-size: 20px;
+  color: #9098c0;
+  font-style: italic;
+  flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+
+<h1>Top 10 Monster Stats</h1>
+<p class="subtitle">Total monsters: 9,244 &nbsp;&middot;&nbsp; updated 2026-06</p>
+
+<div class="grid">
+
+  <div class="panel">
+    <div class="panel-title">By Card Frame</div>
+    <table>
+      <thead><tr><th></th><th>Count</th><th>Share</th></tr></thead>
+      <tbody>
+        <tr><td>Effect</td><td class="count">6,207</td><td class="share">67.1%</td></tr>
+        <tr><td>Normal</td><td class="count">722</td><td class="share">7.8%</td></tr>
+        <tr><td>Xyz</td><td class="count">598</td><td class="share">6.5%</td></tr>
+        <tr><td>Fusion</td><td class="count">569</td><td class="share">6.2%</td></tr>
+        <tr><td>Synchro</td><td class="count">531</td><td class="share">5.7%</td></tr>
+        <tr><td>Link</td><td class="count">468</td><td class="share">5.1%</td></tr>
+        <tr><td>Ritual</td><td class="count">149</td><td class="share">1.6%</td></tr>
+      </tbody>
+    </table>
+    <p class="panel-note">&ldquo;Effect&rdquo; counts main-deck Effect monsters only.</p>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">By Attribute</div>
+    <table>
+      <thead><tr><th></th><th>Count</th><th>Share</th></tr></thead>
+      <tbody>
+        <tr><td>DARK</td><td class="count">2,620</td><td class="share">28.3%</td></tr>
+        <tr><td>EARTH</td><td class="count">2,073</td><td class="share">22.4%</td></tr>
+        <tr><td>LIGHT</td><td class="count">1,943</td><td class="share">21.0%</td></tr>
+        <tr><td>WATER</td><td class="count">930</td><td class="share">10.1%</td></tr>
+        <tr><td>WIND</td><td class="count">858</td><td class="share">9.3%</td></tr>
+        <tr><td>FIRE</td><td class="count">814</td><td class="share">8.8%</td></tr>
+        <tr><td>DIVINE</td><td class="count">6</td><td class="share">0.1%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">By Type</div>
+    <table>
+      <thead><tr><th></th><th>Count</th><th>Share</th></tr></thead>
+      <tbody>
+        <tr><td>Warrior</td><td class="count">1,154</td><td class="share">12.5%</td></tr>
+        <tr><td>Machine</td><td class="count">1,057</td><td class="share">11.4%</td></tr>
+        <tr><td>Fiend</td><td class="count">901</td><td class="share">9.7%</td></tr>
+        <tr><td>Dragon</td><td class="count">810</td><td class="share">8.8%</td></tr>
+        <tr><td>Spellcaster</td><td class="count">796</td><td class="share">8.6%</td></tr>
+        <tr><td>Fairy</td><td class="count">577</td><td class="share">6.2%</td></tr>
+        <tr><td>Beast</td><td class="count">430</td><td class="share">4.7%</td></tr>
+        <tr><td>Winged Beast</td><td class="count">337</td><td class="share">3.6%</td></tr>
+        <tr><td>Cyberse</td><td class="count">294</td><td class="share">3.2%</td></tr>
+        <tr><td>Aqua</td><td class="count">288</td><td class="share">3.1%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">By Level / Rank / Link</div>
+    <table>
+      <thead><tr><th>Level/Rank/Link</th><th>Count</th><th>Share</th></tr></thead>
+      <tbody>
+        <tr><td>4</td><td class="count">2,646</td><td class="share">28.6%</td></tr>
+        <tr><td>3</td><td class="count">1,370</td><td class="share">14.8%</td></tr>
+        <tr><td>2</td><td class="count">962</td><td class="share">10.4%</td></tr>
+        <tr><td>8</td><td class="count">835</td><td class="share">9.0%</td></tr>
+        <tr><td>1</td><td class="count">773</td><td class="share">8.4%</td></tr>
+        <tr><td>6</td><td class="count">731</td><td class="share">7.9%</td></tr>
+        <tr><td>5</td><td class="count">701</td><td class="share">7.6%</td></tr>
+        <tr><td>7</td><td class="count">569</td><td class="share">6.2%</td></tr>
+        <tr><td>10</td><td class="count">329</td><td class="share">3.6%</td></tr>
+        <tr><td>9</td><td class="count">186</td><td class="share">2.0%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">By ATK</div>
+    <table>
+      <thead><tr><th>ATK</th><th>Count</th><th>Share</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td class="count">787</td><td class="share">8.5%</td></tr>
+        <tr><td>1000</td><td class="count">532</td><td class="share">5.8%</td></tr>
+        <tr><td>1500</td><td class="count">479</td><td class="share">5.2%</td></tr>
+        <tr><td>1800</td><td class="count">446</td><td class="share">4.8%</td></tr>
+        <tr><td>2000</td><td class="count">438</td><td class="share">4.7%</td></tr>
+        <tr><td>1600</td><td class="count">418</td><td class="share">4.5%</td></tr>
+        <tr><td>2500</td><td class="count">399</td><td class="share">4.3%</td></tr>
+        <tr><td>1200</td><td class="count">392</td><td class="share">4.2%</td></tr>
+        <tr><td>3000</td><td class="count">373</td><td class="share">4.0%</td></tr>
+        <tr><td>800</td><td class="count">355</td><td class="share">3.8%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">By DEF</div>
+    <table>
+      <thead><tr><th>DEF</th><th>Count</th><th>Share</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td class="count">952</td><td class="share">10.8%</td></tr>
+        <tr><td>1000</td><td class="count">808</td><td class="share">9.2%</td></tr>
+        <tr><td>2000</td><td class="count">717</td><td class="share">8.2%</td></tr>
+        <tr><td>1200</td><td class="count">544</td><td class="share">6.2%</td></tr>
+        <tr><td>1500</td><td class="count">467</td><td class="share">5.3%</td></tr>
+        <tr><td>1800</td><td class="count">422</td><td class="share">4.8%</td></tr>
+        <tr><td>800</td><td class="count">390</td><td class="share">4.4%</td></tr>
+        <tr><td>2500</td><td class="count">320</td><td class="share">3.6%</td></tr>
+        <tr><td>1600</td><td class="count">309</td><td class="share">3.5%</td></tr>
+        <tr><td>200</td><td class="count">288</td><td class="share">3.3%</td></tr>
+      </tbody>
+    </table>
+    <p class="panel-note">Link monsters excluded (no DEF stat). Total: 8,776.</p>
+  </div>
+
+</div>
+</body>
+</html>

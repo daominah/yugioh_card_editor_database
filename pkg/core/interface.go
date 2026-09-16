@@ -36,3 +36,22 @@ type DatabaseAggregate interface {
 	UpsertRarities(rows []konami.RarityRow) error
 	UpdateRarityCardCounts() error
 }
+
+// DatabaseReader is the read contract for querying a fully crawled and aggregated yugioh.db.
+// It is intended for use after cmd/crawl-konami-db-full
+// and cmd/aggregate-type-attr-rarity have both completed,
+// so all cards, card_texts, card_passwords, and set_cards rows are present.
+// Implemented by pkg/driver/sqlite.
+type DatabaseReader interface {
+	// GetCard returns the card assembled from cards, card_texts (for lang), and card_passwords.
+	// Returns a wrapped sql.ErrNoRows when cardID is not found in cards.
+	GetCard(cardID konami.CardID, lang string) (konami.Card, error)
+	// GetMapSetNumberToCardName returns a map from card_set_code (e.g. "LOB-001")
+	// to the card's English name.
+	// When the same code appears with multiple rarities, the first occurrence wins.
+	GetMapSetNumberToCardName() (map[string]string, error)
+	// GetCardCounts returns card counts grouped by type, subtype, monster attribute,
+	// monster type, monster level, monster ATK, and monster DEF.
+	// Monster-specific dimensions only count rows where card_type = 'Monster'.
+	GetCardCounts() (konami.CardCounts, error)
+}

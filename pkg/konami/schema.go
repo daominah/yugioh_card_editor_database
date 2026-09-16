@@ -179,6 +179,19 @@ const (
 	Galaxy           MonsterType = "Galaxy"
 )
 
+// CardCounts holds per-dimension card counts from the cards table.
+// Monster-specific dimensions (MonsterAttribute, MonsterType, Level, ATK, DEF)
+// only include rows where card_type = 'Monster'.
+type CardCounts struct {
+	ByType             map[CardType]int
+	BySubtype          map[CardSubtype]int
+	ByMonsterAttribute map[MonsterAttribute]int
+	ByMonsterType      map[MonsterType]int
+	ByMonsterLevel     map[int]int
+	ByMonsterATK       map[int]int
+	ByMonsterDEF       map[int]int
+}
+
 // Int convert CardID (string) to int, return 0 if error
 func (id CardID) Int() int {
 	ret, err := strconv.Atoi(string(id))

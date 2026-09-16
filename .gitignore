@@ -44,7 +44,17 @@ data/yugioh.db-wal
 
 # generated lookup files (run cmd to regenerate)
 cmd/export-set-number-card-name/set_number_card_name_lookup.go
-cmd/export-set-number-card-name/set_number_card_name_lookup.json
+# cmd/export-set-number-card-name/set_number_card_name_lookup.json
+cmd/count-card-group-stats/count_card_group_type.json
+cmd/count-card-group-stats/top10_monster_stats.md
+# cmd/count-card-group-stats/top10_monster_stats.html
+cmd/count-card-group-stats/top10_monster_stats.png
+cmd/count-card-group-stats/top10_card_frame.png
+cmd/count-card-group-stats/top10_attribute.png
+cmd/count-card-group-stats/top10_type.png
+cmd/count-card-group-stats/top10_level_rank_link.png
+cmd/count-card-group-stats/top10_atk.png
+cmd/count-card-group-stats/top10_def.png
 
 # crawler Konami database result, need to rename before add to git
 web/konami_db.json

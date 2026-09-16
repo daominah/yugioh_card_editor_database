@@ -17,7 +17,38 @@ const AltArts = [
 		"OriginalCardID": "4041",
 		"CardName": "Dark Magician",
 		"AltArtIDs": [
-			"3863", "3880"
+			"3863",
+			"3880",
+			"23487"
+		]
+	},
+	{
+		"OriginalCardID": "4386",
+		"CardName": "Blue-Eyes Ultimate Dragon",
+		"AltArtIDs": [
+			"23489"
+		]
+	},
+	{
+		"OriginalCardID": "4766",
+		"CardName": "Dark Magician Girl",
+		"AltArtIDs": [
+			"23488"
+		]
+	},
+	{
+		"OriginalCardID": "4837",
+		"CardName": "Polymerization",
+		"AltArtIDs": [
+			"20386",
+			"23490"
+		]
+	},
+	{
+		"OriginalCardID": "4842",
+		"CardName": "Monster Reborn",
+		"AltArtIDs": [
+			"23491"
 		]
 	},
 	{
@@ -42,6 +73,13 @@ const AltArts = [
 		]
 	},
 	{
+		"OriginalCardID": "5129",
+		"CardName": "Limiter Removal",
+		"AltArtIDs": [
+			"19945"
+		]
+	},
+	{
 		"OriginalCardID": "5328",
 		"CardName": "Reinforcement of the Army",
 		"AltArtIDs": [
@@ -60,6 +98,13 @@ const AltArts = [
 		"CardName": "Elemental HERO Neos",
 		"AltArtIDs": [
 			"3881"
+		]
+	},
+	{
+		"OriginalCardID": "6784",
+		"CardName": "Elemental HERO Stratos",
+		"AltArtIDs": [
+			"3407"
 		]
 	},
 	{
@@ -95,6 +140,13 @@ const AltArts = [
 		"CardName": "Stardust Dragon/Assault Mode",
 		"AltArtIDs": [
 			"22302"
+		]
+	},
+	{
+		"OriginalCardID": "8933",
+		"CardName": "Effect Veiler",
+		"AltArtIDs": [
+			"21224"
 		]
 	},
 	{
@@ -151,6 +203,13 @@ const AltArts = [
 		"CardName": "Clear Wing Synchro Dragon",
 		"AltArtIDs": [
 			"3873"
+		]
+	},
+	{
+		"OriginalCardID": "11765",
+		"CardName": "Cyber Dragon Infinity",
+		"AltArtIDs": [
+			"3898"
 		]
 	},
 	{
@@ -262,7 +321,8 @@ const AltArts = [
 		"OriginalCardID": "14676",
 		"CardName": "I:P Masquerena",
 		"AltArtIDs": [
-			"3415", "22746"
+			"3415",
+			"22746"
 		]
 	},
 	{
@@ -280,10 +340,24 @@ const AltArts = [
 		]
 	},
 	{
+		"OriginalCardID": "14876",
+		"CardName": "Lightning Storm",
+		"AltArtIDs": [
+			"21235"
+		]
+	},
+	{
 		"OriginalCardID": "14908",
 		"CardName": "Secrets of Dark Magic",
 		"AltArtIDs": [
 			"21728"
+		]
+	},
+	{
+		"OriginalCardID": "15022",
+		"CardName": "Ghost Mourner & Moonlit Chill",
+		"AltArtIDs": [
+			"3416"
 		]
 	},
 	{
@@ -294,10 +368,31 @@ const AltArts = [
 		]
 	},
 	{
+		"OriginalCardID": "15057",
+		"CardName": "Fusion Deployment",
+		"AltArtIDs": [
+			"22188"
+		]
+	},
+	{
 		"OriginalCardID": "15123",
 		"CardName": "Eldlich the Golden Lord",
 		"AltArtIDs": [
 			"3423"
+		]
+	},
+	{
+		"OriginalCardID": "15239",
+		"CardName": "Dogmatika Ecclesia, the Virtuous",
+		"AltArtIDs": [
+			"22186"
+		]
+	},
+	{
+		"OriginalCardID": "15242",
+		"CardName": "Dogmatika Fleurdelis, the Knighted",
+		"AltArtIDs": [
+			"22187"
 		]
 	},
 	{
@@ -357,10 +452,24 @@ const AltArts = [
 		]
 	},
 	{
+		"OriginalCardID": "18214",
+		"CardName": "Triple Tactics Thrust",
+		"AltArtIDs": [
+			"22189"
+		]
+	},
+	{
 		"OriginalCardID": "18482",
 		"CardName": "Hu-Li the Jewel Mikanko",
 		"AltArtIDs": [
 			"21732"
+		]
+	},
+	{
+		"OriginalCardID": "18732",
+		"CardName": "Vanquish Soul Caesar Valius",
+		"AltArtIDs": [
+			"23494"
 		]
 	},
 	{
@@ -375,6 +484,34 @@ const AltArts = [
 		"CardName": "S:P Little Knight",
 		"AltArtIDs": [
 			"22747"
+		]
+	},
+	{
+		"OriginalCardID": "21054",
+		"CardName": "Ame no Murakumo no Mitsurugi",
+		"AltArtIDs": [
+			"23496"
+		]
+	},
+	{
+		"OriginalCardID": "21355",
+		"CardName": "Dracotail Faimena",
+		"AltArtIDs": [
+			"23492"
+		]
+	},
+	{
+		"OriginalCardID": "21371",
+		"CardName": "Yummy★Snatchy",
+		"AltArtIDs": [
+			"23493"
+		]
+	},
+	{
+		"OriginalCardID": "21380",
+		"CardName": "K9-17 \"Ripper\"",
+		"AltArtIDs": [
+			"23495"
 		]
 	}
 ]
