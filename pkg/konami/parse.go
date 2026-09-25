@@ -312,6 +312,58 @@ func ParseKonamiCardHTML(cardPageHTML []byte, cardID CardID) Card {
 	return NewParser(cardPageHTML, cardID).Card()
 }
 
+// htmlGetCardText is textproc.HTMLGetText for card text (effect, Pendulum effect),
+// with two differences:
+//
+//   - The effect prefix (circled number with its colon, JA "①：", KO "①:")
+//     stays as written on the Konami page, like on the printed card,
+//     because Unicode normalization (NFKC) would turn it into "1:".
+//     The rest of the text is still normalized, so searching "700" matches JA "７００".
+//   - Since 2026-09, Konami pages write line breaks in card text as escaped "&lt;br&gt;",
+//     which decodes to a literal "<br>" text instead of a <br> element,
+//     so it is converted to a newline here.
+//     Older pages with a <br> element become a newline like in HTMLGetText.
+func htmlGetCardText(node *html.Node) string {
+	var buf strings.Builder
+	var walk func(n *html.Node)
+	walk = func(n *html.Node) {
+		if n.Type == html.TextNode {
+			isExcluded := n.Parent != nil && (n.Parent.Data == "script" || n.Parent.Data == "style")
+			if !isExcluded {
+				buf.WriteString(n.Data)
+				buf.WriteString("\n")
+			}
+		}
+		for child := n.FirstChild; child != nil; child = child.NextSibling {
+			walk(child)
+		}
+	}
+	walk(node)
+	text := regexpLiteralBr.ReplaceAllString(buf.String(), "\n")
+	text = textproc.RemoveRedundantSpace(strings.TrimSpace(text))
+	return normalizeExceptEffectPrefix(text)
+}
+
+// normalizeExceptEffectPrefix applies textproc.NormalizeText to the text
+// between effect prefixes, keeping each prefix unchanged.
+func normalizeExceptEffectPrefix(text string) string {
+	var buf strings.Builder
+	last := 0
+	for _, loc := range regexpEffectPrefix.FindAllStringIndex(text, -1) {
+		buf.WriteString(textproc.NormalizeText(text[last:loc[0]]))
+		buf.WriteString(text[loc[0]:loc[1]])
+		last = loc[1]
+	}
+	buf.WriteString(textproc.NormalizeText(text[last:]))
+	return buf.String()
+}
+
+// regexpEffectPrefix matches a circled number ① to ⑳ with its optional colon,
+// full-width "：" on JA pages or ":" on KO pages.
+var regexpEffectPrefix = regexp.MustCompile(`[①-⑳][：:]?`)
+
+var regexpLiteralBr = regexp.MustCompile(`(?i)<br\s*/?>`)
+
 func parseKonamiCardFromNode(root *html.Node, cardID CardID) Card {
 	c := Card{MiscKonamiCardID: cardID}
 
@@ -340,7 +392,7 @@ func parseKonamiCardFromNode(root *html.Node, cardID CardID) Card {
 		log.Printf("error cardID %v cardTexts len: %v, %v\n", cardID, len(cardTexts), err)
 		return c
 	}
-	cardText1 := textproc.HTMLGetText(cardTexts[1])
+	cardText1 := htmlGetCardText(cardTexts[1])
 	cardText1 = strings.TrimSpace(cardText1)
 	cardText1 = strings.TrimPrefix(cardText1, "Card Text")
 	cardText1 = strings.TrimPrefix(cardText1, "カードテキスト")
@@ -471,7 +523,7 @@ func parseKonamiCardFromNode(root *html.Node, cardID CardID) Card {
 				if err != nil {
 					log.Printf("error cardID %v PendulumScale: %v\n", cardID, penScaleS)
 				}
-				c.PendulumEffect = textproc.HTMLGetText(
+				c.PendulumEffect = htmlGetCardText(
 					getNode(root, `//div[contains(@class,"pen_effect")]`))
 			}
 		}

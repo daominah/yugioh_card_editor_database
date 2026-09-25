@@ -353,7 +353,7 @@ func TestParseCardLocaleText_KO(t *testing.T) {
 			Name:              "번개",
 			NamePronunciation: "",
 			NameEnglishOnPage: "Raigeki",
-			Effect:            "1: 상대 필드의 몬스터를 전부 파괴한다.",
+			Effect:            "①: 상대 필드의 몬스터를 전부 파괴한다.",
 		}},
 
 		// GIVEN a KO trap page
@@ -361,7 +361,7 @@ func TestParseCardLocaleText_KO(t *testing.T) {
 			Name:              "왕궁의 칙명",
 			NamePronunciation: "",
 			NameEnglishOnPage: "Imperial Order",
-			Effect:            "이 카드의 컨트롤러는 서로의 스탠바이 페이즈마다 700 LP를 지불한다. 700 LP 지불할 수 없을 경우 이 카드를 파괴한다. 1: 이 카드가 마법 & 함정 존에 존재하는 한, 필드의 모든 마법 카드의 효과는 무효화된다.",
+			Effect:            "이 카드의 컨트롤러는 서로의 스탠바이 페이즈마다 700 LP를 지불한다. 700 LP 지불할 수 없을 경우 이 카드를 파괴한다. ①: 이 카드가 마법 & 함정 존에 존재하는 한, 필드의 모든 마법 카드의 효과는 무효화된다.",
 		}},
 	} {
 		// WHEN parsing locale text from the KO page

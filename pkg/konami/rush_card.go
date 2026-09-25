@@ -187,7 +187,7 @@ func parseRushDuelCardFromNode(root *html.Node, cardID CardID) CardRushDuel {
 		log.Printf("error rushDuel cardID %v cardTexts len: %v, %v\n", cardID, len(cardTexts), err)
 		return c
 	}
-	cardEffect := textproc.HTMLGetText(cardTexts[1])
+	cardEffect := htmlGetCardText(cardTexts[1])
 	cardEffect = strings.TrimSpace(cardEffect)
 	cardEffect = strings.TrimPrefix(cardEffect, "Card Text")
 	cardEffect = strings.TrimPrefix(cardEffect, "カードテキスト")

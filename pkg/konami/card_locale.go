@@ -174,7 +174,7 @@ func parseCardLocaleTextFromNode(root *html.Node, _ CardID) CardLocaleText {
 	// Effect text
 	cardTexts, _ := textproc.HTMLXPath(root, `//*[@class="CardText"]`)
 	if len(cardTexts) >= 2 {
-		effect := strings.TrimSpace(textproc.HTMLGetText(cardTexts[1]))
+		effect := strings.TrimSpace(htmlGetCardText(cardTexts[1]))
 		effect = strings.TrimPrefix(effect, "Card Text")
 		effect = strings.TrimPrefix(effect, "カードテキスト")
 		effect = strings.TrimPrefix(effect, "카드 텍스트")
@@ -183,7 +183,7 @@ func parseCardLocaleTextFromNode(root *html.Node, _ CardID) CardLocaleText {
 
 	// Pendulum effect (empty string for non-pendulum cards)
 	t.PendulumEffect = strings.TrimSpace(
-		textproc.HTMLGetText(getNode(root, `//div[contains(@class,"pen_effect")]`)))
+		htmlGetCardText(getNode(root, `//div[contains(@class,"pen_effect")]`)))
 
 	// First item_box_value span is the attribute text for monsters. Spell/Trap
 	// cards have only 1-2 such spans (their subtype text), so checking >= 4

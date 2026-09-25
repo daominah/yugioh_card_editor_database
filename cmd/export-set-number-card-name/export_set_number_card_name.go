@@ -10,7 +10,9 @@ import (
 	"github.com/daominah/yugioh_card_editor/pkg/driver/sqlite"
 )
 
-// Adjustable knobs (edit before running):
+// outputFileName file will store a map of card set number to English card name,
+// e.g. "DPKB-EN001": "Blue-Eyes White Dragon".
+// The map is used by yugioh_shop_order\pkg\item\set_number_card_name_lookup.json
 const outputFileName = "set_number_card_name_lookup.json"
 
 func main() {
@@ -42,4 +44,6 @@ func main() {
 	if err := encoder.Encode(lookup); err != nil {
 		log.Fatalf("error encoder.Encode: %v", err)
 	}
+
+	log.Printf("outputfile path: %v", outputPath)
 }

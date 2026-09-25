@@ -332,6 +332,38 @@ func TestParseKonamiCardHTML_JA(t *testing.T) {
 	}
 }
 
+func TestParseKonamiCardHTML_JA_EffectPrefix(t *testing.T) {
+	for _, c := range []struct {
+		cardID     string
+		pageHTML   []byte
+		wantEffect string
+	}{
+		// GIVEN a JA page whose effect starts with the effect prefix "①："
+		{cardID: "4343", pageHTML: test_konami_ja_4343,
+			wantEffect: "①：相手フィールドのモンスターを全て破壊する。"},
+
+		// GIVEN a JA page whose effect has full-width digits and symbols besides the effect prefix
+		{cardID: "4960", pageHTML: test_konami_ja_4960,
+			wantEffect: "このカードのコントローラーはお互いのスタンバイフェイズ毎に700LPを払う。700LP払えない場合このカードを破壊する。①：このカードが魔法&罠ゾーンに存在する限り、フィールドの全ての魔法カードの効果は無効化される。"},
+
+		// GIVEN a JA page whose effect has several lines and effect prefixes ① and ②
+		{cardID: "15524", pageHTML: test_konami_ja_15524,
+			wantEffect: `レベル12モンスター×2
+「天霆號アーゼウス」は、Xモンスターが戦闘を行ったターンに1度、自分フィールドのXモンスターの上に重ねてX召喚する事もできる。
+①：自分・相手ターンに、このカードのX素材を2つ取り除いて発動できる。フィールドの他のカードを全て墓地へ送る。
+②：1ターンに1度、自分フィールドの他のカードが戦闘または相手の効果で破壊された場合に発動できる。手札・デッキ・EXデッキからカード1枚をこのカードのX素材にする。`},
+	} {
+		// WHEN parsing the JA card page
+		got := ParseKonamiCardHTML(c.pageHTML, CardID(c.cardID))
+
+		// THEN the effect prefix keeps the circled number as on the Konami page ("①：", not "1:"),
+		// while the rest is normalized so searching "700" matches ("７００" becomes "700")
+		if got.CardEffect != c.wantEffect {
+			t.Errorf("cardID %v CardEffect got:\n%v\n, want:\n%v\n", c.cardID, got.CardEffect, c.wantEffect)
+		}
+	}
+}
+
 func TestParseCardLocaleText_JA(t *testing.T) {
 	for _, c := range []struct {
 		cardID   string
@@ -353,7 +385,7 @@ func TestParseCardLocaleText_JA(t *testing.T) {
 			Name:              "サンダー・ボルト",
 			NamePronunciation: "サンダー・ボルト",
 			NameEnglishOnPage: "Raigeki",
-			Effect:            "1:相手フィールドのモンスターを全て破壊する。",
+			Effect:            "①：相手フィールドのモンスターを全て破壊する。",
 		}},
 
 		// GIVEN a JA trap page
@@ -361,7 +393,7 @@ func TestParseCardLocaleText_JA(t *testing.T) {
 			Name:              "王宮の勅命",
 			NamePronunciation: "おうきゅうのちょくめい",
 			NameEnglishOnPage: "Imperial Order",
-			Effect:            "このカードのコントローラーはお互いのスタンバイフェイズ毎に700LPを払う。700LP払えない場合このカードを破壊する。1:このカードが魔法&罠ゾーンに存在する限り、フィールドの全ての魔法カードの効果は無効化される。",
+			Effect:            "このカードのコントローラーはお互いのスタンバイフェイズ毎に700LPを払う。700LP払えない場合このカードを破壊する。①：このカードが魔法&罠ゾーンに存在する限り、フィールドの全ての魔法カードの効果は無効化される。",
 		}},
 	} {
 		// WHEN parsing locale text from the JA page
