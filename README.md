@@ -147,3 +147,11 @@ Steps to generate this file:
 3. Upload to Google Drive to Download as PDF
    (LibreOffice hangs when exporting to PDF, probably because of file too large),
    change page size to Height 19.9", Width 19", so 100 rows fit in 1 page.
+
+## Disclaimer
+
+This is an unofficial fan project, not affiliated with or endorsed by Konami.
+Yu-Gi-Oh! card names, card text, artwork, and card frame designs
+are trademarks and copyrights of Konami.
+Fonts belong to their respective owners.
+The [BSD 2-Clause License](LICENSE) covers only the source code of this repo.
