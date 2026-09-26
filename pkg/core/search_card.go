@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/daominah/yugioh_card_editor/pkg/konami"
+	"github.com/daominah/yugioh_card_editor_database/pkg/konami"
 )
 
 type CardDatabase struct {

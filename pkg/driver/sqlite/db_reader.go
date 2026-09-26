@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/daominah/yugioh_card_editor/pkg/konami"
+	"github.com/daominah/yugioh_card_editor_database/pkg/konami"
 )
 
 // GetCard returns the card assembled from three tables:

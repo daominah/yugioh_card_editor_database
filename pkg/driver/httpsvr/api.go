@@ -4,7 +4,7 @@ package httpsvr
 import (
 	"net/http"
 
-	"github.com/daominah/yugioh_card_editor/pkg/core"
+	"github.com/daominah/yugioh_card_editor_database/pkg/core"
 )
 
 func NewHandlerAPI(app *core.App) http.Handler {

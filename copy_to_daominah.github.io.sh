@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Script to copy necessary files from
-# dir github.com/daominah/yugioh_card_editor/web to
+# dir github.com/daominah/yugioh_card_editor_database/web to
 # dir github.com/daominah/daominah.github.io,
 # so we can push the changes to serve on GitHub page
 

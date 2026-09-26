@@ -14,10 +14,10 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/daominah/yugioh_card_editor/pkg/base"
-	"github.com/daominah/yugioh_card_editor/pkg/core"
-	"github.com/daominah/yugioh_card_editor/pkg/driver/ygocdb"
-	"github.com/daominah/yugioh_card_editor/pkg/konami"
+	"github.com/daominah/yugioh_card_editor_database/pkg/base"
+	"github.com/daominah/yugioh_card_editor_database/pkg/core"
+	"github.com/daominah/yugioh_card_editor_database/pkg/driver/ygocdb"
+	"github.com/daominah/yugioh_card_editor_database/pkg/konami"
 )
 
 // main will read and write files in this repository:
@@ -151,7 +151,7 @@ func main() {
 	// the final output will be a JavaScript file that has a variable named CardDatabase,
 	// which contains the updated data.
 	lastUpdated := time.Now().In(base.VietnamTimezone).Format(time.RFC3339)
-	thisFileAction := `github.com/daominah/yugioh_card_editor/cmd/add-card-password`
+	thisFileAction := `github.com/daominah/yugioh_card_editor_database/cmd/add-card-password`
 	commentLine := fmt.Sprintf("// CardDatabase was updated at %s\n// by %v\n", lastUpdated, thisFileAction)
 	log.Printf("commentLine:\n%s", commentLine)
 

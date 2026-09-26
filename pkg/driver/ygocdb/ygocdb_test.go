@@ -3,8 +3,8 @@ package ygocdb
 import (
 	"testing"
 
-	"github.com/daominah/yugioh_card_editor/pkg/core"
-	"github.com/daominah/yugioh_card_editor/pkg/konami"
+	"github.com/daominah/yugioh_card_editor_database/pkg/core"
+	"github.com/daominah/yugioh_card_editor_database/pkg/konami"
 )
 
 func TestYgocdbDownloadData_InitMapCardsPassword(t *testing.T) {

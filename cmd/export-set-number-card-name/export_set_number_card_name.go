@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/daominah/yugioh_card_editor/pkg/base"
-	"github.com/daominah/yugioh_card_editor/pkg/driver/sqlite"
+	"github.com/daominah/yugioh_card_editor_database/pkg/base"
+	"github.com/daominah/yugioh_card_editor_database/pkg/driver/sqlite"
 )
 
 // outputFileName file will store a map of card set number to English card name,

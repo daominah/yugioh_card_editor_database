@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/daominah/yugioh_card_editor/pkg/konami"
+	"github.com/daominah/yugioh_card_editor_database/pkg/konami"
 )
 
 // Aggregate orchestrates all five lookup-table aggregation passes against db.

@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/daominah/yugioh_card_editor/pkg/base"
-	"github.com/daominah/yugioh_card_editor/pkg/konami"
+	"github.com/daominah/yugioh_card_editor_database/pkg/base"
+	"github.com/daominah/yugioh_card_editor_database/pkg/konami"
 )
 
 // testCardsData will be loaded from the data file in TestMain
@@ -29,7 +29,7 @@ func init() {
 	// testCardsData looks like:
 	_ = `
 // CardDatabase was updated at 2026-01-28T08:24:06+07:00
-// by github.com/daominah/yugioh_card_editor/cmd/add-card-password
+// by github.com/daominah/yugioh_card_editor_database/cmd/add-card-password
 const CardDatabase = [
 	...
 ]

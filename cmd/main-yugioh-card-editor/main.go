@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/daominah/yugioh_card_editor/pkg/driver/httpsvr"
+	"github.com/daominah/yugioh_card_editor_database/pkg/driver/httpsvr"
 )
 
 func main() {

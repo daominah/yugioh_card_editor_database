@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/daominah/yugioh_card_editor/pkg/base"
-	"github.com/daominah/yugioh_card_editor/pkg/konami"
+	"github.com/daominah/yugioh_card_editor_database/pkg/base"
+	"github.com/daominah/yugioh_card_editor_database/pkg/konami"
 )
 
 func TestUpsertCard(t *testing.T) {

@@ -31,7 +31,7 @@ may need adjustment on other display configurations.
 
 1. Navigate to the card editor:
    ```
-   browser_navigate to file:///C:/Users/tungd/go/src/github.com/daominah/yugioh_card_editor/web/index.html
+   browser_navigate to file:///C:/Users/tungd/go/src/github.com/daominah/yugioh_card_editor_database/web/index.html
    ```
 
 2. Use `browser_evaluate` to fill the search box and trigger search:

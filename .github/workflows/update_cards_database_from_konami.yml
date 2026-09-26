@@ -85,7 +85,7 @@ jobs:
           if [ -n "${{ steps.add_password.outputs.card_count }}" ]; then
             CARD_COUNT_MSG="${{ steps.add_password.outputs.card_count }} cards"
           fi
-          git commit -m "Auto updated ${CARD_COUNT_MSG}, by daominah/yugioh_card_editor GitHub action at $COMMIT_TIME"
+          git commit -m "Auto updated ${CARD_COUNT_MSG}, by daominah/yugioh_card_editor_database GitHub action at $COMMIT_TIME"
           git push
           echo "changed=true" >> $GITHUB_OUTPUT
         fi

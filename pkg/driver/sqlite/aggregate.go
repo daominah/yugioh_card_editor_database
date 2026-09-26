@@ -3,8 +3,8 @@ package sqlite
 import (
 	"fmt"
 
-	"github.com/daominah/yugioh_card_editor/pkg/core"
-	"github.com/daominah/yugioh_card_editor/pkg/konami"
+	"github.com/daominah/yugioh_card_editor_database/pkg/core"
+	"github.com/daominah/yugioh_card_editor_database/pkg/konami"
 )
 
 // Compile-time check that *DB implements core.DatabaseAggregate.

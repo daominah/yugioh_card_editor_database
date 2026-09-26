@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/daominah/yugioh_card_editor/pkg/konami"
+	"github.com/daominah/yugioh_card_editor_database/pkg/konami"
 )
 
 // TxWriter funnels write operations from many goroutines through a single

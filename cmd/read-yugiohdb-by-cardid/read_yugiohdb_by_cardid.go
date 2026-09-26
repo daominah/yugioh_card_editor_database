@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/daominah/yugioh_card_editor/pkg/base"
+	"github.com/daominah/yugioh_card_editor_database/pkg/base"
 	"golang.org/x/text/width"
 	_ "modernc.org/sqlite"
 )

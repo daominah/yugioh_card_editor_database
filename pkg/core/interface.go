@@ -2,7 +2,7 @@
 // resources (database, HTTP, websocket, message queue, file, ..)
 package core
 
-import "github.com/daominah/yugioh_card_editor/pkg/konami"
+import "github.com/daominah/yugioh_card_editor_database/pkg/konami"
 
 // App now is just a placeholder
 // (NewHandlerAPI receives this App when init, but it is not used yet)

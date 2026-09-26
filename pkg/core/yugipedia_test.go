@@ -13,7 +13,7 @@ import (
 	"github.com/mywrap/textproc"
 	"golang.org/x/net/html"
 
-	"github.com/daominah/yugioh_card_editor/pkg/konami"
+	"github.com/daominah/yugioh_card_editor_database/pkg/konami"
 )
 
 //go:embed set_yugipedia.html

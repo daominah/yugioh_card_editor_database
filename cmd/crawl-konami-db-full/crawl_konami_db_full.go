@@ -13,11 +13,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/daominah/yugioh_card_editor/pkg/base"
-	"github.com/daominah/yugioh_card_editor/pkg/core"
-	"github.com/daominah/yugioh_card_editor/pkg/driver/sqlite"
-	"github.com/daominah/yugioh_card_editor/pkg/driver/ygocdb"
-	"github.com/daominah/yugioh_card_editor/pkg/konami"
+	"github.com/daominah/yugioh_card_editor_database/pkg/base"
+	"github.com/daominah/yugioh_card_editor_database/pkg/core"
+	"github.com/daominah/yugioh_card_editor_database/pkg/driver/sqlite"
+	"github.com/daominah/yugioh_card_editor_database/pkg/driver/ygocdb"
+	"github.com/daominah/yugioh_card_editor_database/pkg/konami"
 )
 
 // Adjustable knobs for the crawl. Edit and re-run.

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/daominah/yugioh_card_editor/pkg/base"
+	"github.com/daominah/yugioh_card_editor_database/pkg/base"
 )
 
 func NewHandlerGUI(webDirPath string) (http.Handler, error) {

@@ -10,8 +10,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/daominah/yugioh_card_editor/pkg/core"
-	"github.com/daominah/yugioh_card_editor/pkg/konami"
+	"github.com/daominah/yugioh_card_editor_database/pkg/core"
+	"github.com/daominah/yugioh_card_editor_database/pkg/konami"
 )
 
 const ygocdbURL = "https://ygocdb.com/api/v0/cards.zip"

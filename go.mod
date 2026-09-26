@@ -1,4 +1,4 @@
-module github.com/daominah/yugioh_card_editor
+module github.com/daominah/yugioh_card_editor_database
 
 go 1.26
 
