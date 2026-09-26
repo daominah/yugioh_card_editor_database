@@ -45,8 +45,8 @@
 # TODO: Investigate Suspicious Empty Fields
 
 - The `--- suspicious empty fields ---` section of `cmd/read-yugiohdb-stats` flags
-  parser misses worth investigating. Counts from the 2026-07 crawl:
-  276 cards with empty `card_name_en`, 52 set_cards rows with empty `release_date`,
+  parser misses worth investigating. Counts from the 2026-09 crawl:
+  406 cards with empty `card_name_en`, 52 set_cards rows with empty `release_date`,
   28 Pendulum rows with `pendulum_scale=0`, 19 cards_rush rows with empty `card_subtype`,
   7 non-Link monsters with `level_rank_link=0`, 6 ja card_texts rows with empty `effect`,
   and 1 set_cards row missing both `rarity_code` and `rarity_name`.
