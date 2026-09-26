@@ -56,6 +56,9 @@ cmd/count-card-group-stats/top10_level_rank_link.png
 cmd/count-card-group-stats/top10_atk.png
 cmd/count-card-group-stats/top10_def.png
 
+# notes of the Master Duel card decoder round in progress
+cmd/masterduel-card-decoder/tmp-*.md
+
 # crawler Konami database result, need to rename before add to git
 web/konami_db.json
 web/konami_data/konami_db.json

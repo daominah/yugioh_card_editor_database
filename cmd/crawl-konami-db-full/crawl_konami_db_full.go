@@ -112,6 +112,10 @@ func main() {
 // the whole crawl is one transaction that commits at the end,
 // so the page cache absorbs most of the work and we hit disk once.
 func openFreshBulkDB(path string) (*sqlite.DB, *sqlite.TxWriter) {
+	// data/ may not exist yet, e.g. in a checkout without a committed yugioh.db.
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		log.Fatalf("error os.MkdirAll %v: %v", filepath.Dir(path), err)
+	}
 	for _, suffix := range []string{"", "-wal", "-shm"} {
 		p := path + suffix
 		if err := os.Remove(p); err != nil && !os.IsNotExist(err) {

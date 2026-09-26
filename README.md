@@ -86,6 +86,10 @@ Two read-only commands query the DB without the `sqlite3` CLI:
 go run cmd/read-yugiohdb-by-cardid/read_yugiohdb_by_cardid.go 4007
 ```
 
+[`cmd/masterduel-card-decoder`](cmd/masterduel-card-decoder/masterduel-card-decoder.md)
+ranks the next guess in the Master Duel card decoder game
+by how well it splits the remaining candidates.
+
 ## Frontend development with Claude Code
 
 [Playwright MCP](https://github.com/microsoft/playwright-mcp)
