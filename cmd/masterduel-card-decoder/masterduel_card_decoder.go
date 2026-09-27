@@ -21,7 +21,7 @@ import (
 
 // Inputs (edit for each guess).
 // confirmed holds at most 1 value per stat; excluded piles up the unmatched values.
-// Use UnknownBattleStat for an ATK or DEF of "?".
+// Use UndefinedBattleStat for an ATK or DEF of "?".
 var (
 	confirmed = Filter{
 		Types: []konami.MonsterType{konami.Dinosaur},
@@ -32,6 +32,15 @@ var (
 		Frames:     []CardFrame{Effect},
 		Levels:     []int{4},
 		DEFs:       []int{0},
+	}
+	// excludedCandidates drops cards the game lacks (usually new cards).
+	// The filter uses only the card ID key; the English name is for a human double check.
+	// Each comment is the card's first release date.
+	excludedCandidates = map[int]string{
+		10112: "Holactie the Creator of Light",  // 2011-12-10
+		14367: "Exodia, the Legendary Defender", // 2019-02-09
+		22952: "Celtic Mystic",                  // 2026-04-25
+		23359: "D-HERO ドレッドノートガイ",               // 2026-07-18
 	}
 )
 
@@ -127,10 +136,10 @@ func readMonsters(db *sql.DB) ([]Monster, error) {
 			frame = Pendulum
 		}
 		if atkStr == "?" {
-			atk = UnknownBattleStat
+			atk = UndefinedBattleStat
 		}
 		if defStr == "?" {
-			def = UnknownBattleStat
+			def = UndefinedBattleStat
 		}
 		m.Stats = map[Stat]string{
 			Attribute: attribute,
@@ -149,7 +158,7 @@ func readMonsters(db *sql.DB) ([]Monster, error) {
 }
 
 func formatBattleStat(value int) string {
-	if value == UnknownBattleStat {
+	if value == UndefinedBattleStat {
 		return "?"
 	}
 	return strconv.Itoa(value)
@@ -167,6 +176,9 @@ func filterCandidates(monsters []Monster) []Monster {
 }
 
 func isCandidate(m Monster, confirmedValues, excludedValues map[Stat][]string) bool {
+	if _, isExcluded := excludedCandidates[m.CardID]; isExcluded {
+		return false
+	}
 	for s, values := range confirmedValues {
 		if !slices.Contains(values, m.Stats[s]) {
 			return false
@@ -422,8 +434,10 @@ const (
 	Pendulum CardFrame = "Pendulum"
 )
 
-// UnknownBattleStat stands for an ATK or DEF printed as "?".
-const UnknownBattleStat = -1
+// UndefinedBattleStat stands for an ATK or DEF printed as "?".
+// The value is not unknown but defined by the card's effect,
+// and counts as 0 wherever that effect does not apply.
+const UndefinedBattleStat = -1
 
 // Filter lists stat values; an empty field does not filter that stat.
 type Filter struct {

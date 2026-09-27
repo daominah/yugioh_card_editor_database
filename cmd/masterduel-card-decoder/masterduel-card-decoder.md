@@ -35,13 +35,15 @@ Goal: each guess **leaves as few candidates** as possible, whatever the game rep
 - Check: the player **compares the game's candidates count with the database's**.
   The game's should be a bit lower, because the game lacks some new cards.
   A big gap means a wrong filter.
+  When the player names a card the game lacks, add it to `excludedCandidates`,
+  with its first release date as a comment.
 - Notes: after each guess or hint, **record the round**
   in `cmd/masterduel-card-decoder/tmp-masterduel-round.md` as in the example below.
   Delete the file when the player says the round is won.
 
 ## Query candidates
 
-Edit `confirmed` and `excluded` at the top of `masterduel_card_decoder.go`,
+Edit `confirmed`, `excluded`, and `excludedCandidates` at the top of `masterduel_card_decoder.go`,
 then run `go run ./cmd/masterduel-card-decoder` to query `data/yugioh.db`.
 
 The game treats Pendulum as its own frame,
