@@ -24,14 +24,15 @@ import (
 // Use UndefinedBattleStat for an ATK or DEF of "?".
 var (
 	confirmed = Filter{
-		Types: []konami.MonsterType{konami.Dinosaur},
-		ATKs:  []int{2000},
+		Attributes:      []konami.MonsterAttribute{konami.DARK},
+		Frames:          []CardFrame{Effect},
+		FrameIsPendulum: Yes,
+		Types:           []konami.MonsterType{konami.Wyrm},
+		Levels:          []int{4},
 	}
 	excluded = Filter{
-		Attributes: []konami.MonsterAttribute{konami.EARTH},
-		Frames:     []CardFrame{Effect},
-		Levels:     []int{4},
-		DEFs:       []int{0},
+		ATKs: []int{1800},
+		DEFs: []int{1000},
 	}
 	// excludedCandidates drops cards the game lacks (usually new cards).
 	// The filter uses only the card ID key; the English name is for a human double check.
@@ -130,11 +131,7 @@ func readMonsters(db *sql.DB) ([]Monster, error) {
 		if err != nil {
 			return nil, fmt.Errorf("error rows.Scan: %w", err)
 		}
-		// The game treats Pendulum as its own frame.
-		frame := CardFrame(strings.TrimPrefix(subtype, "Monster"))
-		if isPendulum == 1 {
-			frame = Pendulum
-		}
+		m.IsPendulum = isPendulum == 1
 		if atkStr == "?" {
 			atk = UndefinedBattleStat
 		}
@@ -143,7 +140,7 @@ func readMonsters(db *sql.DB) ([]Monster, error) {
 		}
 		m.Stats = map[Stat]string{
 			Attribute: attribute,
-			Frame:     string(frame),
+			Frame:     strings.TrimPrefix(subtype, "Monster"),
 			Type:      monsterType,
 			Level:     strconv.Itoa(level),
 			ATK:       formatBattleStat(atk),
@@ -177,6 +174,9 @@ func filterCandidates(monsters []Monster) []Monster {
 
 func isCandidate(m Monster, confirmedValues, excludedValues map[Stat][]string) bool {
 	if _, isExcluded := excludedCandidates[m.CardID]; isExcluded {
+		return false
+	}
+	if confirmed.FrameIsPendulum != Unknown && m.IsPendulum != (confirmed.FrameIsPendulum == Yes) {
 		return false
 	}
 	for s, values := range confirmedValues {
@@ -418,20 +418,23 @@ const (
 	DEF       Stat = "DEF"
 )
 
-// CardFrame is the monster frame as the game shows it,
-// which differs from konami.CardSubtype: no "Monster" prefix, and Pendulum is its own frame.
+// CardFrame is the monster frame as the game compares it:
+// konami.CardSubtype without the "Monster" prefix.
+// Pendulum is a special part of the frame, kept out of CardFrame
+// and filtered explicitly by Filter.FrameIsPendulum:
+// an Effect Pendulum monster matches an Effect guess,
+// and the game only shows the Pendulum part when revealing the frame.
 type CardFrame string
 
 // CardFrame enum values.
 const (
-	Normal   CardFrame = "Normal"
-	Effect   CardFrame = "Effect"
-	Ritual   CardFrame = "Ritual"
-	Fusion   CardFrame = "Fusion"
-	Synchro  CardFrame = "Synchro"
-	Xyz      CardFrame = "Xyz"
-	Link     CardFrame = "Link"
-	Pendulum CardFrame = "Pendulum"
+	Normal  CardFrame = "Normal"
+	Effect  CardFrame = "Effect"
+	Ritual  CardFrame = "Ritual"
+	Fusion  CardFrame = "Fusion"
+	Synchro CardFrame = "Synchro"
+	Xyz     CardFrame = "Xyz"
+	Link    CardFrame = "Link"
 )
 
 // UndefinedBattleStat stands for an ATK or DEF printed as "?".
@@ -439,14 +442,27 @@ const (
 // and counts as 0 wherever that effect does not apply.
 const UndefinedBattleStat = -1
 
+// TriBool is a yes or no answer that may not be known yet.
+type TriBool string
+
+// TriBool enum values.
+const (
+	Unknown TriBool = ""
+	Yes     TriBool = "YES"
+	No      TriBool = "NO"
+)
+
 // Filter lists stat values; an empty field does not filter that stat.
 type Filter struct {
 	Attributes []konami.MonsterAttribute
 	Frames     []CardFrame
-	Types      []konami.MonsterType
-	Levels     []int
-	ATKs       []int
-	DEFs       []int
+	// FrameIsPendulum is read from confirmed only, Unknown does not filter.
+	// Set it once the game reveals the frame, e.g. Yes for "Effect Pendulum".
+	FrameIsPendulum TriBool
+	Types           []konami.MonsterType
+	Levels          []int
+	ATKs            []int
+	DEFs            []int
 }
 
 // values converts the filter to the same wording as Monster.Stats.
@@ -475,9 +491,10 @@ func (f Filter) values() map[Stat][]string {
 
 // Monster holds the stats of one monster card as the game shows them.
 type Monster struct {
-	CardID int
-	Name   string
-	Stats  map[Stat]string
+	CardID     int
+	Name       string
+	Stats      map[Stat]string
+	IsPendulum bool
 }
 
 // Group is a set of candidates sharing identical unconfirmed stats,

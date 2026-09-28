@@ -46,10 +46,13 @@ Goal: each guess **leaves as few candidates** as possible, whatever the game rep
 Edit `confirmed`, `excluded`, and `excludedCandidates` at the top of `masterduel_card_decoder.go`,
 then run `go run ./cmd/masterduel-card-decoder` to query `data/yugioh.db`.
 
-The game treats Pendulum as its own frame,
-but the database stores Pendulum monsters as `MonsterEffect` (or another frame)
-with `is_pendulum = 1`.
-So Effect means `card_subtype = 'MonsterEffect' AND is_pendulum = 0`.
+Pendulum is a special part of the frame, **filtered by its own `FrameIsPendulum`**:
+the game compares only the base frame,
+so an Effect guess matches an Effect Pendulum hidden monster.
+When the game reveals the frame, it shows the Pendulum part too, e.g. "Effect Pendulum".
+Record that as `Frames: []CardFrame{Effect}` plus `FrameIsPendulum: Yes` in `confirmed`,
+or `No` for a frame revealed without Pendulum.
+The database matches: Pendulum monsters keep their base `card_subtype` with `is_pendulum = 1`.
 
 ## Rank next guesses
 
@@ -72,7 +75,7 @@ Only candidates are tried as guesses.
 The duration grows with the square of the candidates count:
 about 2 seconds for 2600 candidates, 24 seconds for the whole pool of 9275.
 Over 3000 candidates the script warns before the check,
-which only happens when the start reveals Frame Effect (5913 candidates).
+which only happens when the start reveals Frame Effect (6286 candidates, or fewer with `FrameIsPendulum`).
 
 Example: 4 candidates with Dinosaur and ATK 2000 confirmed,
 EARTH, Effect, Level 4, and DEF 0 excluded.
