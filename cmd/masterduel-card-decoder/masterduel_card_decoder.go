@@ -41,6 +41,7 @@ var (
 		10112: "Holactie the Creator of Light",  // 2011-12-10
 		14367: "Exodia, the Legendary Defender", // 2019-02-09
 		22952: "Celtic Mystic",                  // 2026-04-25
+		22963: "Emi Blitzclique",                // 2026-04-25
 		23359: "D-HERO ドレッドノートガイ",               // 2026-07-18
 	}
 )
