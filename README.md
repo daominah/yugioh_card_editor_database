@@ -68,7 +68,12 @@ To refresh:
 ```bash
 go run cmd/crawl-konami-db-full/crawl_konami_db_full.go
 go run cmd/aggregate-type-attr-rarity/aggregate_type_attr_rarity.go
+go run cmd/export-all-cards-csv/export_all_cards_csv.go
 ```
+
+The last command only reads the database (a few seconds)
+and writes the human-readable files `data/yugioh_cards.csv`, `data/yugioh_cards.xlsx`,
+and `data/yugioh_sets.csv`.
 
 The crawler caches every Konami HTML page under `data/html_cache/`
 (gitignored), so re-runs do not re-hit Konami's servers.
@@ -121,7 +126,7 @@ to serve on `http://localhost:20808`.
 
 ## All cards list table
 
-Final result is file [yugioh_cards.pdf](pkg/core/yugioh_cards.pdf).
+Final result is file [yugioh_cards.pdf](data/yugioh_cards.pdf).
 All cards shown as a table (without card effect text).
 
 The [Google Drive file yugioh_cards.gsheet](
@@ -129,8 +134,14 @@ https://docs.google.com/spreadsheets/d/1EzqMmwNq6jc_4JbxjxvjK8EdCHBTTyal248kmG2B
 
 Steps to generate this file:
 
-1. Run `cmd/add-card-password` to get file `yugioh_cards.csv`.
-2. Open it as XLSX file in LibreOffice Calc. Format rows color with
+1. Run `cmd/export-all-cards-csv` to get files `data/yugioh_cards.csv` and `data/yugioh_cards.xlsx`
+   (every card with an English name, set columns from its first English print).
+   It reads the existing `data/yugioh.db`,
+   run `cmd/crawl-konami-db-full` before it to include new cards.
+   The XLSX file already has the rows colored by card type
+   (see `writeCardsXLSX` in `cmd/export-all-cards-csv`).
+2. Deprecated, now automated by step 1:
+   open the CSV as XLSX file in LibreOffice Calc. Format rows color with
    `Format`: `Conditional`, using `Formula is`:
 
   ```excel
@@ -144,7 +155,7 @@ Steps to generate this file:
   AND($C2="Trap", ISODD(ROW()))                    // Light Purple
   ```
 
-3. Upload to Google Drive to Download as PDF
+3. Upload the XLSX file to Google Drive to Download as PDF
    (LibreOffice hangs when exporting to PDF, probably because of file too large),
    change page size to Height 19.9", Width 19", so 100 rows fit in 1 page.
 

@@ -268,6 +268,49 @@ func TestGetMapSetNumberToCardName(t *testing.T) {
 	}
 }
 
+func TestListCardsEN(t *testing.T) {
+	db := openRealDB(t)
+
+	// WHEN listing every card with an English name from the crawled database
+	cards, err := db.ListCardsEN()
+	if err != nil {
+		t.Fatalf("error ListCardsEN: %v", err)
+	}
+	byID := make(map[konami.CardID]konami.Card)
+	for _, c := range cards {
+		byID[c.MiscKonamiCardID] = c
+	}
+
+	// THEN each card shows its first English print,
+	// skipping Japanese and Korean prints that share the set code
+	for _, tc := range []struct {
+		id      konami.CardID
+		name    string
+		setCode string
+		year    string
+	}{
+		{id: "4007", name: "Blue-Eyes White Dragon", setCode: "LOB-001", year: "2002"},
+		// the Korean print "PP01-KR006" (2008) is earlier but not English
+		{id: "6400", name: "Summoner Monk", setCode: "SDSC-EN005", year: "2009"},
+		{id: "19164", name: "Seed-Spitting Saplings", setCode: "AGOV-EN022", year: "2023"},
+	} {
+		c, ok := byID[tc.id]
+		if !ok {
+			t.Errorf("cardID %v not found", tc.id)
+			continue
+		}
+		if c.CardName != tc.name || c.MiscKonamiSet != tc.setCode || c.MiscYear != tc.year {
+			t.Errorf("cardID %v got (%q, %q, %q), want (%q, %q, %q)", tc.id,
+				c.CardName, c.MiscKonamiSet, c.MiscYear, tc.name, tc.setCode, tc.year)
+		}
+	}
+
+	// THEN Rush Duel cards (no English name) are excluded
+	if _, ok := byID["15150"]; ok {
+		t.Errorf("Rush Duel cardID 15150 should be excluded")
+	}
+}
+
 func TestGetCardCounts(t *testing.T) {
 	db := openRealDB(t)
 

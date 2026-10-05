@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"github.com/daominah/yugioh_card_editor_database/pkg/konami"
 )
@@ -93,6 +94,130 @@ func (db *DB) GetCard(cardID konami.CardID, lang string) (konami.Card, error) {
 		MiscYear:             year,
 		MiscCreator:          creator,
 	}, nil
+}
+
+// ListCardsEN returns every TCG/OCG card that has an English name
+// (card_texts lang='en'), with fields for the human-readable CSV export.
+// Rush Duel cards are excluded: Konami has no English Rush pages.
+//
+// MiscKonamiSet and MiscYear come from the card's first English print,
+// ordered by release date (empty dates last), then by card_set_code.
+// A print is English when its card number has the "-EN" region
+// (for example "AGOV-EN022"),
+// or it is an early TCG number without region (for example "LOB-001").
+// sets.game_version alone is not enough:
+// a set code shared by Japanese, English, and Korean prints keeps the first pass's version,
+// for example "PP01" is "TCG" but also covers Korean "PP01-KR006".
+// Cards without an English print leave both fields empty.
+func (db *DB) ListCardsEN() ([]konami.Card, error) {
+	rows, err := db.sql.Query(`
+        WITH english_prints AS (
+            SELECT sc.card_id, sc.card_set_code, sc.release_date,
+                ROW_NUMBER() OVER (
+                    PARTITION BY sc.card_id
+                    ORDER BY sc.release_date = '', sc.release_date, sc.card_set_code
+                ) AS print_order
+            FROM set_cards sc
+            LEFT JOIN sets s ON s.set_code = sc.set_code
+            WHERE sc.card_set_code GLOB '*-EN*'
+                OR (sc.card_set_code GLOB '*-[0-9]*' AND s.game_version = 'TCG')
+        )
+        SELECT
+            c.card_id, t.name, c.card_type, c.card_subtype,
+            c.attribute, c.monster_type, c.level_rank_link,
+            c.atk, c.atk_str, c.def, c.def_str, c.abilities,
+            COALESCE(p.password, ''),
+            COALESCE(e.card_set_code, ''), COALESCE(e.release_date, '')
+        FROM cards c
+        JOIN card_texts t ON t.card_id = c.card_id AND t.lang = 'en' AND t.name != ''
+        LEFT JOIN card_passwords p ON p.card_id = c.card_id
+        LEFT JOIN english_prints e ON e.card_id = c.card_id AND e.print_order = 1
+        ORDER BY c.card_id`)
+	if err != nil {
+		return nil, fmt.Errorf("error ListCardsEN: %w", err)
+	}
+	defer rows.Close()
+
+	var cards []konami.Card
+	for rows.Next() {
+		var (
+			cardID                                   int
+			name, cardType, cardSubtype              string
+			attribute, monsterType                   string
+			levelRankLink, atk, def                  int
+			atkStr, defStr, abilitiesJSON            string
+			password, firstSetCode, firstReleaseDate string
+		)
+		err := rows.Scan(
+			&cardID, &name, &cardType, &cardSubtype,
+			&attribute, &monsterType, &levelRankLink,
+			&atk, &atkStr, &def, &defStr, &abilitiesJSON,
+			&password, &firstSetCode, &firstReleaseDate,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("error ListCardsEN rows.Scan: %w", err)
+		}
+		var abilities []konami.MonsterAbility
+		if err := json.Unmarshal([]byte(abilitiesJSON), &abilities); err != nil {
+			abilities = nil
+		}
+		var year string
+		if len(firstReleaseDate) >= 4 {
+			year = firstReleaseDate[:4]
+		}
+		cards = append(cards, konami.Card{
+			CardName:             name,
+			CardNameEN:           name,
+			CardType:             konami.CardType(cardType),
+			CardSubtype:          konami.CardSubtype(cardSubtype),
+			MonsterAttribute:     konami.MonsterAttribute(attribute),
+			MonsterType:          konami.MonsterType(monsterType),
+			MonsterLevelRankLink: levelRankLink,
+			MonsterATK:           float64(atk),
+			MonsterATKStr:        atkStr,
+			MonsterDEF:           float64(def),
+			MonsterDEFStr:        defStr,
+			MonsterAbilities:     abilities,
+			MiscKonamiCardID:     konami.CardID(strconv.Itoa(cardID)),
+			MiscCardPassword:     password,
+			MiscKonamiSet:        firstSetCode,
+			MiscYear:             year,
+		})
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error ListCardsEN rows.Err: %w", err)
+	}
+	return cards, nil
+}
+
+// ListSets returns every set (OCG, TCG, and Rush Duel)
+// with the names collected from Japanese, Korean, and English card pages,
+// ordered by set_code.
+// A name is empty when no card page of that language lists the set.
+func (db *DB) ListSets() ([]konami.KonamiSet, error) {
+	rows, err := db.sql.Query(`
+        SELECT set_code, game_version, release_date, name_ja, name_ko, name_en
+        FROM sets
+        ORDER BY set_code`)
+	if err != nil {
+		return nil, fmt.Errorf("error ListSets: %w", err)
+	}
+	defer rows.Close()
+
+	var sets []konami.KonamiSet
+	for rows.Next() {
+		var s konami.KonamiSet
+		var gameVersion string
+		if err := rows.Scan(&s.Abbreviation, &gameVersion, &s.ReleaseDate, &s.NameJA, &s.NameKO, &s.NameEN); err != nil {
+			return nil, fmt.Errorf("error ListSets rows.Scan: %w", err)
+		}
+		s.YuGiOhVersion = konami.YuGiOhVersion(gameVersion)
+		sets = append(sets, s)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error ListSets rows.Err: %w", err)
+	}
+	return sets, nil
 }
 
 // GetCardCounts returns card counts grouped across seven dimensions.

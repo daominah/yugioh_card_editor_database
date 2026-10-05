@@ -50,8 +50,11 @@ A static snapshot is embedded at `pkg/core/ygocdb_card_password.json` for offlin
 URL: the set chronology page (saved as `pkg/core/set_yugipedia.html`)
 
 Provides: set abbreviation, full set name, type, release date, OCG vs TCG.
-Used only to produce `pkg/core/yugioh_sets.csv`, which feeds the human-readable
-CSV export. Not used in the web JS output.
+Used only to produce `pkg/core/yugioh_sets.csv`, through the test `TestParseYugipediaSetChronology`.
+No longer an input of the human-readable CSV export:
+`cmd/export-all-cards-csv` now takes set names from `data/yugioh.db`
+and writes its own `data/yugioh_sets.csv`.
+Not used in the web JS output.
 
 ---
 
@@ -68,13 +71,16 @@ flowchart TD
     KonamiEN -->|HTTP GET per cid| CrawlCmd
     CrawlCmd -->|" []Card (EN only) "| KonamiJSON
     KonamiJSON["konami_db.json\n(gitignored)"]
-    SetsCSV["yugioh_sets.csv\n(tracked)"]
+    SetsCSV["pkg/core/yugioh_sets.csv\n(tracked)"]
     YugipediaHTML --> SetTest --> SetsCSV
     YGOCDB -->|cards . zip| AddPwdCmd
     KonamiJSON --> AddPwdCmd
-    SetsCSV -->|set names for CSV export| AddPwdCmd
     AddPwdCmd --> WebJS["konami_db_en.js\n(tracked, web asset)"]
-    AddPwdCmd --> CardsCSV["yugioh_cards.csv\n(gitignored, human-readable)"]
+    FullCmd["cmd/crawl-konami-db-full"]
+    FullCmd --> SQLite["data/yugioh.db"]
+    ExportCmd["cmd/export-all-cards-csv"]
+    SQLite --> ExportCmd
+    ExportCmd --> CardsCSV["data/yugioh_cards.csv, yugioh_cards.xlsx,\nyugioh_sets.csv\n(tracked, human-readable)"]
 ```
 
 ## Existing Go code
@@ -87,8 +93,14 @@ flowchart TD
   rarity — all currently unused except year and set code.
 - `pkg/konami/rush_card.go`: parses Rush Duel card HTML, same `t_row` structure.
   No crawl cmd exists yet.
-- `cmd/add-card-password`: merges YGOCDB passwords into `konami_db.json`, outputs
-  `konami_db_en.js` (web asset) and `yugioh_cards.csv` (human-readable).
+- `cmd/add-card-password`: merges YGOCDB passwords into `konami_db.json`,
+  outputs `konami_db_en.js` (web asset).
+- `cmd/crawl-konami-db-full`: rebuilds `data/yugioh.db` from Konami card pages (a few minutes).
+- `cmd/export-all-cards-csv`: reads `data/yugioh.db` (a few seconds)
+  and exports `yugioh_cards.csv` (human-readable): every card with an English name,
+  set columns from its first English print.
+  The same rows go to `yugioh_cards.xlsx`, with rows colored by card type.
+  It also writes `yugioh_sets.csv`, every set from the database.
 - `pkg/core/set_number.go`: parses Yugipedia set chronology HTML into
   `[]KonamiSet{Abbreviation, Name, ReleaseDate, YuGiOhVersion}`.
 
@@ -100,7 +112,9 @@ flowchart TD
 |--------------------------------------|-----------------------|---------|------------------------------------------|
 | `web/konami_data/konami_db.json`     | JSON array of Card    | No      | Intermediate; input to add-card-password |
 | `web/konami_data/konami_db_en.js`    | JS const CardDatabase | Yes     | Web app card database                    |
-| `pkg/core/yugioh_cards.csv`          | CSV                   | No      | Human-readable card list                 |
+| `data/yugioh_cards.csv`              | CSV                   | Yes     | Human-readable card list                 |
+| `data/yugioh_cards.xlsx`             | XLSX                  | Yes     | Same list, rows colored by card type     |
+| `data/yugioh_sets.csv`               | CSV                   | Yes     | Every set, from `data/yugioh.db`         |
 | `pkg/core/yugioh_sets.csv`           | CSV                   | Yes     | Set abbreviation → name, from Yugipedia  |
 | `pkg/core/ygocdb_card_password.json` | JSON                  | Yes     | Static password snapshot                 |
 
