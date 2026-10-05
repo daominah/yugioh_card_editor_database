@@ -50,6 +50,12 @@ type DatabaseReader interface {
 	// to the card's English name.
 	// When the same code appears with multiple rarities, the first occurrence wins.
 	GetMapSetNumberToCardName() (map[string]string, error)
+	// ListCardsEN returns every TCG/OCG card that has an English name,
+	// with MiscKonamiSet and MiscYear taken from the card's first English print.
+	ListCardsEN() ([]konami.Card, error)
+	// ListSets returns every set (OCG, TCG, and Rush Duel)
+	// with its Japanese, Korean, and English names, ordered by set_code.
+	ListSets() ([]konami.KonamiSet, error)
 	// GetCardCounts returns card counts grouped by type, subtype, monster attribute,
 	// monster type, monster level, monster ATK, and monster DEF.
 	// Monster-specific dimensions only count rows where card_type = 'Monster'.

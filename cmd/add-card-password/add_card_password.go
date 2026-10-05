@@ -2,13 +2,11 @@ package main
 
 import (
 	"database/sql"
-	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
-	"sort"
 	"strconv"
 	"time"
 
@@ -25,7 +23,6 @@ import (
 // * input files:
 //   - cards data from Konami database: `web/konami_data/konami_db.json`
 //   - cards password: `pkg/core/ygocdb_card_password.json`
-//   - card set name: `pkg/core/yugioh_sets.csv`
 //   - JA-only fields snapshot: `data/yugioh.db`
 //     (CardNameEN, IsSpecialSummonOnly).
 //     The daily EN crawl that produces `konami_db.json`
@@ -38,7 +35,8 @@ import (
 //
 // * output files:
 //   - `web/konami_data/konami_db_en.js`: all cards data as a JavaScript variable, for web asset
-//   - `pkg/core/yugioh_cards.csv`: cards data (without effect), for human view and search
+//
+// The human-readable `data/yugioh_cards.csv` is written by `cmd/export-all-cards-csv`.
 func main() {
 	projectRoot, err := base.GetProjectRootDir()
 	if err != nil {
@@ -61,24 +59,6 @@ func main() {
 		return
 	}
 	log.Printf("len(cardPasswords): %v", len(cardPasswords))
-
-	// read the Konami sets name from CSV file
-	setsNameCSVFile := filepath.Join(projectRoot, "pkg/core/yugioh_sets.csv")
-	csvFile, err := os.Open(setsNameCSVFile)
-	if err != nil {
-		log.Fatalf("error setsNameCSVFile: %v", err)
-	}
-	defer csvFile.Close()
-	csvReader := csv.NewReader(csvFile)
-	records, err := csvReader.ReadAll()
-	if err != nil {
-		log.Fatalf("error csvReader.ReadAll: %v", err)
-	}
-	mapKonamiSetsFullName := konami.UnmarshalCSVToMapSetAbbreviationToName(records)
-	log.Printf("len(mapKonamiSetsFullName): %v", len(mapKonamiSetsFullName))
-	if len(mapKonamiSetsFullName) == 0 {
-		log.Fatalf("error empty mapKonamiSetsFullName")
-	}
 
 	// read crawled cards data from Konami database
 	crawledOutputPath := filepath.Join(projectRoot, "web/konami_data/konami_db.json")
@@ -164,25 +144,6 @@ func main() {
 		log.Fatalf("Failed to write final output: %v", err)
 	}
 	log.Printf("SUCCESSFULLY UPDATED THE CARD DATABASE to %s", finalOutputPath)
-
-	// write all cards data to csv too, but sort by name (instead of id in the JS file)
-	outputFileShortCardsData := filepath.Join(projectRoot, "pkg/core/yugioh_cards.csv")
-	outputCSVFile, err := os.Create(outputFileShortCardsData)
-	if err != nil {
-		log.Fatalf("error creating CSV file: %v", err)
-	}
-	sort.Sort(konami.SortCardNames(cards))
-	csvWriter := csv.NewWriter(outputCSVFile)
-	err = csvWriter.WriteAll(konami.ToCSV(cards, mapKonamiSetsFullName))
-	if err != nil {
-		log.Fatalf("error csv.NewWriter.WriteAll: %v", err)
-	}
-	absPath, err := filepath.Abs(outputCSVFile.Name())
-	if err != nil {
-		log.Fatalf("error outputCSVFile absolute path: %v", err)
-	}
-	outputCSVFile.Close()
-	log.Printf("wrote short cards data too: %v", absPath)
 
 	// write back the card passwords to the crawled JSON file
 	// code here write updatedData to crawledOutputPath
