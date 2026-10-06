@@ -132,7 +132,7 @@ Final result is file [yugioh_cards.pdf](data/yugioh_cards.pdf).
 All cards shown as a table (without card effect text).
 
 The [Google Drive file yugioh_cards.gsheet](
-https://docs.google.com/spreadsheets/d/1EzqMmwNq6jc_4JbxjxvjK8EdCHBTTyal248kmG2BuZ0/edit?usp=sharing).
+https://docs.google.com/spreadsheets/d/1qh5XaVlQs907jpf9EwF31S3H9LcZLsj_/edit?usp=sharing&ouid=113696399660843005514&rtpof=true&sd=true).
 
 Steps to generate this file:
 

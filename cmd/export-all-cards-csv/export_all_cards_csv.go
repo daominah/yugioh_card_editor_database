@@ -117,6 +117,30 @@ func writeCardsXLSX(records [][]string, path string) {
 	if err := f.SetColVisible(sheet, firstUnusedColumn+":XFD", false); err != nil {
 		log.Fatalf("error SetColVisible: %v", err)
 	}
+	// The PDF page (Height 19.9", Width 19", see README) fits 100 rows at this height,
+	// but only 85 rows at the excelize default 15 points.
+	// Set both the sheet default and each row's height,
+	// as the previously hand-made file did,
+	// in case a spreadsheet app reads only one of them.
+	isCustomHeight := true
+	defaultRowHeight := cardsTableRowHeight
+	if err := f.SetSheetProps(sheet, &excelize.SheetPropsOptions{
+		DefaultRowHeight: &defaultRowHeight,
+		CustomHeight:     &isCustomHeight,
+	}); err != nil {
+		log.Fatalf("error SetSheetProps: %v", err)
+	}
+	// Google Sheets keeps these margins when exporting to PDF.
+	// With top and bottom 1.05", the 19.9" page height leaves 17.79" (1,281 points),
+	// exactly 100 rows of 12.8 points (header plus 99 cards on the first page).
+	// Without margins in the file, Google uses narrower ones and fits 103 rows.
+	if err := f.SetPageMargins(sheet, &excelize.PageLayoutMarginsOptions{
+		Top: &cardsTablePageMarginTopBottom, Bottom: &cardsTablePageMarginTopBottom,
+		Left: &cardsTablePageMarginOther, Right: &cardsTablePageMarginOther,
+		Header: &cardsTablePageMarginOther, Footer: &cardsTablePageMarginOther,
+	}); err != nil {
+		log.Fatalf("error SetPageMargins: %v", err)
+	}
 
 	headerStyle := newCardsTableStyle(f, true, "")
 	bodyStyle := newCardsTableStyle(f, false, "")
@@ -133,6 +157,9 @@ func writeCardsXLSX(records [][]string, path string) {
 		}
 		if err := f.SetSheetRow(sheet, firstCell, &row); err != nil {
 			log.Fatalf("error SetSheetRow %v: %v", firstCell, err)
+		}
+		if err := f.SetRowHeight(sheet, sheetRow, cardsTableRowHeight); err != nil {
+			log.Fatalf("error SetRowHeight %v: %v", sheetRow, err)
 		}
 		if i == 0 {
 			setRowStyle(f, sheet, firstCell, fmt.Sprintf("%v%v", lastColumn, sheetRow), headerStyle)
@@ -205,10 +232,22 @@ func cardsTableRowColor(cardType, cardSubtype string, sheetRow int) string {
 	return shades.odd
 }
 
+// cardsTableRowHeight is the yugioh_cards.xlsx row height in points,
+// copied from the previously hand-made file.
+const cardsTableRowHeight = 12.8
+
+// cardsTablePageMarginTopBottom and cardsTablePageMarginOther are the yugioh_cards.xlsx
+// page margins in inches, copied from the previously hand-made file
+// (LibreOffice defaults: 2.67 cm top and bottom, 2 cm for the others).
+var (
+	cardsTablePageMarginTopBottom = 1.05277777777778
+	cardsTablePageMarginOther     = 0.7875
+)
+
 // cardsTableColumnWidths are the yugioh_cards.xlsx column widths
 // in the order of konami.ToCSV columns, copied from the previously hand-made file.
 var cardsTableColumnWidths = []float64{
-	4.41,         // Row
+	6.12,         // Row, up to 5 digits
 	51.07,        // ENName
 	12.76, 12.76, // CardType, CardSubtype
 	8.17, 12.76, // CardID, CardPasswd
