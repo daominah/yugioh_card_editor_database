@@ -43,8 +43,8 @@ const (
 	// caches at or above are time-sensitive
 	// (a "not found" tail or a recent card page may change),
 	// caches below are trusted indefinitely.
-	latestKnownCardID     = 23808
-	latestKnownRushCardID = 23807
+	latestKnownCardID     = 23902
+	latestKnownRushCardID = 24004
 
 	isIncludingCardPassword = true // 3rd-party data ygocdb.com
 )

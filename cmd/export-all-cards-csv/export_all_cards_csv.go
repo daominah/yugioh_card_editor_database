@@ -42,7 +42,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("error ListSets: %v", err)
 	}
-	sort.Sort(konami.SortKonamiSetsByReleaseDate(sets))
+	// Stable keeps the set_code order of ListSets for ties
+	// (same release date and English name, often both OCG sets without NameEN),
+	// so re-running on the same database writes the same file.
+	sort.Stable(konami.SortKonamiSetsByReleaseDate(sets))
 	writeCSV(konami.MarshalKonamiSetsToCSV(sets), filepath.Join(dataDir, "yugioh_sets.csv"))
 
 	cardsTable := readCardsTable(db, sets)

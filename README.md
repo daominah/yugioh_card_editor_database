@@ -45,21 +45,23 @@ Standard (TCG / OCG) and Rush Duel cards across en, ja, ko locales, plus every
 Konami set and print. Schema lives in
 [`init_schema.sql`](pkg/driver/sqlite/init_schema.sql).
 
-Contents from the 2026-09 crawl:
+Contents from the 2026-10-05 crawl
+(numbers printed by `go run cmd/read-yugiohdb-stats/read_yugiohdb_stats.go`,
+update them after each refresh):
 
 | Table                                           | Rows    | Notes                                                                                                                       |
 |-------------------------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------|
-| `cards`                                         | 14,304  | Standard cards (TCG / OCG / Master Duel)                                                                                    |
-| `cards_rush`                                    | 3,116   | Rush Duel / Duel Links cards                                                                                                |
-| `card_texts`                                    | 48,002  | per-locale name and effect (ja: 17,420 / ko: 16,663 / en: 13,919)                                                           |
+| `cards`                                         | 14,305  | Standard cards (TCG / OCG / Master Duel)                                                                                    |
+| `cards_rush`                                    | 3,117   | Rush Duel / Duel Links cards                                                                                                |
+| `card_texts`                                    | 48,004  | per-locale name and effect (ja: 17,422 / ko: 16,663 / en: 13,919)                                                           |
 | `card_passwords`                                | 14,281  | 8-digit passwords from ygocdb.com (Konami's DB does not expose this)                                                        |
 | `sets`                                          | 1,578   | every Konami set across all locales                                                                                         |
-| `set_cards`                                     | 125,785 | every print of every card; PK is composite (`card_set_code`, `rarity_code`) so one print can be listed at multiple rarities |
+| `set_cards`                                     | 125,787 | every print of every card; PK is composite (`card_set_code`, `rarity_code`) so one print can be listed at multiple rarities |
 | `rarities`                                      | 49      | canonical rarity_code → localized rarity name lookup, seeded by `cmd/aggregate-type-attr-rarity`                            |
 | `monster_types`, `monster_types_rush`           | 26 + 29 | enum to localized text (e.g. Dragon → ドラゴン族 / 드래곤족)                                                                         |
 | `monster_attributes`, `monster_attributes_rush` | 7 + 6   | enum to localized text (e.g. LIGHT → 光属性 / 빛)                                                                               |
 
-Of the 14,304 Standard cards, 99.7% have a YGOCDB password match. Rush cards
+Of the 14,305 Standard cards, 99.7% have a YGOCDB password match. Rush cards
 do not, since YGOCDB only tracks Standard. 351 cards are flagged as
 Special-Summon-only (Nomi / Semi-Nomi monsters).
 
