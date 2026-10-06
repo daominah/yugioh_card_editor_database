@@ -1,3 +1,12 @@
+// read-yugiohdb-stats prints row counts and data quality audits of `data/yugioh.db`.
+//
+// Its main purpose is to produce the numbers of the README section
+// "Full card database (SQLite)": the table of row counts per table,
+// the password match percentage, and the Special-Summon-only count.
+// After refreshing the database, run this command and copy the numbers into that section.
+// The other output (samples, suspicious empty fields) is for investigating parser misses.
+//
+// Read-only: it only runs SELECT statements.
 package main
 
 import (
@@ -55,6 +64,14 @@ func main() {
 			continue
 		}
 		fmt.Printf("%-40s %d\n", c.label, n)
+	}
+	// The README shows the password coverage as a percentage of cards.
+	var cardsTotal, passwordsMatched int
+	_ = db.QueryRow(counts[0].query).Scan(&cardsTotal)
+	_ = db.QueryRow(`SELECT COUNT(DISTINCT card_id) FROM card_passwords WHERE card_id IN (SELECT card_id FROM cards)`).Scan(&passwordsMatched)
+	if cardsTotal > 0 {
+		fmt.Printf("%-40s %.1f%%\n", "card_passwords matched / cards total",
+			100*float64(passwordsMatched)/float64(cardsTotal))
 	}
 
 	fmt.Println("\n--- sample empty cards (card_type='') ---")
@@ -317,4 +334,8 @@ func main() {
 		fmt.Printf("  card_id=%-6s sub=%-12s attr=%-6s mt=%-14s LINK-%d atk=%-5d %s\n",
 			cardID, sub, attr, mt, lv, atk, name)
 	}
+
+	fmt.Println()
+	log.Printf("reminder: if the counts above changed, update the table" +
+		` in README.md section "Full card database (SQLite)" and its crawl date`)
 }
