@@ -552,12 +552,10 @@
             <br />
 
             <div style="display: flex">
-              <input id="SearchCardQuery" style="width: 80%; box-sizing: border-box" />
+              <input id="SearchCardQuery" placeholder="search full word in card name" style="width: 80%; box-sizing: border-box" />
               <button id="SearchCardDatabase" onclick="SearchCardDatabase()" class="smallBtn" style="flex-grow: 1">Search</button>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center">
-              <!-- tabindex="-1": focusable by click so arrow keys stay active in SearchRegion -->
-              <div class="smallNote" tabindex="-1">(search full word in card name)</div>
+            <div style="display: flex; justify-content: flex-start; align-items: center">
               <div id="SearchPagination" style="display: flex; align-items: center; gap: 8px; font-size: 24px">
                 <button id="SearchPrev" class="smallBtn" style="font-size: 24px" onclick="SearchCardPrev()"> ← </button>
                 <!-- tabindex="-1": focusable via JS .focus() but skipped in tab order,
