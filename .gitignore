@@ -38,6 +38,9 @@ config/.env*
 
 # local crawl output: raw HTML cache
 data/html_cache
+# temporary backups while verifying a fresh full crawl against the previous one
+data/html_cache_backup
+data/yugioh_before.db
 # keep SQLite data/yugioh.db (but ignore temporary files)
 data/yugioh.db-shm
 data/yugioh.db-wal

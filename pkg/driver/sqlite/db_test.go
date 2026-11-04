@@ -71,6 +71,48 @@ func TestUpsertCard(t *testing.T) {
 	}
 }
 
+func TestFillCardNameEN(t *testing.T) {
+	db := openTestDB(t)
+
+	// GIVEN a card saved from a current JA page, which has no English name
+	err := db.UpsertCard(konami.Card{CardName: "青眼の白龍", CardType: konami.Monster, MiscKonamiCardID: "4007"})
+	if err != nil {
+		t.Fatalf("error UpsertCard: %v", err)
+	}
+	// GIVEN a card saved from an old JA page, which has the English name
+	err = db.UpsertCard(konami.Card{CardName: "サンダー・ボルト", CardNameEN: "Raigeki", CardType: konami.Spell, MiscKonamiCardID: "4343"})
+	if err != nil {
+		t.Fatalf("error UpsertCard: %v", err)
+	}
+
+	// WHEN the EN page name, then the English Asia page name, are filled for both cards
+	for _, fill := range []struct{ cardID, nameEN string }{
+		{"4007", "Blue-Eyes White Dragon"},
+		{"4007", "Blue-Eyes White Dragon (Asia)"},
+		{"4343", "Raigeki (EN page)"},
+	} {
+		if err := db.FillCardNameEN(fill.cardID, fill.nameEN); err != nil {
+			t.Fatalf("error FillCardNameEN: %v", err)
+		}
+	}
+
+	// THEN the missing name is filled by the first source,
+	// and an existing name is kept
+	for cardID, want := range map[string]string{
+		"4007": "Blue-Eyes White Dragon",
+		"4343": "Raigeki",
+	} {
+		var got string
+		err := db.sql.QueryRow(`SELECT card_name_en FROM cards WHERE card_id = ?`, cardID).Scan(&got)
+		if err != nil {
+			t.Fatalf("error SELECT cards: %v", err)
+		}
+		if got != want {
+			t.Errorf("cardID %v card_name_en got %q, want %q", cardID, got, want)
+		}
+	}
+}
+
 func TestUpsertCardRush(t *testing.T) {
 	db := openTestDB(t)
 

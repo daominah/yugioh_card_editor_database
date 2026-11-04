@@ -145,6 +145,20 @@ func (w *TxWriter) UpsertCardRush(c konami.CardRushDuel) error {
 	return nil
 }
 
+func (w *TxWriter) FillCardNameEN(cardID, nameEN string) error {
+	w.ops <- func() error {
+		_, err := w.tx.Exec(`
+            UPDATE cards SET card_name_en = ?
+            WHERE card_id = ? AND card_name_en = ''`,
+			nameEN, cardID)
+		if err != nil {
+			return fmt.Errorf("FillCardNameEN %v: %w", cardID, err)
+		}
+		return nil
+	}
+	return nil
+}
+
 func (w *TxWriter) UpsertCardPassword(cardID, password, cardName string) error {
 	w.ops <- func() error {
 		_, err := w.tx.Exec(`
