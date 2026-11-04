@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="센츄리온 레가티아,유희왕,덱,듀얼 몬스터즈,VRAINS,브레인즈,금지,제한,팩,금지 카드,카드,수록,룰,오피셜 카드게임,코나미,KONAM"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="센츄리온 레가티아: 튜너 ＋ 튜너 이외의 몬스터 1장 이상 이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 특수 소환했을 경우에 발동할 수 있다. 자신은 1장 "/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Dko%26a%3D202606262316"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Dko%26a%3D202606262316"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=ko&amp;cid=19375"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Dko%26a%3D202611040939"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>센츄리온 레가티아 | 카드 상세 | Yu-Gi-Oh! Neuron(오피셜 카드게임 카드 데이터 베이스)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=19375&ciid=1&enc=hoLCZxBEZI7MqNkwfVPADA').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=19375&ciid=1&enc=hoLCZxBEZI7MqNkwfVPADA').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=19375&ciid=1&enc=hoLCZxBEZI7MqNkwfVPADA').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=19375&ciid=1&enc=hoLCZxBEZI7MqNkwfVPADA').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=19375&ciid=1&enc=hoLCZxBEZI7MqNkwfVPADA').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -339,9 +406,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=19375'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=19375&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -355,32 +422,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=19375'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=19375&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -445,7 +542,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" class="current">한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" class="current">한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -586,6 +683,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -767,6 +865,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -852,7 +951,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>Yu-Gi-Oh! OCG 카드 '센츄리온 레가티아'의 카드 상세 정보입니다. <br>'센츄리온 레가티아'의 Yu-Gi-Oh! OCG 공식 규칙은 이 페이지에서 확인하세요. <br>'센츄리온 레가티아' 카드를 사용한 덱을 검색하고 싶다면 '<a href="deck_search.action?cardid=19375" target=_blank>이 카드를 사용한 덱을 검색</a>'에서 확인할 수 있습니다.</span>
+			<span class="text_linebreak">Yu-Gi-Oh! OCG 카드 '센츄리온 레가티아'의 카드 상세 정보입니다. <br>'센츄리온 레가티아'의 Yu-Gi-Oh! OCG 공식 규칙은 이 페이지에서 확인하세요. <br>'센츄리온 레가티아' 카드를 사용한 덱을 검색하고 싶다면 '<a href="deck_search.action?cardid=19375" target=_blank>이 카드를 사용한 덱을 검색</a>'에서 확인할 수 있습니다.</span>
 		</nav>
 	
 
@@ -888,15 +987,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			센츄리온 레가티아
-	
-			<span>Centur-Ion Legatia</span>
-	
-		</h1>
-	</div>
 
 
 
@@ -904,10 +995,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="센츄리온 레가티아" title="센츄리온 레가티아" class="none">
@@ -917,13 +1009,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -932,11 +1025,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					센츄리온 레가티아
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -1023,7 +1118,7 @@
 					<div class="text_title">
 						카드 텍스트
 					</div>
-					튜너 ＋ 튜너 이외의 몬스터 1장 이상<br>이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 특수 소환했을 경우에 발동할 수 있다. 자신은 1장 드로우한다. 그 후, 상대 필드의 공격력이 가장 높은 몬스터 1장을 파괴할 수 있다. ②: 공격력 2000 이하의 자신 몬스터는 전투로는 파괴되지 않는다. ③: 자신 / 상대의 엔드 페이즈에 발동할 수 있다. 자신의 패 / 묘지에서 싱크로 몬스터 이외의 "센츄리온" 몬스터 1장을 지속 함정 카드로 취급하고 자신의 마법 & 함정 존에 앞면 표시로 놓는다.
+					<div class="text_linebreak">튜너 ＋ 튜너 이외의 몬스터 1장 이상&lt;br&gt;이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 특수 소환했을 경우에 발동할 수 있다. 자신은 1장 드로우한다. 그 후, 상대 필드의 공격력이 가장 높은 몬스터 1장을 파괴할 수 있다. ②: 공격력 2000 이하의 자신 몬스터는 전투로는 파괴되지 않는다. ③: 자신 / 상대의 엔드 페이즈에 발동할 수 있다. 자신의 패 / 묘지에서 싱크로 몬스터 이외의 &quot;센츄리온&quot; 몬스터 1장을 지속 함정 카드로 취급하고 자신의 마법 &amp; 함정 존에 앞면 표시로 놓는다.</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1051,21 +1146,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=19375"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=19375"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1078,13 +1172,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>이 카드를  사용한 덱을 검색</h4>
-			</span></a>
+					<h4>이 카드를  사용한 덱을 검색</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1094,30 +1188,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>이 카드의 관련 카드 보기</h4>
-			</span></a>
+					<h4>이 카드의 관련 카드 보기</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1140,17 +1248,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Dko%26a%3D202606262316&amp;lang=ko&amp;count=horizontal&amp;hashtags=YugiohDB_KO" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Dko%26a%3D202611040939&amp;hashtags=YugiohDB_KO" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Dko%26a%3D202606262316&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=ko_KR" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Dko%26a%3D202611040939" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=19375&request_locale=ko&a=202606262316" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="ko" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=19375&request_locale=ko&a=202606262316"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=19375&request_locale=ko&a=202611040939" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1165,32 +1276,35 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>수록 시리즈</div>
+					<div>일러스트별 수록</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2025-10-31
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									ULSP-KR008
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									얼티미트 스페셜 팩
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001578000&rp=99999">
-
 							</div>
 		
 			
@@ -1209,28 +1323,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-10
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									DBVS-KR019
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									덱 빌드 팩 밸리언트 스매셔즈
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001313000&rp=99999">
-
 							</div>
 		
 			
@@ -1410,8 +1523,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 카드는 1턴에 1장밖에 발동할 수 없다. ①: 이하의 효과에서 1개를 선택하고 발동할 수 있다. ●덱에서 "센츄리온" 몬스터 1장을 지속 함정 카드로 취급하고 자신의 마법 & 함정 존에 앞면 표시로 놓는다. 이 턴에, 이 효과로 놓은 카드 또는 그 카드와 원래의 카드명이 같은 카드가 자신 필드에 앞면 표시로 존재하는 동안, 자신은 "센츄리온" 몬스터밖에 엑스트라 덱에서 특수 소환할 수 없다. ●덱에서 "센츄리온" 마법 / 함정 카드 1장을 자신 필드에 세트한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 카드는 1턴에 1장밖에 발동할 수 없다. ①: 이하의 효과에서 1개를 선택하고 발동할 수 있다. ●덱에서 &quot;센츄리온&quot; 몬스터 1장을 지속 함정 카드로 취급하고 자신의 마법 &amp; 함정 존에 앞면 표시로 놓는다. 이 턴에, 이 효과로 놓은 카드 또는 그 카드와 원래의 카드명이 같은 카드가 자신 필드에 앞면 표시로 존재하는 동안, 자신은 &quot;센츄리온&quot; 몬스터밖에 엑스트라 덱에서 특수 소환할 수 없다. ●덱에서 &quot;센츄리온&quot; 마법 / 함정 카드 1장을 자신 필드에 세트한다.
 								</dd>
 		
 		
@@ -1428,7 +1541,7 @@
 
 								<input type="hidden" class="cnm" value='맹세의 엠블레마'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19377">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19377&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1520,8 +1633,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 자신 필드의 앞면 표시의 "센츄리온" 카드 1장을 묘지로 보내고 발동할 수 있다. 이 카드를 패에서 특수 소환한다. 이 턴에, 자신은 "센츄리온 가고일Ⅱ(츠바이)"를 특수 소환할 수 없다. ②: 이 카드가 싱크로 소재로서 묘지로 보내졌을 경우에 발동할 수 있다. 이 카드를 패에 넣는다. ③: 이 카드를 지속 함정 카드로 취급할 경우, 자신 / 상대의 메인 페이즈에 발동할 수 있다. 이 카드를 특수 소환한다. 그 후, 이 카드의 레벨을 4개 내릴 수 있다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 자신 필드의 앞면 표시의 &quot;센츄리온&quot; 카드 1장을 묘지로 보내고 발동할 수 있다. 이 카드를 패에서 특수 소환한다. 이 턴에, 자신은 &quot;센츄리온 가고일Ⅱ(츠바이)&quot;를 특수 소환할 수 없다. ②: 이 카드가 싱크로 소재로서 묘지로 보내졌을 경우에 발동할 수 있다. 이 카드를 패에 넣는다. ③: 이 카드를 지속 함정 카드로 취급할 경우, 자신 / 상대의 메인 페이즈에 발동할 수 있다. 이 카드를 특수 소환한다. 그 후, 이 카드의 레벨을 4개 내릴 수 있다.
 								</dd>
 		
 		
@@ -1538,7 +1651,7 @@
 
 								<input type="hidden" class="cnm" value='센츄리온 가고일Ⅱ'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19862">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19862&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1630,8 +1743,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 체인 2 이후에 상대가 몬스터의 효과를 발동했을 때에 발동할 수 있다. 그 효과는 "상대는 자신의 필드(앞면 표시) / 묘지의 "센츄리온" 몬스터 1장을 지속 함정 카드로 취급하고 자신의 마법 & 함정 존에 앞면 표시로 놓는다"가 된다. 이 턴에, 자신은 "센츄리온 시메리아"를 특수 소환할 수 없다. ②: 이 카드를 지속 함정 카드로 취급할 경우, 자신 / 상대의 메인 페이즈에 발동할 수 있다. 이 카드를 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 체인 2 이후에 상대가 몬스터의 효과를 발동했을 때에 발동할 수 있다. 그 효과는 &quot;상대는 자신의 필드(앞면 표시) / 묘지의 &quot;센츄리온&quot; 몬스터 1장을 지속 함정 카드로 취급하고 자신의 마법 &amp; 함정 존에 앞면 표시로 놓는다&quot;가 된다. 이 턴에, 자신은 &quot;센츄리온 시메리아&quot;를 특수 소환할 수 없다. ②: 이 카드를 지속 함정 카드로 취급할 경우, 자신 / 상대의 메인 페이즈에 발동할 수 있다. 이 카드를 특수 소환한다.
 								</dd>
 		
 		
@@ -1648,7 +1761,7 @@
 
 								<input type="hidden" class="cnm" value='센츄리온 시메리아'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20492">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20492&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1740,8 +1853,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									튜너 ＋ 튜너 이외의 몬스터 1장 이상<br>이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 특수 소환했을 경우에 발동할 수 있다. 덱에서 "센츄리온" 카드 1장을 패에 넣는다. ②: 이 카드가 몬스터 존에 존재하는 한, 자신의 마법 & 함정 존의 앞면 표시 카드는 효과로는 파괴되지 않는다. ③: 자신 / 상대의 엔드 페이즈에 발동할 수 있다. 싱크로 몬스터 이외의 자신의 묘지 / 제외 상태인 "센츄리온" 몬스터 1장을 지속 함정 카드로 취급하고 자신의 마법 & 함정 존에 앞면 표시로 놓는다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									튜너 ＋ 튜너 이외의 몬스터 1장 이상&lt;br&gt;이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 특수 소환했을 경우에 발동할 수 있다. 덱에서 &quot;센츄리온&quot; 카드 1장을 패에 넣는다. ②: 이 카드가 몬스터 존에 존재하는 한, 자신의 마법 &amp; 함정 존의 앞면 표시 카드는 효과로는 파괴되지 않는다. ③: 자신 / 상대의 엔드 페이즈에 발동할 수 있다. 싱크로 몬스터 이외의 자신의 묘지 / 제외 상태인 &quot;센츄리온&quot; 몬스터 1장을 지속 함정 카드로 취급하고 자신의 마법 &amp; 함정 존에 앞면 표시로 놓는다.
 								</dd>
 		
 		
@@ -1758,7 +1871,7 @@
 
 								<input type="hidden" class="cnm" value='센츄리온 아크실라'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19883">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19883&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1850,8 +1963,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우, "엠블레마" 카드와 "센츄리온" 카드가 각각 자신 묘지에 존재하고 있으면 발동할 수 있다. 자신은 1장 드로우한다. 이 턴에, 자신은 "센츄리온 아트리"를 특수 소환할 수 없다. ②: 자신 필드의 이 카드를 싱크로 소재로 할 경우, 이 카드를 튜너 이외의 몬스터로 취급할 수 있다. ③: 이 카드를 지속 함정 카드로 취급할 경우, 자신 / 상대의 메인 페이즈에 발동할 수 있다. 이 카드를 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우, &quot;엠블레마&quot; 카드와 &quot;센츄리온&quot; 카드가 각각 자신 묘지에 존재하고 있으면 발동할 수 있다. 자신은 1장 드로우한다. 이 턴에, 자신은 &quot;센츄리온 아트리&quot;를 특수 소환할 수 없다. ②: 자신 필드의 이 카드를 싱크로 소재로 할 경우, 이 카드를 튜너 이외의 몬스터로 취급할 수 있다. ③: 이 카드를 지속 함정 카드로 취급할 경우, 자신 / 상대의 메인 페이즈에 발동할 수 있다. 이 카드를 특수 소환한다.
 								</dd>
 		
 		
@@ -1868,7 +1981,7 @@
 
 								<input type="hidden" class="cnm" value='센츄리온 아트리'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20200">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20200&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1960,8 +2073,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드가 패 / 묘지에 존재할 경우, 상대 턴에, "센츄리온 에메트Ⅵ(젝스)" 이외의 자신 필드의 "센츄리온" 몬스터 1장을 대상으로 하고 발동할 수 있다. 그 몬스터를 지속 함정 카드로 취급하여 자신의 마법 & 함정 존에 앞면 표시로 놓고, 이 카드를 특수 소환한다. 이 턴에, 자신은 "센츄리온 에메트Ⅵ(젝스)"를 특수 소환할 수 없다. ②: 이 카드를 지속 함정 카드로 취급할 경우, 자신 / 상대의 메인 페이즈에 발동할 수 있다. 이 카드를 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드가 패 / 묘지에 존재할 경우, 상대 턴에, &quot;센츄리온 에메트Ⅵ(젝스)&quot; 이외의 자신 필드의 &quot;센츄리온&quot; 몬스터 1장을 대상으로 하고 발동할 수 있다. 그 몬스터를 지속 함정 카드로 취급하여 자신의 마법 &amp; 함정 존에 앞면 표시로 놓고, 이 카드를 특수 소환한다. 이 턴에, 자신은 &quot;센츄리온 에메트Ⅵ(젝스)&quot;를 특수 소환할 수 없다. ②: 이 카드를 지속 함정 카드로 취급할 경우, 자신 / 상대의 메인 페이즈에 발동할 수 있다. 이 카드를 특수 소환한다.
 								</dd>
 		
 		
@@ -1978,7 +2091,7 @@
 
 								<input type="hidden" class="cnm" value='센츄리온 에메트Ⅵ'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19374">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19374&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2070,8 +2183,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 자신 메인 페이즈에 발동할 수 있다. 자신 필드의 이 카드와, "센츄리온 트루디아" 이외의 패 / 덱의 "센츄리온" 몬스터 1장을, 지속 함정 카드로 취급하고 자신의 마법 & 함정 존에 앞면 표시로 놓는다. 이 턴에, 자신은 "센츄리온 트루디아"를 특수 소환할 수 없다. ②: 이 카드를 지속 함정 카드로 취급할 경우, 자신 / 상대의 메인 페이즈에 발동할 수 있다. 이 카드를 특수 소환한다. 그 후, 이 카드의 레벨을 4개 올릴 수 있다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 자신 메인 페이즈에 발동할 수 있다. 자신 필드의 이 카드와, &quot;센츄리온 트루디아&quot; 이외의 패 / 덱의 &quot;센츄리온&quot; 몬스터 1장을, 지속 함정 카드로 취급하고 자신의 마법 &amp; 함정 존에 앞면 표시로 놓는다. 이 턴에, 자신은 &quot;센츄리온 트루디아&quot;를 특수 소환할 수 없다. ②: 이 카드를 지속 함정 카드로 취급할 경우, 자신 / 상대의 메인 페이즈에 발동할 수 있다. 이 카드를 특수 소환한다. 그 후, 이 카드의 레벨을 4개 올릴 수 있다.
 								</dd>
 		
 		
@@ -2088,7 +2201,7 @@
 
 								<input type="hidden" class="cnm" value='센츄리온 트루디아'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19373">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19373&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2146,8 +2259,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 효과는 1턴에 1번, 어느 쪽이든 1개밖에 사용할 수 없다. ①: 필드의 앞면 표시의 몬스터 카드 1장을 대상으로 하고 발동할 수 있다. 그 카드를 제외한다. 다음 턴의 스탠바이 페이즈에, 이 효과로 제외한 몬스터를 주인의 필드에 특수 소환한다. ②: 묘지의 이 카드를 제외하고, 자신 묘지의 "센츄리온" 싱크로 몬스터 1장을 대상으로 하여 발동할 수 있다. 그 몬스터를 특수 소환한다. 이 효과로 특수 소환한 몬스터의 공격력은 1500 내린다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 효과는 1턴에 1번, 어느 쪽이든 1개밖에 사용할 수 없다. ①: 필드의 앞면 표시의 몬스터 카드 1장을 대상으로 하고 발동할 수 있다. 그 카드를 제외한다. 다음 턴의 스탠바이 페이즈에, 이 효과로 제외한 몬스터를 주인의 필드에 특수 소환한다. ②: 묘지의 이 카드를 제외하고, 자신 묘지의 &quot;센츄리온&quot; 싱크로 몬스터 1장을 대상으로 하여 발동할 수 있다. 그 몬스터를 특수 소환한다. 이 효과로 특수 소환한 몬스터의 공격력은 1500 내린다.
 								</dd>
 		
 		
@@ -2164,7 +2277,7 @@
 
 								<input type="hidden" class="cnm" value='센츄리온 파랑크스'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19379">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19379&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2256,8 +2369,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우에 발동할 수 있다. 덱에서 "센츄리온 프리메라" 이외의 "센츄리온" 카드 1장을 패에 넣는다. 이 턴에, 자신은 "센츄리온 프리메라"를 특수 소환할 수 없다. ②: 이 카드를 지속 함정 카드로 취급할 경우, 자신 필드의 레벨 5 이상의 "센츄리온" 몬스터는 효과로는 파괴되지 않는다. ③: 이 카드를 지속 함정 카드로 취급할 경우, 자신 / 상대의 메인 페이즈에 발동할 수 있다. 이 카드를 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우에 발동할 수 있다. 덱에서 &quot;센츄리온 프리메라&quot; 이외의 &quot;센츄리온&quot; 카드 1장을 패에 넣는다. 이 턴에, 자신은 &quot;센츄리온 프리메라&quot;를 특수 소환할 수 없다. ②: 이 카드를 지속 함정 카드로 취급할 경우, 자신 필드의 레벨 5 이상의 &quot;센츄리온&quot; 몬스터는 효과로는 파괴되지 않는다. ③: 이 카드를 지속 함정 카드로 취급할 경우, 자신 / 상대의 메인 페이즈에 발동할 수 있다. 이 카드를 특수 소환한다.
 								</dd>
 		
 		
@@ -2274,7 +2387,7 @@
 
 								<input type="hidden" class="cnm" value='센츄리온 프리메라'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19372">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19372&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2366,8 +2479,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									튜너 ＋ 튜너 이외의 몬스터 1장 이상<br>이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 싱크로 소환했을 경우에 발동할 수 있다. 자신의 덱 / 묘지에서 "엠블레마" 카드 1장을 패에 넣는다. 그 후, 자신 및 상대 필드의 카드를 1장씩 파괴할 수 있다. ②: 엑스트라 덱 이외에서 특수 소환한 이 카드는 전투로는 파괴되지 않는다. ③: 자신 필드의 앞면 표시의 "센츄리온" 카드가 상대 효과로 필드에서 벗어났을 경우에 발동할 수 있다. 이 카드를 묘지에서 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									튜너 ＋ 튜너 이외의 몬스터 1장 이상&lt;br&gt;이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 싱크로 소환했을 경우에 발동할 수 있다. 자신의 덱 / 묘지에서 &quot;엠블레마&quot; 카드 1장을 패에 넣는다. 그 후, 자신 및 상대 필드의 카드를 1장씩 파괴할 수 있다. ②: 엑스트라 덱 이외에서 특수 소환한 이 카드는 전투로는 파괴되지 않는다. ③: 자신 필드의 앞면 표시의 &quot;센츄리온&quot; 카드가 상대 효과로 필드에서 벗어났을 경우에 발동할 수 있다. 이 카드를 묘지에서 특수 소환한다.
 								</dd>
 		
 		
@@ -2384,7 +2497,7 @@
 
 								<input type="hidden" class="cnm" value='센츄리온 프리메라 프리머스'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20514">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20514&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3818,6 +3931,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3991,6 +4106,8 @@
 														<option value="2025" >2025</option>
 			
 														<option value="2026" >2026</option>
+			
+														<option value="2027" >2027</option>
 			
 													</select>
 												</span>
@@ -4455,6 +4572,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -4556,7 +4674,7 @@
 			<p>Privacy Settings</p>
 		</div>
 		<div class="ps_body">
-			<p>Yu-Gi-Oh! Neuron(OFFICIAL CARD GAME CARD DATABASE)을 이용하려면 이용 약관에 동의해야 합니다. <br>이용 약관이 개정된 경우, 서비스를 계속 이용하시려면 개정된 내용에 다시 동의하셔야 합니다.</p>
+			<p>Yu-Gi-Oh! Neuron(OFFICIAL CARD GAME CARD DATABASE) 을 이용하려면 이용 약관에 동의해야 합니다. <br>이용 약관이 개정된 경우, 서비스를 계속 이용하시려면 개정된 내용에 다시 동의하셔야 합니다.</p>
 		</div>
 		<div class="ps_footer">
 			<div class="ps_button">
@@ -5112,6 +5230,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=3&cb=1882565388" async></script></body>
+</body>
 </html>
 

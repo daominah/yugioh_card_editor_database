@@ -20,25 +20,24 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="매지션 오브 블랙 카오스,러시듀얼,유희왕,룰,카드,덱,카드리스트,덱레시피,RUSH,RUSHDUEL,Yugioh,코나미,KONAMI,금지,제한,팩,금지카드"/>
 
 
 	<meta name="description" content="매지션 오브 블랙 카오스: 묘지에 있는 이 카드의 카드명은  블랙 매지션 이 된다. 【조건】없음 【효과】없음"/>
-	<meta name="title" content="매지션 오브 블랙 카오스 | 카드 상세 | Yu-Gi-Oh! Neuron(러시 듀얼 카드 데이터베이스)"/>
-	<meta property="og:title" content="매지션 오브 블랙 카오스 | 카드 상세 | Yu-Gi-Oh! Neuron(러시 듀얼 카드 데이터베이스)"/>
+	<meta name="title" content="매지션 오브 블랙 카오스 | Card Details | Yu-Gi-Oh! Neuron(RUSH DUEL CARD DATABASE)"/>
+	<meta property="og:title" content="매지션 오브 블랙 카오스 | Card Details | Yu-Gi-Oh! Neuron(RUSH DUEL CARD DATABASE)"/>
 
 
 	<meta name="og:description" content="매지션 오브 블랙 카오스: 묘지에 있는 이 카드의 카드명은  블랙 매지션 이 된다. 【조건】없음 【효과】없음"/>
-	<meta name="twitter:title" content="매지션 오브 블랙 카오스 | 카드 상세 | Yu-Gi-Oh! Neuron(러시 듀얼 카드 데이터베이스)"/>
+	<meta name="twitter:title" content="매지션 오브 블랙 카오스 | Card Details | Yu-Gi-Oh! Neuron(RUSH DUEL CARD DATABASE)"/>
 
 
 	<meta name="twitter:description" content="매지션 오브 블랙 카오스: 묘지에 있는 이 카드의 카드명은  블랙 매지션 이 된다. 【조건】없음 【효과】없음"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dko%26a%3D202604131103"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dko%26a%3D202604131103"/>
+	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dko%26a%3D202611040939"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dko%26a%3D202611040939"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -49,7 +48,7 @@
 	<meta http-equiv="Content-Script-Type" content="text/javascript">
 	<meta http-equiv="imagetoolbar" content="no">
 
-	<meta property="og:site_name" content="Yu-Gi-Oh! Neuron(러시 듀얼 카드 데이터베이스)">
+	<meta property="og:site_name" content="Yu-Gi-Oh! CARD DATABASE">
 
 	<meta property="og:type" content="product" />
 	<meta property="og:locale" content="ko_KR" />
@@ -78,9 +77,8 @@
 
 
 
-
 	
-		<title>매지션 오브 블랙 카오스 | 카드 상세 | Yu-Gi-Oh! Neuron(러시 듀얼 카드 데이터베이스)</title>
+		<title>매지션 오브 블랙 카오스 | Card Details | Yu-Gi-Oh! Neuron(RUSH DUEL CARD DATABASE)</title>
 	
 	
 
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,15 +231,21 @@
 		
 	   
 		$('#card_image_1').attr('src', '/rushdb/get_image.action?type=2&cid=21588&ciid=1&enc=CfgDCe6ioHvVyIremGxguA').show();
-		$('#thumbnail_card_image_1').attr('src', '/rushdb/get_image.action?type=1&cid=21588&ciid=1&enc=CfgDCe6ioHvVyIremGxguA').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/rushdb/get_image.action?type=2&cid=21588&ciid=1&enc=CfgDCe6ioHvVyIremGxguA').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/rushdb/get_image.action?type=1&cid=21588&ciid=1&enc=CfgDCe6ioHvVyIremGxguA').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/rushdb/get_image.action?type=2&cid=21588&ciid=1&enc=CfgDCe6ioHvVyIremGxguA').show();
 	   
 		$('#card_image_101').attr('src', '/rushdb/get_image.action?type=2&cid=21588&ciid=101&enc=CfgDCe6ioHvVyIremGxguA');
-		$('#thumbnail_card_image_101').attr('src', '/rushdb/get_image.action?type=1&cid=21588&ciid=101&enc=CfgDCe6ioHvVyIremGxguA').show();
-		$('#pop_card_image_101').attr('src', '/rushdb/get_image.action?type=2&cid=21588&ciid=101&enc=CfgDCe6ioHvVyIremGxguA');
+		$('#thumbnail_card_image_101,#popup_card_image_101').attr('src', '/rushdb/get_image.action?type=1&cid=21588&ciid=101&enc=CfgDCe6ioHvVyIremGxguA').show();
+		$('#pop_card_image_101,#update_list_card_image_101').attr('src', '/rushdb/get_image.action?type=2&cid=21588&ciid=101&enc=CfgDCe6ioHvVyIremGxguA');
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -247,10 +262,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -343,9 +410,9 @@
 				
 				location.href = '/rushdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=21588'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=21588&stype=1&othercon=2&releaseYStart=2020&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -359,32 +426,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/rushdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=21588'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=21588&stype=1&othercon=2&releaseYStart=2020&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -442,13 +539,14 @@
 				 		
 				 		한글
 				 		
+				 		
 					</div>
 					
 					<div id="lang_mane">
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" class="current">한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" class="current">한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -456,7 +554,8 @@
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
 								<li><a href="javascript:ChangeLanguage('ko')" class="current">한글</a></li>
-								<li><a href="javascript:ChangeLanguage('ae')" >English(Asia)</a></li>
+								<li class="ae"><a href="javascript:ChangeLanguage('ae')" >English(Asia)</a></li>
+								<li class="cn"><a href="javascript:ChangeLanguage('cn')" >簡体字</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -541,8 +640,8 @@
 						</a>
 						<ul>
 							<li><a href="/rushdb/card_list.action?clm=3&wname=CardSearch">발매일 최신 순</a></li>
-							<li><a href="/rushdb/card_list.action?clm=1&wname=CardSearch">일반상품</a></li>
-							<li><a href="/rushdb/card_list.action?clm=2&wname=CardSearch">특전 / 동봉계열</a></li>
+							<li><a href="/rushdb/card_list.action?clm=1&wname=CardSearch">카테고리순</a></li>
+							
 				
 						</ul>
 					</li>
@@ -588,6 +687,7 @@
 							<li><a href="/rushdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -722,8 +822,8 @@
 						</a>
 						<ul>
 							<li><a href="/rushdb/card_list.action?clm=3&wname=CardSearch">발매일 최신 순</a></li>
-							<li><a href="/rushdb/card_list.action?clm=1&wname=CardSearch">일반상품</a></li>
-							<li><a href="/rushdb/card_list.action?clm=2&wname=CardSearch">특전 / 동봉계열</a></li>
+							<li><a href="/rushdb/card_list.action?clm=1&wname=CardSearch">카테고리순</a></li>
+							
 				
 						</ul>
 					</li>
@@ -769,6 +869,7 @@
 							<li><a href="/rushdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -854,7 +955,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>Yu-Gi-Oh! RUSH DUEL '매지션 오브 블랙 카오스'의 카드 상세 정보입니다. <br>'매지션 오브 블랙 카오스'의 Yu-Gi-Oh! RUSH DUEL 공식 규칙은 이 페이지에서 확인하세요. <br>'매지션 오브 블랙 카오스' 카드를 사용한 덱을 검색하고 싶다면 <a href="deck_search.action?cardid=21588" target=_blank>이 카드를 사용한 덱을 검색</a>에서 확인할 수 있습니다.</span>
+			<span class="text_linebreak">These are the card details for the Yu-Gi-Oh! RUSH DUEL card "매지션 오브 블랙 카오스." <br>Please refer to this page for the Yu-Gi-Oh! RUSH DUEL official rules for "매지션 오브 블랙 카오스." <br>Please go to "<a href="deck_search.action?cardid=21588" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "매지션 오브 블랙 카오스."</span>
 		</nav>
 	
 
@@ -890,13 +991,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			매지션 오브 블랙 카오스
-	
-		</h1>
-	</div>
 
 
 
@@ -904,10 +999,14 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
+					<div class="left_btn"><span class="arrow"></span></div>
+					<div class="right_btns"><span class="arrow"></span></div>
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="매지션 오브 블랙 카오스" title="매지션 오브 블랙 카오스" class="none">
@@ -919,20 +1018,16 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
-				<img id="thumbnail_card_image_101" alt="101" class="none">
+				<img id="thumbnail_card_image_101" alt="101" class="none iid_101">
 		
 			</div>
-		
-			<ul class="img_yaji">
-				<li class="left_btn btn"><</li>
-				<li class="right_btns btn">></li>
-			</ul>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -941,11 +1036,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					매지션 오브 블랙 카오스
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -972,7 +1069,7 @@
 							<img class="icon_img" src="external/image/parts/icon_level.png" alt="" title="">
 						</span>
 						<span class="item_box_value">
-							레벨 8
+							레벨  8
 						</span>
 		
 					</div>
@@ -1032,7 +1129,7 @@
 					<div class="text_title">
 						카드 텍스트
 					</div>
-					묘지에 있는 이 카드의 카드명은 "블랙 매지션"이 된다.<br>【조건】없음<br>【효과】없음
+					<div class="text_linebreak">묘지에 있는 이 카드의 카드명은 &quot;블랙 매지션&quot;이 된다.&lt;br&gt;【조건】없음&lt;br&gt;【효과】없음</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1060,21 +1157,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/rushdb/deck_search.action?cardid=21588"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/rushdb/deck_search.action?cardid=21588"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1087,13 +1183,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>이 카드를  사용한 덱을 검색</h4>
-			</span></a>
+					<h4>이 카드를  사용한 덱을 검색</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1103,25 +1199,30 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>이 카드의 관련 카드 보기</h4>
-			</span></a>
+					<h4>이 카드의 관련 카드 보기</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
-				<div class="btn_set"><span class="left_btn btn"><</span></div>
+					<div class="left_btn"><span class="arrow"></span></div>
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
@@ -1129,10 +1230,21 @@
 					<img id="pop_card_image_101" alt="101" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
-				<div class="btn_set"><span class="right_btns btn">></span></div>
+					<div class="right_btns"><span class="arrow"></span></div>
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+				<img id="popup_card_image_101" alt="101" class="none iid_101">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1155,17 +1267,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dko%26a%3D202604131103&amp;lang=ko&amp;count=horizontal&amp;hashtags=rushdb_KO" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dko%26a%3D202611040939&amp;hashtags=rushdb_KO" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dko%26a%3D202604131103&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=ko_KR" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dko%26a%3D202611040939" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/rushdb/card_search.action?ope=2&cid=21588&request_locale=ko&a=202604131103" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="ko" data-type="share-a" data-url="https://www.db.yugioh-card.com/rushdb/card_search.action?ope=2&cid=21588&request_locale=ko&a=202604131103"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/rushdb/card_search.action?ope=2&cid=21588&request_locale=ko&a=202611040939" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1180,32 +1295,41 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>수록 시리즈</div>
+					<div>일러스트별 수록</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
+					<div class="btn_set">
+						<span class="all">ALL</span>
+						<span class="left_btn btn">＜</span>
+						<span class="right_btns btn">＞</span>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2025-08-20
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RD/SD0E-KR001
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									흑마술의 의식
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=1&sess=1&pid=1010100118000&rp=99999">
-
 							</div>
 		
 			
@@ -1224,28 +1348,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_101">
 						<div class="inside">
 							<div class="time">
 		
 								2025-08-20
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_101" alt="101" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RD/SD0E-KRS01
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									흑마술의 의식(특전 카드)
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=1&sess=1&pid=1010100119000&rp=99999">
-
 							</div>
 		
 			
@@ -1418,8 +1541,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									【조건】상대 필드에 공격 표시 몬스터가 있을 경우에 발동할 수 있다.<br>【효과】자신 필드의 "블랙 매지션" 또는 "버스터 블레이더" 1장과, 자신 묘지의 "블랙 매지션" 또는 "버스터 블레이더" 1장을 소재로서 주인의 덱으로 되돌리고, 퓨전 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									【조건】상대 필드에 공격 표시 몬스터가 있을 경우에 발동할 수 있다.&lt;br&gt;【효과】자신 필드의 &quot;블랙 매지션&quot; 또는 &quot;버스터 블레이더&quot; 1장과, 자신 묘지의 &quot;블랙 매지션&quot; 또는 &quot;버스터 블레이더&quot; 1장을 소재로서 주인의 덱으로 되돌리고, 퓨전 소환한다.
 								</dd>
 		
 		
@@ -1436,7 +1559,7 @@
 
 								<input type="hidden" class="cnm" value='기적의 비술'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=22030">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=22030&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1491,8 +1614,8 @@
 			
 			
 									<span class="box_card_level_rank level">
-										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨" title="레벨">
-										<span>레벨 2</span>
+										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨 " title="레벨 ">
+										<span>레벨  2</span>
 									</span>
 			
 		
@@ -1528,8 +1651,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									【조건】700 LP를 지불하고 발동할 수 있다.<br>【효과】자신의 덱 위에서 카드를 4장 넘기고, 서로 확인한다. 자신은 그 중에서 "블랙 매지션" "블랙 매지션 걸"을 합계 2장까지 고르고 패에 넣을 수 있다. 남은 카드를 좋아하는 순서대로 덱 아래로 되돌린다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									【조건】700 LP를 지불하고 발동할 수 있다.&lt;br&gt;【효과】자신의 덱 위에서 카드를 4장 넘기고, 서로 확인한다. 자신은 그 중에서 &quot;블랙 매지션&quot; &quot;블랙 매지션 걸&quot;을 합계 2장까지 고르고 패에 넣을 수 있다. 남은 카드를 좋아하는 순서대로 덱 아래로 되돌린다.
 								</dd>
 		
 		
@@ -1546,7 +1669,7 @@
 
 								<input type="hidden" class="cnm" value='매지션의 커튼'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=18692">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=18692&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1601,8 +1724,8 @@
 			
 			
 									<span class="box_card_level_rank level">
-										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨" title="레벨">
-										<span>레벨 7</span>
+										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨 " title="레벨 ">
+										<span>레벨  7</span>
 									</span>
 			
 		
@@ -1638,7 +1761,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									마법사 중에서 공격력, 수비력이 동시에 가장 높은 계급.
 								</dd>
 		
@@ -1656,7 +1779,7 @@
 
 								<input type="hidden" class="cnm" value='블랙 매지션'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=15410">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=15410&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1711,8 +1834,8 @@
 			
 			
 									<span class="box_card_level_rank level">
-										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨" title="레벨">
-										<span>레벨 6</span>
+										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨 " title="레벨 ">
+										<span>레벨  6</span>
 									</span>
 			
 		
@@ -1748,8 +1871,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									【조건】없음<br>【지속 효과】이 카드의 공격력은, [서로의 묘지의 "블랙 매지션"의 수] × 500 올린다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									【조건】없음&lt;br&gt;【지속 효과】이 카드의 공격력은, [서로의 묘지의 &quot;블랙 매지션&quot;의 수] &times; 500 올린다.
 								</dd>
 		
 		
@@ -1766,7 +1889,7 @@
 
 								<input type="hidden" class="cnm" value='블랙 매지션 걸'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=16371">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=16371&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1824,8 +1947,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									【조건】자신 필드에 앞면 표시의 "블랙 매지션"이 있을 경우에 발동할 수 있다.<br>【효과】상대 필드의 몬스터 1장을 고르고 파괴한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									【조건】자신 필드에 앞면 표시의 &quot;블랙 매지션&quot;이 있을 경우에 발동할 수 있다.&lt;br&gt;【효과】상대 필드의 몬스터 1장을 고르고 파괴한다.
 								</dd>
 		
 		
@@ -1842,7 +1965,7 @@
 
 								<input type="hidden" class="cnm" value='사우전드 나이프'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=15450">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=15450&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1897,8 +2020,8 @@
 			
 			
 									<span class="box_card_level_rank level">
-										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨" title="레벨">
-										<span>레벨 8</span>
+										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨 " title="레벨 ">
+										<span>레벨  8</span>
 									</span>
 			
 		
@@ -1934,8 +2057,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									"블랙 매지션" ＋ 몬스터(드래곤족)<br>묘지에 있는 이 카드의 카드명은 "블랙 매지션"이 된다.<br>【조건】없음<br>【지속 효과】이 카드의 카드명은 "블랙 매지션"이 된다. 자신 필드의 마법 / 함정 카드는 상대의 효과로는 파괴되지 않는다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									&quot;블랙 매지션&quot; ＋ 몬스터(드래곤족)&lt;br&gt;묘지에 있는 이 카드의 카드명은 &quot;블랙 매지션&quot;이 된다.&lt;br&gt;【조건】없음&lt;br&gt;【지속 효과】이 카드의 카드명은 &quot;블랙 매지션&quot;이 된다. 자신 필드의 마법 / 함정 카드는 상대의 효과로는 파괴되지 않는다.
 								</dd>
 		
 		
@@ -1952,7 +2075,7 @@
 
 								<input type="hidden" class="cnm" value='용기사 블랙 매지션'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21644">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21644&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2007,8 +2130,8 @@
 			
 			
 									<span class="box_card_level_rank level">
-										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨" title="레벨">
-										<span>레벨 3</span>
+										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨 " title="레벨 ">
+										<span>레벨  3</span>
 									</span>
 			
 		
@@ -2044,8 +2167,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									【조건】패의 몬스터(어둠 속성 / 마법사족) 1장을 묘지로 보내고 발동할 수 있다.<br>【효과】자신은 1장 드로우한다. 그 후, 자신 묘지의 "블랙 매지션" 1장을 고르고 자신 필드에 앞면 표시로 특수 소환할 수 있다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									【조건】패의 몬스터(어둠 속성 / 마법사족) 1장을 묘지로 보내고 발동할 수 있다.&lt;br&gt;【효과】자신은 1장 드로우한다. 그 후, 자신 묘지의 &quot;블랙 매지션&quot; 1장을 고르고 자신 필드에 앞면 표시로 특수 소환할 수 있다.
 								</dd>
 		
 		
@@ -2062,7 +2185,7 @@
 
 								<input type="hidden" class="cnm" value='원숙의 흑마술사'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=19597">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=19597&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2117,8 +2240,8 @@
 			
 			
 									<span class="box_card_level_rank level">
-										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨" title="레벨">
-										<span>레벨 8</span>
+										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨 " title="레벨 ">
+										<span>레벨  8</span>
 									</span>
 			
 		
@@ -2154,8 +2277,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									"블랙 매지션" ＋ "버스터 블레이더"<br>【조건】없음<br>【지속 효과】이 카드의 공격력은, [서로의 필드의 앞면 표시 몬스터(드래곤족)의 수와 서로의 묘지의 몬스터(드래곤족)의 수의 합계] × 500 올린다. 자신의 패가 있을 경우, 이 카드는 상대의 마법 카드의 효과로는 파괴되지 않으며, 상대는 레전드 마법 카드를 발동할 수 없다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									&quot;블랙 매지션&quot; ＋ &quot;버스터 블레이더&quot;&lt;br&gt;【조건】없음&lt;br&gt;【지속 효과】이 카드의 공격력은, [서로의 필드의 앞면 표시 몬스터(드래곤족)의 수와 서로의 묘지의 몬스터(드래곤족)의 수의 합계] &times; 500 올린다. 자신의 패가 있을 경우, 이 카드는 상대의 마법 카드의 효과로는 파괴되지 않으며, 상대는 레전드 마법 카드를 발동할 수 없다.
 								</dd>
 		
 		
@@ -2172,7 +2295,7 @@
 
 								<input type="hidden" class="cnm" value='초마도검사 블랙 파라딘'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21496">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21496&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2227,8 +2350,8 @@
 			
 			
 									<span class="box_card_level_rank level">
-										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨" title="레벨">
-										<span>레벨 8</span>
+										<img class="icon_img" src="external/image/parts/icon_level.png" alt="레벨 " title="레벨 ">
+										<span>레벨  8</span>
 									</span>
 			
 		
@@ -2264,8 +2387,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									"블랙 매지션" ＋ 몬스터(전사족 / 수비력 2100)<br>【조건】없음<br>【지속 효과】이 카드의 공격력은, [서로의 묘지의 마법 / 함정 카드의 수의 합계] × 100 올린다. 이 카드의 공격은 관통한다. 자신의 패가 있을 경우, 이 카드 이외의 자신 필드의 몬스터는 상대 효과로는 파괴되지 않는다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									&quot;블랙 매지션&quot; ＋ 몬스터(전사족 / 수비력 2100)&lt;br&gt;【조건】없음&lt;br&gt;【지속 효과】이 카드의 공격력은, [서로의 묘지의 마법 / 함정 카드의 수의 합계] &times; 100 올린다. 이 카드의 공격은 관통한다. 자신의 패가 있을 경우, 이 카드 이외의 자신 필드의 몬스터는 상대 효과로는 파괴되지 않는다.
 								</dd>
 		
 		
@@ -2282,7 +2405,7 @@
 
 								<input type="hidden" class="cnm" value='초마법 기사 블랙 카발리'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21500">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21500&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2340,8 +2463,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									【조건】자신이 "티마이오스의 눈"을 발동하고 있지 않은 턴에 발동할 수 있다.<br>【효과】"블랙 매지션" 또는 "블랙 매지션 걸"의 카드명을 1개 선언하고, 선언한 카드명인 자신 필드의 앞면 표시 몬스터 1장만을 소재로서 묘지로 보내고, 그 카드명이 소재로서 쓰여진 몬스터를 퓨전 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									【조건】자신이 &quot;티마이오스의 눈&quot;을 발동하고 있지 않은 턴에 발동할 수 있다.&lt;br&gt;【효과】&quot;블랙 매지션&quot; 또는 &quot;블랙 매지션 걸&quot;의 카드명을 1개 선언하고, 선언한 카드명인 자신 필드의 앞면 표시 몬스터 1장만을 소재로서 묘지로 보내고, 그 카드명이 소재로서 쓰여진 몬스터를 퓨전 소환한다.
 								</dd>
 		
 		
@@ -2358,7 +2481,7 @@
 
 								<input type="hidden" class="cnm" value='티마이오스의 눈'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21709">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21709&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3638,6 +3761,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3770,6 +3895,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3850,7 +3977,7 @@
 				</div>
 				<div class="in">
 					<div class="in_btn">
-						<p>유희왕 러시 듀얼의 공식 사이트입니다.<br>모든 유희왕 러시 듀얼 카드를 검색하거나, 상세한 룰을 참조할 수 있습니다.<br>또한, 자신이 보유한 카드나 덱을 마이덱에 등록하여 관리하거나, 공개되어 있는 덱 레시피를 검색하여 자신의 덱 구축에 참고할 수 있습니다.</p>
+						<p>The Yu-Gi-Oh! TCG Card Database is an official Konami Site for the Yu-Gi-Oh! Trading Card Game.<br>You can search through all Yu-Gi-Oh! TCG cards, check detailed rules, and view the Forbidden &amp; Limited List.<br>You can also register and manage cards and Decks you own via My Deck or search through Deck Recipes posted for public viewing as a reference for fine-tuning your Decks.</p>
 						<a class="btn" href="http://yugioh-rushduel.co.kr/sub/sub01_01.php" target="_blank">
 							<img class="ocg" src="external/image/ko/00_logo_ocgtcg.png" />
 							<img class="rush" src="external/image/ko/00_logo_rush.png" />
@@ -4183,8 +4310,8 @@
 						</a>
 						<ul>
 							<li><a href="/rushdb/card_list.action?clm=3&wname=CardSearch">발매일 최신 순</a></li>
-							<li><a href="/rushdb/card_list.action?clm=1&wname=CardSearch">일반상품</a></li>
-							<li><a href="/rushdb/card_list.action?clm=2&wname=CardSearch">특전 / 동봉계열</a></li>
+							<li><a href="/rushdb/card_list.action?clm=1&wname=CardSearch">카테고리순</a></li>
+							
 				
 						</ul>
 					</li>
@@ -4230,6 +4357,7 @@
 							<li><a href="/rushdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -4475,7 +4603,7 @@
 			<p>개인정보 보호 고지 철회</p>
 		</div>
 		<div class="ps_body">
-			<p>개인정보 보호 고지에 대한 동의를 철회하면 <span style="color: #ffba00; font-size: 1.4rem;">Yu-Gi-Oh! Neuron</span>을(를) 이용할 수 없습니다. <br>철회를 원하시는 경우 <span style="color: #ffba00; font-size: 1.4rem;">이용 중인 CARD GAME ID</span> 삭제 절차를 진행해 주세요.</p>
+			<p>개인정보 보호 고지에 대한 동의를 철회하면 <span style="color: #ffba00; font-size: 1.4rem;">Yu-Gi-Oh! Neuron</span>을(를) 이용할 수 없습니다. <br>철회를 원하시는 경우 <span style="color: #ffba00; font-size: 1.4rem;">이용 중인 CARD GAME ID</span> 삭제 절차를 진행해 주세요. </p>
 			<p>ID 삭제는 Yu-Gi-Oh! Neuron(KONAMI CARD GAME NETWORK)에 로그인하고, 본 사이트의 마이 페이지 > 이용 중인 CARD GAME ID 삭제 관련 정보 에서 개인정보 보호 고지에 대한 동의를 철회하고, 제공된 개인정보를 삭제할 수 있습니다</p>
 		</div>
 		<div class="ps_footer">
@@ -4887,6 +5015,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=32&cb=1258584364" async></script></body>
+</body>
 </html>
 

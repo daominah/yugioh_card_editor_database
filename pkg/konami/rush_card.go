@@ -178,7 +178,7 @@ func parseRushDuelCardFromNode(root *html.Node, cardID CardID) CardRushDuel {
 	// Card name: h1 contains a <span class="ruby"> with an alternate reading
 	// followed by a direct text node with the actual card name. We walk the
 	// h1's children to collect only text nodes, skipping element children.
-	cardNameNode := getNode(root, `//*[@id="cardname"]`)
+	cardNameNode := getNode(root, xpathCardNameBox)
 	c.CardName = rushDuelH1TextOnly(cardNameNode)
 
 	// Card effect: second CardText div contains the effect in item_box_text

@@ -364,6 +364,12 @@ var regexpEffectPrefix = regexp.MustCompile(`[①-⑳][：:]?`)
 
 var regexpLiteralBr = regexp.MustCompile(`(?i)<br\s*/?>`)
 
+// xpathCardNameBox is the element wrapping the card name h1,
+// on both the main site and Rush Duel card pages.
+// Konami changed it from an id to a class around 2026-10-28,
+// matching both keeps older saved pages parseable.
+const xpathCardNameBox = `//*[@id="cardname" or contains(concat(" ", normalize-space(@class), " "), " cardname ")]`
+
 func parseKonamiCardFromNode(root *html.Node, cardID CardID) Card {
 	c := Card{MiscKonamiCardID: cardID}
 
@@ -376,13 +382,13 @@ func parseKonamiCardFromNode(root *html.Node, cardID CardID) Card {
 		return node[0]
 	}
 
-	// Extract names from the h1 inside #cardname. parseCardNameAndPronunciation
+	// Extract names from the h1 inside the card name box. parseCardNameAndPronunciation
 	// returns three parts (see its docstring): localized printed name from
 	// text nodes, kana pronunciation from <span class="ruby">, and the EN
 	// name from the bare <span>. Only the JA crawl pass actually persists
 	// CardNameEN to cards.card_name_en (gated in the crawler); for EN/KO
 	// pages this field is parsed but the crawler does not call UpsertCard.
-	h1NameNode := getNode(root, `//*[@id="cardname"]//h1`)
+	h1NameNode := getNode(root, xpathCardNameBox+`//h1`)
 	if h1NameNode.Parent != nil {
 		c.CardName, _, c.CardNameEN = parseCardNameAndPronunciation(h1NameNode)
 	}

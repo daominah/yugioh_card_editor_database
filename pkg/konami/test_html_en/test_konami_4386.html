@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="Blue-Eyes Ultimate Dragon,KONAMI,yugioh,Yu-Gi-Oh,TCG,card,database,card,list,Forbidden,Limited,Semi-limited,Cards,Included in,"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="Blue-Eyes Ultimate Dragon:  Blue-Eyes White Dragon  +  Blue-Eyes White Dragon  +  Blue-Eyes White Dragon "/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D4386%26request_locale%3Den%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D4386%26request_locale%3Den%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=en&amp;cid=4386"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D4386%26request_locale%3Den%26a%3D202611040938"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>Blue-Eyes Ultimate Dragon | Card Details | Yu-Gi-Oh! Neuron(TRADING CARD GAME CARD DATABASE)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=4386&ciid=1&enc=PZs3NTR6SxDGYLO816V1tg').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=4386&ciid=1&enc=PZs3NTR6SxDGYLO816V1tg').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=4386&ciid=1&enc=PZs3NTR6SxDGYLO816V1tg').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=4386&ciid=1&enc=PZs3NTR6SxDGYLO816V1tg').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=4386&ciid=1&enc=PZs3NTR6SxDGYLO816V1tg').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -339,9 +406,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=4386'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=4386&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -355,32 +422,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=4386'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=4386&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -445,7 +542,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -846,7 +943,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>These are the card details for the Yu-Gi-Oh! TCG card "Blue-Eyes Ultimate Dragon." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Blue-Eyes Ultimate Dragon." <br>Please go to "<a href="deck_search.action?cardid=4386" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Blue-Eyes Ultimate Dragon."</span>
+			<span class="text_linebreak">These are the card details for the Yu-Gi-Oh! TCG card "Blue-Eyes Ultimate Dragon." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Blue-Eyes Ultimate Dragon." <br>Please go to "<a href="deck_search.action?cardid=4386" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Blue-Eyes Ultimate Dragon."</span>
 		</nav>
 	
 
@@ -882,13 +979,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			Blue-Eyes Ultimate Dragon
-	
-		</h1>
-	</div>
 
 
 
@@ -896,10 +987,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="Blue-Eyes Ultimate Dragon" title="Blue-Eyes Ultimate Dragon" class="none">
@@ -909,13 +1001,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -924,11 +1017,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					Blue-Eyes Ultimate Dragon
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -1015,7 +1110,7 @@
 					<div class="text_title">
 						Card Text
 					</div>
-					"Blue-Eyes White Dragon" + "Blue-Eyes White Dragon" + "Blue-Eyes White Dragon"
+					<div class="text_linebreak">&quot;Blue-Eyes White Dragon&quot; + &quot;Blue-Eyes White Dragon&quot; + &quot;Blue-Eyes White Dragon&quot;</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1043,21 +1138,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=4386"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=4386"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1070,13 +1164,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>Search For Decks Containing This Card</h4>
-			</span></a>
+					<h4>Search For Decks Containing This Card</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1086,30 +1180,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>View Cards Related to This Card</h4>
-			</span></a>
+					<h4>View Cards Related to This Card</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1132,17 +1240,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D4386%26request_locale%3Den%26a%3D202604301956&amp;lang=en&amp;count=horizontal&amp;hashtags=YugiohDB_EN" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D4386%26request_locale%3Den%26a%3D202611040938&amp;hashtags=YugiohDB_EN" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D4386%26request_locale%3Den%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=en_US" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D4386%26request_locale%3Den%26a%3D202611040938" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=4386&request_locale=en&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="en" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=4386&request_locale=en&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=4386&request_locale=en&a=202611040938" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1157,32 +1268,35 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>Sets</div>
+					<div>Organized by Illustration</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2025-02-14
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									SDWD-EN034
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									STRUCTURE DECK: BLUE-EYES WHITE DESTINY
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001443000&rp=99999">
-
 							</div>
 		
 			
@@ -1201,28 +1315,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2024-12-13
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									SBC2-ENI27
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									SPEED DUEL: BATTLE CITY FINALS
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001416000&rp=99999">
-
 							</div>
 		
 			
@@ -1241,28 +1354,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2024-11-07
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA03-EN178
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									QUARTER CENTURY BONANZA
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001422000&rp=99999">
-
 							</div>
 		
 			
@@ -1281,28 +1393,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2024-11-07
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA03-EN178
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									QUARTER CENTURY BONANZA
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001422000&rp=99999">
-
 							</div>
 		
 			
@@ -1321,28 +1432,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2024-03-01
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									KC01-EN033
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY ULTIMATE KAIBA SET
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001309000&rp=99999">
-
 							</div>
 		
 			
@@ -1361,28 +1471,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2022-05-06
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									GFP2-EN181
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									GHOSTS FROM THE PAST: THE 2ND HAUNTING
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001159000&rp=99999">
-
 							</div>
 		
 			
@@ -1401,28 +1510,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2021-01-22
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									LDS2-EN018
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									LEGENDARY DUELISTS: SEASON 2
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001096000&rp=99999">
-
 							</div>
 		
 			
@@ -1441,28 +1549,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2019-03-29
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									SBLS-EN012
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									SPEED DUEL: ARENA OF LOST SOULS
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=11118003&rp=99999">
-
 							</div>
 		
 			
@@ -1481,28 +1588,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2018-03-09
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									LCKC-EN057
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									LEGENDARY COLLECTION KAIBA MEGA PACK
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=18812001&rp=99999">
-
 							</div>
 		
 			
@@ -1521,28 +1627,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2016-10-07
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									LDK2-ENK40
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									LEGENDARY DECKS II
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=18810002&rp=99999">
-
 							</div>
 		
 			
@@ -1561,28 +1666,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2016-09-16
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									DPRP-EN025
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									DUELIST PACK - RIVALS OF THE PHARAOH -
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=16610000&rp=99999">
-
 							</div>
 		
 			
@@ -1601,28 +1705,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2014-03-28
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									PGLD-EN055
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									PREMIUM GOLD
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=18808000&rp=99999">
-
 							</div>
 		
 			
@@ -1641,28 +1744,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2012-05-29
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									BATT-EN001
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									BATTLE PACK TOURNAMENT
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1121211003&rp=99999">
-
 							</div>
 		
 			
@@ -1681,28 +1783,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2010-04-20
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									DPKB-EN026
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									DUELIST PACK - KAIBA -
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=16605001&rp=99999">
-
 							</div>
 		
 			
@@ -1721,28 +1822,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2008-11-21
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									DLG1-EN001
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									DARK LEGENDS
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=11107006&rp=99999">
-
 							</div>
 		
 			
@@ -1761,28 +1861,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2008-07-08
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RP01-EN000
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									RETRO PACK
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=11107002&rp=99999">
-
 							</div>
 		
 			
@@ -1801,28 +1900,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2008-04-02
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									GLD1-EN028
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									GOLD SERIES
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=18802000&rp=99999">
-
 							</div>
 		
 			
@@ -1841,26 +1939,25 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									JMP-EN005
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									SHONEN JUMP Promotional Card - January 2006 -
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1111102000&rp=99999">
-
 							</div>
 		
 			
@@ -2040,8 +2137,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									If you do not control another "Beacon of White", and you have 3 or more "Blue-Eyes" monsters in your GY: Target 1 of them; Special Summon it, but negate its effects, also equip it with this card. When this card leaves the field, banish the equipped monster. Other monsters you control cannot attack, also if you have any number of "Blue-Eyes" monster(s) in your GY, the equipped monster can attack up to that number of times during each Battle Phase.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									If you do not control another &quot;Beacon of White&quot;, and you have 3 or more &quot;Blue-Eyes&quot; monsters in your GY: Target 1 of them; Special Summon it, but negate its effects, also equip it with this card. When this card leaves the field, banish the equipped monster. Other monsters you control cannot attack, also if you have any number of &quot;Blue-Eyes&quot; monster(s) in your GY, the equipped monster can attack up to that number of times during each Battle Phase.
 								</dd>
 		
 		
@@ -2058,7 +2155,7 @@
 
 								<input type="hidden" class="cnm" value='Beacon of White'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12332">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12332&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2116,8 +2213,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									Reveal 3 cards from your Deck that each meets at least 1 of the criteria listed below, your opponent randomly picks 1 for you to add to your hand, and you shuffle the rest into your Deck. You can only activate 1 "Bingo Machine, Go!!!" per turn.<br>●"Blue-Eyes" monster<br>●Spell/Trap that mentions "Blue-Eyes White Dragon" or "Blue-Eyes Ultimate Dragon", except "Bingo Machine, Go!!!"
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									Reveal 3 cards from your Deck that each meets at least 1 of the criteria listed below, your opponent randomly picks 1 for you to add to your hand, and you shuffle the rest into your Deck. You can only activate 1 &quot;Bingo Machine, Go!!!&quot; per turn.&lt;br&gt;●&quot;Blue-Eyes&quot; monster&lt;br&gt;●Spell/Trap that mentions &quot;Blue-Eyes White Dragon&quot; or &quot;Blue-Eyes Ultimate Dragon&quot;, except &quot;Bingo Machine, Go!!!&quot;
 								</dd>
 		
 		
@@ -2134,7 +2231,7 @@
 
 								<input type="hidden" class="cnm" value='Bingo Machine, Go!!!'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13844">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13844&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2226,8 +2323,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									Cannot be Normal Summoned/Set. Must first be Special Summoned (from your hand) by revealing "Blue-Eyes White Dragon" in your hand. You can only Special Summon "Blue-Eyes Alternative White Dragon" once per turn this way. This card's name becomes "Blue-Eyes White Dragon" while on the field or in the GY. Once per turn: You can target 1 monster your opponent controls; destroy it. This card cannot attack the turn this effect is activated.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									Cannot be Normal Summoned/Set. Must first be Special Summoned (from your hand) by revealing &quot;Blue-Eyes White Dragon&quot; in your hand. You can only Special Summon &quot;Blue-Eyes Alternative White Dragon&quot; once per turn this way. This card's name becomes &quot;Blue-Eyes White Dragon&quot; while on the field or in the GY. Once per turn: You can target 1 monster your opponent controls; destroy it. This card cannot attack the turn this effect is activated.
 								</dd>
 		
 		
@@ -2244,7 +2341,7 @@
 
 								<input type="hidden" class="cnm" value='Blue-Eyes Alternative White Dragon'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12253">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12253&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2336,8 +2433,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									Cannot be Normal Summoned/Set. Must be Special Summoned (from your hand) by Tributing 1 "Blue-Eyes Ultimate Dragon". Gains 300 ATK for each Dragon monster in your GY. When a card or effect is activated that targets this card (Quick Effect): You can negate that effect.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									Cannot be Normal Summoned/Set. Must be Special Summoned (from your hand) by Tributing 1 &quot;Blue-Eyes Ultimate Dragon&quot;. Gains 300 ATK for each Dragon monster in your GY. When a card or effect is activated that targets this card (Quick Effect): You can negate that effect.
 								</dd>
 		
 		
@@ -2354,7 +2451,7 @@
 
 								<input type="hidden" class="cnm" value='Blue-Eyes Shining Dragon'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=6082">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=6082&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2446,8 +2543,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 Tuner + 1+ non-Tuner "Blue-Eyes" monsters<br>Neither player can Special Summon 2 or more monsters at the same time. Once per turn, when an effect of a card in the GY is activated (Quick Effect): You can negate the activation. (Quick Effect): You can Tribute this Synchro Summoned card; Special Summon 1 LIGHT Dragon Synchro Monster from your Extra Deck in Defense Position, except "Blue-Eyes Spirit Dragon", but destroy it during the End Phase of this turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 Tuner + 1+ non-Tuner &quot;Blue-Eyes&quot; monsters&lt;br&gt;Neither player can Special Summon 2 or more monsters at the same time. Once per turn, when an effect of a card in the GY is activated (Quick Effect): You can negate the activation. (Quick Effect): You can Tribute this Synchro Summoned card; Special Summon 1 LIGHT Dragon Synchro Monster from your Extra Deck in Defense Position, except &quot;Blue-Eyes Spirit Dragon&quot;, but destroy it during the End Phase of this turn.
 								</dd>
 		
 		
@@ -2464,7 +2561,7 @@
 
 								<input type="hidden" class="cnm" value='Blue-Eyes Spirit Dragon'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12324">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12324&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2556,8 +2653,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									2+ Tuners + 1 non-Tuner "Blue-Eyes" monster<br>Your opponent cannot banish cards from your GY. You can only use each of the following effects of "Blue-Eyes Ultimate Spirit Dragon" once per turn. When a card or effect is activated on the field (Quick Effect): You can negate the activation, and if you do, this card gains 1000 ATK until the end of this turn. If this card is destroyed by battle or card effect: You can Special Summon 1 LIGHT Dragon monster from your GY, except "Blue-Eyes Ultimate Spirit Dragon".
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									2+ Tuners + 1 non-Tuner &quot;Blue-Eyes&quot; monster&lt;br&gt;Your opponent cannot banish cards from your GY. You can only use each of the following effects of &quot;Blue-Eyes Ultimate Spirit Dragon&quot; once per turn. When a card or effect is activated on the field (Quick Effect): You can negate the activation, and if you do, this card gains 1000 ATK until the end of this turn. If this card is destroyed by battle or card effect: You can Special Summon 1 LIGHT Dragon monster from your GY, except &quot;Blue-Eyes Ultimate Spirit Dragon&quot;.
 								</dd>
 		
 		
@@ -2574,7 +2671,7 @@
 
 								<input type="hidden" class="cnm" value='Blue-Eyes Ultimate Spirit Dragon'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20607">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20607&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2666,7 +2763,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									This legendary dragon is a powerful engine of destruction. Virtually invincible, very few have faced this awesome creature and lived to tell the tale.
 								</dd>
 		
@@ -2684,7 +2781,7 @@
 
 								<input type="hidden" class="cnm" value='Blue-Eyes White Dragon'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=4007">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=4007&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2776,8 +2873,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									You can activate 1 of these effects based on the Attributes in your GY;<br>●LIGHT: Send 1 "Blue-Eyes White Dragon" or 1 card that mentions it from your Deck to the GY, except "Chronicle Sorceress".<br>●DARK: Send 1 "Dark Magician" or 1 card that mentions it from your Deck to the GY, except "Chronicle Sorceress".<br>You can only use this effect of "Chronicle Sorceress" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									You can activate 1 of these effects based on the Attributes in your GY;&lt;br&gt;●LIGHT: Send 1 &quot;Blue-Eyes White Dragon&quot; or 1 card that mentions it from your Deck to the GY, except &quot;Chronicle Sorceress&quot;.&lt;br&gt;●DARK: Send 1 &quot;Dark Magician&quot; or 1 card that mentions it from your Deck to the GY, except &quot;Chronicle Sorceress&quot;.&lt;br&gt;You can only use this effect of &quot;Chronicle Sorceress&quot; once per turn.
 								</dd>
 		
 		
@@ -2794,7 +2891,7 @@
 
 								<input type="hidden" class="cnm" value='Chronicle Sorceress'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17386">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17386&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2886,8 +2983,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									When a face-up "Blue-Eyes" monster(s) you control is destroyed by battle or an opponent's card effect, and you have a Dragon-Type monster in your Graveyard: You can Special Summon this card from your hand, and if you do, inflict 600 damage to your opponent for each Dragon-Type monster with different names in your Graveyard. If this card is Normal or Special Summoned: Target 1 Dragon-Type monster in your Graveyard; this card's ATK becomes equal to that monster's. If this card on the field is destroyed by a card effect: Destroy all monsters your opponent controls.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									When a face-up &quot;Blue-Eyes&quot; monster(s) you control is destroyed by battle or an opponent's card effect, and you have a Dragon-Type monster in your Graveyard: You can Special Summon this card from your hand, and if you do, inflict 600 damage to your opponent for each Dragon-Type monster with different names in your Graveyard. If this card is Normal or Special Summoned: Target 1 Dragon-Type monster in your Graveyard; this card's ATK becomes equal to that monster's. If this card on the field is destroyed by a card effect: Destroy all monsters your opponent controls.
 								</dd>
 		
 		
@@ -2904,7 +3001,7 @@
 
 								<input type="hidden" class="cnm" value='Deep-Eyes White Dragon'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12488">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12488&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2996,8 +3093,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									While you control a "Blue-Eyes" monster, you choose the attack targets for your opponent's attacks. You can only use each of the following effects of "Dictator of D." once per turn. You can send 1 "Blue-Eyes White Dragon" from your hand or Deck to the GY; Special Summon this card from your hand. You can discard 1 "Blue-Eyes White Dragon", or 1 card that mentions it, then target 1 "Blue-Eyes" monster in your GY; Special Summon it.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									While you control a &quot;Blue-Eyes&quot; monster, you choose the attack targets for your opponent's attacks. You can only use each of the following effects of &quot;Dictator of D.&quot; once per turn. You can send 1 &quot;Blue-Eyes White Dragon&quot; from your hand or Deck to the GY; Special Summon this card from your hand. You can discard 1 &quot;Blue-Eyes White Dragon&quot;, or 1 card that mentions it, then target 1 &quot;Blue-Eyes&quot; monster in your GY; Special Summon it.
 								</dd>
 		
 		
@@ -3014,7 +3111,7 @@
 
 								<input type="hidden" class="cnm" value='Dictator of D.'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16810">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16810&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -4443,6 +4540,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4617,6 +4716,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4700,7 +4801,7 @@
 						<p>This is an official site for the Yu-Gi-Oh! Trading Card Game. <br>You can search through all Yu-Gi-Oh! TCG cards, check detailed rules, and view the Forbidden & Limited List. <br>You can also manage your own cards and Decks by registering them in My Deck, and search publicly available Deck Recipes to help you build your own Deck.</p>
 						<a class="btn" href="https://www.yugioh-card.com/en/rulebook/index.html" target="_blank">
 							<img class="ocg" src="external/image/en/00_logo_ocgtcg.png" />
-							<img class="rush" src="external/image/en/00_logo_rush.png" />
+
 							<span>How to Play</span>
 						</a>
 					</div>
@@ -5718,6 +5819,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=3&cb=2103088364" async></script></body>
+</body>
 </html>
 

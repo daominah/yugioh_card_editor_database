@@ -2,6 +2,7 @@ package konami
 
 import (
 	_ "embed"
+	"strings"
 	"testing"
 )
 
@@ -167,12 +168,11 @@ var (
 	//go:embed test_html_ja/test_konami_22617.html
 	test_konami_ja_22617 []byte
 	// 22617: Stealth Ange - Cradle (latest Korean release as of 2026-04;
-	// JA page lists the card but the EN-name span is still empty)
+	// JA page lists the card)
 
 	//go:embed test_html_ja/test_konami_23141.html
 	test_konami_ja_23141 []byte
-	// 23141: 黒陽竜イリオス (latest Japanese release as of 2026-04;
-	// EN-name span on the JA page is still empty)
+	// 23141: 黒陽竜イリオス (latest Japanese release as of 2026-04)
 )
 
 func TestParseKonamiCardHTML_JA_DevPanelSmoke(t *testing.T) {
@@ -201,8 +201,7 @@ func TestParseKonamiCardHTML_JA_DevPanelSmoke(t *testing.T) {
 		{cardID: "19521", pageHTML: test_konami_ja_19521},
 		{cardID: "20536", pageHTML: test_konami_ja_20536},
 		{cardID: "20578", pageHTML: test_konami_ja_20578},
-		// 21627 (Miracle Raven) is EN-only at crawl time; the JA page is an
-		// empty stub. Re-add once Konami publishes the JA card page.
+		{cardID: "21627", pageHTML: test_konami_ja_21627},
 	} {
 		// WHEN parsing the JA card page
 		got := ParseKonamiCardHTML(c.pageHTML, CardID(c.cardID))
@@ -370,11 +369,10 @@ func TestParseCardLocaleText_JA(t *testing.T) {
 		pageHTML []byte
 		want     CardLocaleText
 	}{
-		// GIVEN a JA monster page with kanji name, katakana ruby, and EN-name span
+		// GIVEN a JA monster page with kanji name and katakana ruby
 		{cardID: "4007", pageHTML: test_konami_ja_4007, want: CardLocaleText{
 			Name:              "青眼の白龍",
 			NamePronunciation: "ブルーアイズ・ホワイト・ドラゴン",
-			NameEnglishOnPage: "Blue-Eyes White Dragon",
 			Effect:            "高い攻撃力を誇る伝説のドラゴン。どんな相手でも粉砕する、その破壊力は計り知れない。",
 			AttributeText:     "光属性",
 			MonsterTypeText:   "ドラゴン族",
@@ -384,7 +382,6 @@ func TestParseCardLocaleText_JA(t *testing.T) {
 		{cardID: "4343", pageHTML: test_konami_ja_4343, want: CardLocaleText{
 			Name:              "サンダー・ボルト",
 			NamePronunciation: "サンダー・ボルト",
-			NameEnglishOnPage: "Raigeki",
 			Effect:            "①：相手フィールドのモンスターを全て破壊する。",
 		}},
 
@@ -392,14 +389,14 @@ func TestParseCardLocaleText_JA(t *testing.T) {
 		{cardID: "4960", pageHTML: test_konami_ja_4960, want: CardLocaleText{
 			Name:              "王宮の勅命",
 			NamePronunciation: "おうきゅうのちょくめい",
-			NameEnglishOnPage: "Imperial Order",
 			Effect:            "このカードのコントローラーはお互いのスタンバイフェイズ毎に700LPを払う。700LP払えない場合このカードを破壊する。①：このカードが魔法&罠ゾーンに存在する限り、フィールドの全ての魔法カードの効果は無効化される。",
 		}},
 	} {
 		// WHEN parsing locale text from the JA page
 		got := ParseCardLocaleText(c.pageHTML, CardID(c.cardID))
 
-		// THEN every locale field matches: name, kana pronunciation, EN-name span, effect, attribute, type
+		// THEN every locale field matches: name, kana pronunciation, effect, attribute, type,
+		// and no English name because Konami removed it from JA pages around 2026-10-28
 		if got.Name != c.want.Name {
 			t.Errorf("cardID %v Name got %q, want %q", c.cardID, got.Name, c.want.Name)
 		}
@@ -421,69 +418,31 @@ func TestParseCardLocaleText_JA(t *testing.T) {
 	}
 }
 
-func TestParseCardLocaleText_JA_NameEnglishOnPage(t *testing.T) {
-	// Konami's JA card pages embed the official English name in a bare
-	// <span> next to the kanji <h1>. This single source covers all
-	// JA-cataloged cards, including OCG-only releases that have no EN page.
-	// 21627 (Miracle Raven, TCG-exclusive) has no JA page, so the parser
-	// returns an empty NameEnglishOnPage.
+func TestParseCardLocaleText_NameEnglishOnPage(t *testing.T) {
+	// Until around 2026-10-28, Konami's JA and KO card pages printed
+	// the official English name in a bare <span> next to the local name.
+	// Pages saved before then (e.g. the crawler's HTML cache) still have it,
+	// so the parser keeps reading it; current pages have none.
 	for _, c := range []struct {
+		name     string
 		cardID   string
 		pageHTML []byte
 		want     string
 	}{
-		{cardID: "4007", pageHTML: test_konami_ja_4007, want: "Blue-Eyes White Dragon"},
-		{cardID: "4343", pageHTML: test_konami_ja_4343, want: "Raigeki"},
-		{cardID: "4386", pageHTML: test_konami_ja_4386, want: "Blue-Eyes Ultimate Dragon"},
-		{cardID: "4861", pageHTML: test_konami_ja_4861, want: "Solemn Judgment"},
-		{cardID: "4960", pageHTML: test_konami_ja_4960, want: "Imperial Order"},
-		{cardID: "6341", pageHTML: test_konami_ja_6341, want: "King of the Skull Servants"},
-		{cardID: "6996", pageHTML: test_konami_ja_6996, want: "Advanced Ritual Art"},
-		{cardID: "8409", pageHTML: test_konami_ja_8409, want: "Ally of Justice Cycle Reader"},
-		{cardID: "8933", pageHTML: test_konami_ja_8933, want: "Effect Veiler"},
-		{cardID: "11232", pageHTML: test_konami_ja_11232, want: "Shaddoll Falco"},
-		{cardID: "11353", pageHTML: test_konami_ja_11353, want: "Qliphort Scout"},
-		{cardID: "11973", pageHTML: test_konami_ja_11973, want: "Majespecter Unicorn - Kirin"},
-		{cardID: "12788", pageHTML: test_konami_ja_12788, want: "Zoodiac Drident"},
-		{cardID: "12828", pageHTML: test_konami_ja_12828, want: "Clear Wing Fast Dragon"},
-		{cardID: "12953", pageHTML: test_konami_ja_12953, want: "Supreme King Z-ARC"},
-		{cardID: "13587", pageHTML: test_konami_ja_13587, want: "Ghost Belle & Haunted Mansion"},
-		{cardID: "13631", pageHTML: test_konami_ja_13631, want: "Infinite Impermanence"},
-		{cardID: "14356", pageHTML: test_konami_ja_14356, want: "Time Thief Redoer"},
-		{cardID: "14439", pageHTML: test_konami_ja_14439, want: "Endymion, the Mighty Master of Magic"},
-		{cardID: "14491", pageHTML: test_konami_ja_14491, want: "Monk of the Tenyi"},
-		{cardID: "14496", pageHTML: test_konami_ja_14496, want: "Apollousa, Bow of the Goddess"},
-		{cardID: "15296", pageHTML: test_konami_ja_15296, want: "Triple Tactics Talent"},
-		{cardID: "15299", pageHTML: test_konami_ja_15299, want: "Forbidden Droplet"},
-		{cardID: "15524", pageHTML: test_konami_ja_15524, want: "Divine Arsenal AA-ZEUS - Sky Thunder"},
-		{cardID: "15741", pageHTML: test_konami_ja_15741, want: "Underworld Goddess of the Closed World"},
-		{cardID: "16386", pageHTML: test_konami_ja_16386, want: "Baronne de Fleur"},
-		{cardID: "16849", pageHTML: test_konami_ja_16849, want: "D/D/D Deviser King Deus Machinex"},
-		{cardID: "17474", pageHTML: test_konami_ja_17474, want: "Tearlaments Sulliek"},
-		{cardID: "17746", pageHTML: test_konami_ja_17746, want: "Garura, Wings of Resonant Life"},
-		{cardID: "17808", pageHTML: test_konami_ja_17808, want: "Branded Regained"},
-		{cardID: "18022", pageHTML: test_konami_ja_18022, want: "Mikanko Water Arabesque"},
-		{cardID: "18177", pageHTML: test_konami_ja_18177, want: "Evigishki Neremanas"},
-		{cardID: "18792", pageHTML: test_konami_ja_18792, want: "Cornfield Coatl"},
-		{cardID: "19188", pageHTML: test_konami_ja_19188, want: "S:P Little Knight"},
-		{cardID: "19376", pageHTML: test_konami_ja_19376, want: "Stand Up Centur-Ion!"},
-		{cardID: "19521", pageHTML: test_konami_ja_19521, want: "Prayers of the Voiceless Voice"},
-		{cardID: "20536", pageHTML: test_konami_ja_20536, want: "Primite Drillbeam"},
-		{cardID: "20578", pageHTML: test_konami_ja_20578, want: "Ryzeal Detonator"},
-		// 21627 Miracle Raven: TCG-exclusive, JA page is an empty stub
-		{cardID: "21627", pageHTML: test_konami_ja_21627, want: ""},
-		// 22617, 23141: latest 2026-04 releases; JA page lists the card but
-		// Konami has not published the official English name yet
-		{cardID: "22617", pageHTML: test_konami_ja_22617, want: ""},
-		{cardID: "23141", pageHTML: test_konami_ja_23141, want: ""},
+		// GIVEN a JA page saved before the change, with the English-name span
+		{name: "old JA page", cardID: "15524", pageHTML: test_escaped_br_15524_ja,
+			want: "Divine Arsenal AA-ZEUS - Sky Thunder"},
+		// GIVEN current JA and KO pages, without the English-name span
+		{name: "current JA page", cardID: "4007", pageHTML: test_konami_ja_4007, want: ""},
+		{name: "current KO page", cardID: "4007", pageHTML: test_konami_ko_4007, want: ""},
 	} {
-		// WHEN parsing locale text from the JA page
+		// WHEN parsing locale text from the page
 		got := ParseCardLocaleText(c.pageHTML, CardID(c.cardID))
 
-		// THEN the English-name span on the JA page matches the expected name
+		// THEN the English name is read from the span only when the page has one
 		if got.NameEnglishOnPage != c.want {
-			t.Errorf("cardID %v NameEnglishOnPage got %q, want %q",
-				c.cardID, got.NameEnglishOnPage, c.want)
+			t.Errorf("%v cardID %v NameEnglishOnPage got %q, want %q",
+				c.name, c.cardID, got.NameEnglishOnPage, c.want)
 		}
 	}
 }
@@ -499,9 +458,9 @@ func TestParseCardPrints_JA(t *testing.T) {
 		// GIVEN a JA monster page with many prints
 		{cardID: "4007", pageHTML: test_konami_ja_4007,
 			wantFirst: CardPrint{
-				Date:       "2025-12-13",
-				Position:   "LPST-JP003",
-				SetName:    "LIMITED PACK ー STAMP EDITION ー",
+				Date:       "2026-10-31",
+				Position:   "YAS3-JP003",
+				SetName:    "ORIGINAL ARTWORK DUEL SET-海馬編-",
 				RarityCode: "UR",
 				RarityName: "ウルトラレア仕様",
 			},
@@ -560,6 +519,117 @@ func TestParseCardPrints_JA(t *testing.T) {
 		}
 		if got.RarityName != c.wantFirst.RarityName {
 			t.Errorf("cardID %v first print RarityName got %q, want %q", c.cardID, got.RarityName, c.wantFirst.RarityName)
+		}
+	}
+}
+
+func TestParseCardLocaleText_NameOnEveryPage(t *testing.T) {
+	// Konami changed the card name wrapper from id="cardname" to class="cardname"
+	// around 2026-10-28, which left every parsed name empty.
+	// ParseCardLocaleText finds the name separately from ParseKonamiCardHTML,
+	// so it needs its own check.
+	// Every saved JA and KO page must yield its local card name,
+	// except the empty stub pages of cards not released in that locale.
+	isStub := map[string]bool{
+		"ko_23141": true, // 黒陽竜イリオス: no Korean release yet
+	}
+	for _, c := range []struct {
+		page     string
+		pageHTML []byte
+	}{
+		{"ja_4007", test_konami_ja_4007},
+		{"ja_4343", test_konami_ja_4343},
+		{"ja_4386", test_konami_ja_4386},
+		{"ja_4861", test_konami_ja_4861},
+		{"ja_4960", test_konami_ja_4960},
+		{"ja_6341", test_konami_ja_6341},
+		{"ja_6996", test_konami_ja_6996},
+		{"ja_8409", test_konami_ja_8409},
+		{"ja_8933", test_konami_ja_8933},
+		{"ja_11232", test_konami_ja_11232},
+		{"ja_11353", test_konami_ja_11353},
+		{"ja_11973", test_konami_ja_11973},
+		{"ja_12788", test_konami_ja_12788},
+		{"ja_12828", test_konami_ja_12828},
+		{"ja_12953", test_konami_ja_12953},
+		{"ja_13587", test_konami_ja_13587},
+		{"ja_13631", test_konami_ja_13631},
+		{"ja_14356", test_konami_ja_14356},
+		{"ja_14439", test_konami_ja_14439},
+		{"ja_14491", test_konami_ja_14491},
+		{"ja_14496", test_konami_ja_14496},
+		{"ja_15296", test_konami_ja_15296},
+		{"ja_15299", test_konami_ja_15299},
+		{"ja_15524", test_konami_ja_15524},
+		{"ja_15741", test_konami_ja_15741},
+		{"ja_16386", test_konami_ja_16386},
+		{"ja_16849", test_konami_ja_16849},
+		{"ja_17474", test_konami_ja_17474},
+		{"ja_17746", test_konami_ja_17746},
+		{"ja_17808", test_konami_ja_17808},
+		{"ja_18022", test_konami_ja_18022},
+		{"ja_18177", test_konami_ja_18177},
+		{"ja_18792", test_konami_ja_18792},
+		{"ja_19188", test_konami_ja_19188},
+		{"ja_19376", test_konami_ja_19376},
+		{"ja_19521", test_konami_ja_19521},
+		{"ja_20536", test_konami_ja_20536},
+		{"ja_20578", test_konami_ja_20578},
+		{"ja_21627", test_konami_ja_21627},
+		{"ja_22617", test_konami_ja_22617},
+		{"ja_23141", test_konami_ja_23141},
+		{"ko_4007", test_konami_ko_4007},
+		{"ko_4343", test_konami_ko_4343},
+		{"ko_4386", test_konami_ko_4386},
+		{"ko_4861", test_konami_ko_4861},
+		{"ko_4960", test_konami_ko_4960},
+		{"ko_6341", test_konami_ko_6341},
+		{"ko_6996", test_konami_ko_6996},
+		{"ko_8409", test_konami_ko_8409},
+		{"ko_8933", test_konami_ko_8933},
+		{"ko_11232", test_konami_ko_11232},
+		{"ko_11353", test_konami_ko_11353},
+		{"ko_11973", test_konami_ko_11973},
+		{"ko_12788", test_konami_ko_12788},
+		{"ko_12828", test_konami_ko_12828},
+		{"ko_12953", test_konami_ko_12953},
+		{"ko_13587", test_konami_ko_13587},
+		{"ko_13631", test_konami_ko_13631},
+		{"ko_14356", test_konami_ko_14356},
+		{"ko_14439", test_konami_ko_14439},
+		{"ko_14491", test_konami_ko_14491},
+		{"ko_14496", test_konami_ko_14496},
+		{"ko_15296", test_konami_ko_15296},
+		{"ko_15299", test_konami_ko_15299},
+		{"ko_15524", test_konami_ko_15524},
+		{"ko_15741", test_konami_ko_15741},
+		{"ko_16386", test_konami_ko_16386},
+		{"ko_16849", test_konami_ko_16849},
+		{"ko_17474", test_konami_ko_17474},
+		{"ko_17746", test_konami_ko_17746},
+		{"ko_17808", test_konami_ko_17808},
+		{"ko_18022", test_konami_ko_18022},
+		{"ko_18177", test_konami_ko_18177},
+		{"ko_18792", test_konami_ko_18792},
+		{"ko_19188", test_konami_ko_19188},
+		{"ko_19376", test_konami_ko_19376},
+		{"ko_19521", test_konami_ko_19521},
+		{"ko_20536", test_konami_ko_20536},
+		{"ko_20578", test_konami_ko_20578},
+		{"ko_21627", test_konami_ko_21627},
+		{"ko_22617", test_konami_ko_22617},
+		{"ko_23141", test_konami_ko_23141},
+	} {
+		// WHEN parsing locale text from the saved page
+		cardID := CardID(c.page[strings.Index(c.page, "_")+1:])
+		got := ParseCardLocaleText(c.pageHTML, cardID)
+
+		// THEN the local card name is found, unless the page is an empty stub
+		if isStub[c.page] && got.Name != "" {
+			t.Errorf("page %v is a stub, Name got %q, want empty", c.page, got.Name)
+		}
+		if !isStub[c.page] && got.Name == "" {
+			t.Errorf("page %v Name got empty", c.page)
 		}
 	}
 }

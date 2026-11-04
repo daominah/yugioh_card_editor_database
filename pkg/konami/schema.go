@@ -18,9 +18,13 @@ const (
 type Card struct {
 	CardName string
 	// CardNameEN is the English card name as printed on the Japanese card
-	// page <h1> (the bare <span> next to the kanji title). It is parsed and
-	// written only during the "ja" crawl pass; the EN crawl page itself does
-	// not source it. Stored on the cards row as a viewer convenience so the
+	// page <h1> (the bare <span> next to the kanji title).
+	// Konami removed that span around 2026-10-28,
+	// so it is only parsed from JA pages saved before then.
+	// The full crawler fills cards.card_name_en from it during the "ja" pass,
+	// then for cards still missing a name,
+	// from the "en" page name.
+	// Stored on the cards row as a viewer convenience so the
 	// DB can be browsed without joining card_texts. The authoritative
 	// localized EN name still lives in card_texts where lang='en'.
 	// Always empty for Rush Duel cards (Konami's Rush JA pages have no EN span).

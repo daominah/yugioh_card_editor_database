@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="원석의 천광,유희왕,덱,듀얼 몬스터즈,VRAINS,브레인즈,금지,제한,팩,금지 카드,카드,수록,룰,오피셜 카드게임,코나미,KONAM"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="원석의 천광: 이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①:  원석의 천광  이외의 패의  원석  카드 1장이나 일반 몬스터 1장을 상대에게 보여주고, 필드의 앞면 표시"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D20536%26request_locale%3Dko%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D20536%26request_locale%3Dko%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=ko&amp;cid=20536"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D20536%26request_locale%3Dko%26a%3D202611040939"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>원석의 천광 | 카드 상세 | Yu-Gi-Oh! Neuron(오피셜 카드게임 카드 데이터 베이스)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=20536&ciid=1&enc=tnrBWkF4CNtaff9gsFdjpg').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=20536&ciid=1&enc=tnrBWkF4CNtaff9gsFdjpg').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=20536&ciid=1&enc=tnrBWkF4CNtaff9gsFdjpg').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=20536&ciid=1&enc=tnrBWkF4CNtaff9gsFdjpg').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=20536&ciid=1&enc=tnrBWkF4CNtaff9gsFdjpg').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -331,9 +398,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=20536'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=20536&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -347,32 +414,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=20536'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=20536&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -437,7 +534,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" class="current">한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" class="current">한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -578,6 +675,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -759,6 +857,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -844,7 +943,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>Yu-Gi-Oh! OCG 카드 '원석의 천광'의 카드 상세 정보입니다. <br>'원석의 천광'의 Yu-Gi-Oh! OCG 공식 규칙은 이 페이지에서 확인하세요. <br>'원석의 천광' 카드를 사용한 덱을 검색하고 싶다면 '<a href="deck_search.action?cardid=20536" target=_blank>이 카드를 사용한 덱을 검색</a>'에서 확인할 수 있습니다.</span>
+			<span class="text_linebreak">Yu-Gi-Oh! OCG 카드 '원석의 천광'의 카드 상세 정보입니다. <br>'원석의 천광'의 Yu-Gi-Oh! OCG 공식 규칙은 이 페이지에서 확인하세요. <br>'원석의 천광' 카드를 사용한 덱을 검색하고 싶다면 '<a href="deck_search.action?cardid=20536" target=_blank>이 카드를 사용한 덱을 검색</a>'에서 확인할 수 있습니다.</span>
 		</nav>
 	
 
@@ -880,15 +979,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			원석의 천광
-	
-			<span>Primite Drillbeam</span>
-	
-		</h1>
-	</div>
 
 
 
@@ -896,10 +987,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="원석의 천광" title="원석의 천광" class="none">
@@ -909,13 +1001,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -924,11 +1017,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					원석의 천광
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -956,7 +1051,7 @@
 					<div class="text_title">
 						카드 텍스트
 					</div>
-					이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: "원석의 천광" 이외의 패의 "원석" 카드 1장이나 일반 몬스터 1장을 상대에게 보여주고, 필드의 앞면 표시 카드 1장을 대상으로 하여 발동할 수 있다(토큰이 아닌, 일반 몬스터 또는 레벨 5 이상의 "원석" 몬스터가 자신 필드에 존재할 경우, 보여주지 않고 발동할 수도 있다). 대상의 카드의 효과를 무효로 하고 제외한다. ②: 자신 필드에 "원석" 몬스터가 존재할 경우, 자신 메인 페이즈에 발동할 수 있다. 묘지의 이 카드를 자신 필드에 세트한다.
+					<div class="text_linebreak">이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: &quot;원석의 천광&quot; 이외의 패의 &quot;원석&quot; 카드 1장이나 일반 몬스터 1장을 상대에게 보여주고, 필드의 앞면 표시 카드 1장을 대상으로 하여 발동할 수 있다(토큰이 아닌, 일반 몬스터 또는 레벨 5 이상의 &quot;원석&quot; 몬스터가 자신 필드에 존재할 경우, 보여주지 않고 발동할 수도 있다). 대상의 카드의 효과를 무효로 하고 제외한다. ②: 자신 필드에 &quot;원석&quot; 몬스터가 존재할 경우, 자신 메인 페이즈에 발동할 수 있다. 묘지의 이 카드를 자신 필드에 세트한다.</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -984,21 +1079,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=20536"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=20536"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1011,13 +1105,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>이 카드를  사용한 덱을 검색</h4>
-			</span></a>
+					<h4>이 카드를  사용한 덱을 검색</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1027,30 +1121,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>이 카드의 관련 카드 보기</h4>
-			</span></a>
+					<h4>이 카드의 관련 카드 보기</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1073,17 +1181,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D20536%26request_locale%3Dko%26a%3D202604301956&amp;lang=ko&amp;count=horizontal&amp;hashtags=YugiohDB_KO" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D20536%26request_locale%3Dko%26a%3D202611040939&amp;hashtags=YugiohDB_KO" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D20536%26request_locale%3Dko%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=ko_KR" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D20536%26request_locale%3Dko%26a%3D202611040939" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=20536&request_locale=ko&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="ko" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=20536&request_locale=ko&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=20536&request_locale=ko&a=202611040939" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1098,32 +1209,74 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>수록 시리즈</div>
+					<div>일러스트별 수록</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
-								2025-10-18
+								2026-06-23
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
-									AE23-KR003
+									LOCR-KR074
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
-									어드밴스드 이벤트 팩 2025 Vol.2 Version1
+									리미트 오버 컬렉션 -더 라이벌즈-
 								</div>
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001668000&rp=99999">
+							</div>
+		
+			
+			
+							<div class="icon rarity">
+								<div class="lr_icon rid_3" style="background-color:#6aa1cf;color:#6aa1cf">
+									<p>SR</p>
+									<span style="background-color:#e9f5ff;border-color:#6aa1cf;color:#6aa1cf; ">
+										슈퍼 레어
+									</span>
+								</div>
+							</div><!-- .icon -->
+			
+		
+						</div>
+					</div>
 
-
-
-								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001572000&rp=99999">
-
+	
+					<div class="t_row  pack_iid_1">
+						<div class="inside">
+							<div class="time">
+		
+								2026-06-23
+		
+							</div>
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
+							<div class="flex_1 contents " >
+								<div class="card_number">
+		
+									LOCR-KR074
+									
+		
+								</div>
+								<div class="pack_name flex_1" >
+									리미트 오버 컬렉션 -더 라이벌즈-
+								</div>
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001668000&rp=99999">
 							</div>
 		
 			
@@ -1142,28 +1295,144 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
+						<div class="inside">
+							<div class="time">
+		
+								2026-06-23
+		
+							</div>
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
+							<div class="flex_1 contents " >
+								<div class="card_number">
+		
+									LOCR-KR074
+									
+		
+								</div>
+								<div class="pack_name flex_1" >
+									리미트 오버 컬렉션 -더 라이벌즈-
+								</div>
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001668000&rp=99999">
+							</div>
+		
+			
+			
+							<div class="icon rarity">
+								<div class="lr_icon rid_6" style="background-color:#d87ce6;color:#d87ce6">
+									<p>UL</p>
+									<span style="background-color:#fff5ff;border-color:#d87ce6;color:#d87ce6; ">
+										얼티미트 레어
+									</span>
+								</div>
+							</div><!-- .icon -->
+			
+		
+						</div>
+					</div>
+
+	
+					<div class="t_row  pack_iid_1">
+						<div class="inside">
+							<div class="time">
+		
+								2026-06-23
+		
+							</div>
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
+							<div class="flex_1 contents " >
+								<div class="card_number">
+		
+									LOCR-KR074
+									
+		
+								</div>
+								<div class="pack_name flex_1" >
+									리미트 오버 컬렉션 -더 라이벌즈-
+								</div>
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001668000&rp=99999">
+							</div>
+		
+			
+			
+							<div class="icon rarity">
+								<div class="lr_icon rid_36" style="background-color:#e86d6d;color:#e86d6d">
+									<p>PSE</p>
+									<span style="background-color:#fff4f4;border-color:#e86d6d;color:#e86d6d; ">
+										프리즈마틱 시크릿 레어
+									</span>
+								</div>
+							</div><!-- .icon -->
+			
+		
+						</div>
+					</div>
+
+	
+					<div class="t_row  pack_iid_1">
+						<div class="inside">
+							<div class="time">
+		
+								2025-10-18
+		
+							</div>
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
+							<div class="flex_1 contents " >
+								<div class="card_number">
+		
+									AE23-KR003
+									
+		
+								</div>
+								<div class="pack_name flex_1" >
+									어드밴스드 이벤트 팩 2025 Vol.2 Version1
+								</div>
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001572000&rp=99999">
+							</div>
+		
+			
+			
+							<div class="icon rarity">
+								<div class="lr_icon rid_5" style="background-color:#e86d6d;color:#e86d6d">
+									<p>SE</p>
+									<span style="background-color:#fff4f4;border-color:#e86d6d;color:#e86d6d; ">
+										시크릿 레어
+									</span>
+								</div>
+							</div><!-- .icon -->
+			
+		
+						</div>
+					</div>
+
+	
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2024-10-11
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									ROTA-KR060
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									레이지 오브 디 어비스
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001426000&rp=99999">
-
 							</div>
 		
 			
@@ -1336,8 +1605,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 일반 몬스터를 포함하는 자신의 필드 / 묘지 / 제외 상태인 몬스터를 융합 소재로 하여 덱으로 되돌리고, 드래곤족의 융합 몬스터 1장을 융합 소환한다. ②: 묘지의 이 카드를 제외하고 발동할 수 있다. 자신의 덱 / 묘지에서 레벨 5 이상의 "원석" 몬스터 1장을 패에 넣는다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 일반 몬스터를 포함하는 자신의 필드 / 묘지 / 제외 상태인 몬스터를 융합 소재로 하여 덱으로 되돌리고, 드래곤족의 융합 몬스터 1장을 융합 소환한다. ②: 묘지의 이 카드를 제외하고 발동할 수 있다. 자신의 덱 / 묘지에서 레벨 5 이상의 &quot;원석&quot; 몬스터 1장을 패에 넣는다.
 								</dd>
 		
 		
@@ -1354,7 +1623,7 @@
 
 								<input type="hidden" class="cnm" value='원석 융합'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=21476">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=21476&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1446,8 +1715,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									"원석" 몬스터 ＋ 일반 몬스터 1장 이상<br>①: 이 카드의 공격력은, 이 카드의 융합 소재로 한 일반 몬스터의 수 × 1000 올린다. ②: 이 카드가 몬스터 존에 존재하는 한, 레벨 / 랭크 / 링크의 수치가, 자신의 필드 / 묘지의 일반 몬스터의 수 이하인, 상대 필드의 몬스터가 발동한 효과는 무효화된다. ③: 이 카드가 필드에서 묘지로 보내졌을 경우에 발동할 수 있다. 덱에서 일반 몬스터 1장을 수비 표시로 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									&quot;원석&quot; 몬스터 ＋ 일반 몬스터 1장 이상&lt;br&gt;①: 이 카드의 공격력은, 이 카드의 융합 소재로 한 일반 몬스터의 수 &times; 1000 올린다. ②: 이 카드가 몬스터 존에 존재하는 한, 레벨 / 랭크 / 링크의 수치가, 자신의 필드 / 묘지의 일반 몬스터의 수 이하인, 상대 필드의 몬스터가 발동한 효과는 무효화된다. ③: 이 카드가 필드에서 묘지로 보내졌을 경우에 발동할 수 있다. 덱에서 일반 몬스터 1장을 수비 표시로 특수 소환한다.
 								</dd>
 		
 		
@@ -1464,7 +1733,7 @@
 
 								<input type="hidden" class="cnm" value='원석룡 네더 베르셀리우스'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=21446">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=21446&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1556,8 +1825,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ②③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환했을 경우에 발동할 수 있다. 덱에서 "원석" 마법 / 함정 카드 1장을 자신 필드에 세트한다. ②: 이 카드를 릴리스하고 발동할 수 있다. 덱에서 일반 몬스터 1장을 묘지로 보낸다. ③: 자신 스탠바이 페이즈에, 자신의 필드나 묘지에 일반 몬스터가 존재할 경우에 발동할 수 있다. 묘지의 이 카드를 패에 넣는다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ②③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환했을 경우에 발동할 수 있다. 덱에서 &quot;원석&quot; 마법 / 함정 카드 1장을 자신 필드에 세트한다. ②: 이 카드를 릴리스하고 발동할 수 있다. 덱에서 일반 몬스터 1장을 묘지로 보낸다. ③: 자신 스탠바이 페이즈에, 이 카드가 묘지에 존재하고, 자신의 필드나 묘지에 일반 몬스터가 존재할 경우에 발동할 수 있다. 이 카드를 패에 넣는다.
 								</dd>
 		
 		
@@ -1574,7 +1843,7 @@
 
 								<input type="hidden" class="cnm" value='원석룡 어나더 베릴'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20754">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20754&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1666,8 +1935,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드는 일반 몬스터 1장을 릴리스했을 경우에만 일반 소환할 수 있다. 이 카드명의 ①의 효과는 1턴에 1번밖에 사용할 수 없다. ①: 상대 메인 페이즈에, 패의 이 카드를 상대에게 보여주고 발동할 수 있다. "원석" 몬스터 1장의 일반 소환을 실행한다. ②: 이 카드를 어드밴스 소환했을 경우에 발동할 수 있다. 이하의 효과를 각각 적용한다. ●상대 필드의 모든 앞면 표시 몬스터의 효과는 무효화된다. ●종족이나 속성이, 자신 묘지의 일반 몬스터 중 어느 것과 같아지는 상대 필드의 몬스터를 전부 제외한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드는 일반 몬스터 1장을 릴리스했을 경우에만 일반 소환할 수 있다. 이 카드명의 ①의 효과는 1턴에 1번밖에 사용할 수 없다. ①: 상대 메인 페이즈에, 패의 이 카드를 상대에게 보여주고 발동할 수 있다. &quot;원석&quot; 몬스터 1장의 일반 소환을 실행한다. ②: 이 카드를 어드밴스 소환했을 경우에 발동할 수 있다. 이하의 효과를 각각 적용한다. ●상대 필드의 모든 앞면 표시 몬스터의 효과는 무효화된다. ●종족이나 속성이, 자신 묘지의 일반 몬스터 중 어느 것과 같아지는 상대 필드의 몬스터를 전부 제외한다.
 								</dd>
 		
 		
@@ -1684,7 +1953,7 @@
 
 								<input type="hidden" class="cnm" value='원석룡 임페리얼 드래곤'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20489">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20489&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1749,8 +2018,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									①: 2000 LP를 지불하고, 일반 몬스터의 카드명을 1개 선언하여 발동할 수 있다. 상대 턴 종료시까지, 자신의 선언한 일반 몬스터 및 자신의 "원석" 몬스터는 전투로는 파괴되지 않는다. 자신 필드에 몬스터가 존재하지 않을 경우, 추가로 선언한 일반 몬스터 1장을 덱에서 수비 표시로 특수 소환할 수 있다. ②: 상대가 몬스터를 일반 소환했을 경우, 묘지의 이 카드를 제외하고, 자신의 필드 / 묘지의 일반 몬스터 1장을 대상으로 하여 발동할 수 있다. 그 몬스터보다 낮은 공격력을 가지는 필드의 몬스터 1장을 제외한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									①: 2000 LP를 지불하고, 일반 몬스터의 카드명을 1개 선언하여 발동할 수 있다. 상대 턴 종료시까지, 자신의 선언한 일반 몬스터 및 자신의 &quot;원석&quot; 몬스터는 전투로는 파괴되지 않는다. 자신 필드에 몬스터가 존재하지 않을 경우, 추가로 선언한 일반 몬스터 1장을 덱에서 수비 표시로 특수 소환할 수 있다. ②: 상대가 몬스터를 일반 소환했을 경우, 묘지의 이 카드를 제외하고, 자신의 필드 / 묘지의 일반 몬스터 1장을 대상으로 하여 발동할 수 있다. 그 몬스터보다 낮은 공격력을 가지는 필드의 몬스터 1장을 제외한다.
 								</dd>
 		
 		
@@ -1767,7 +2036,7 @@
 
 								<input type="hidden" class="cnm" value='원석의 명영'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20535">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20535&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1832,8 +2101,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 토큰이 아닌, 일반 몬스터 또는 레벨 5 이상의 "원석" 몬스터가 자신 필드에 존재하고, 상대가 몬스터를 일반 소환 / 특수 소환할 시기에 발동할 수 있다. 그것을 무효로 하고, 그 몬스터를 제외한다. ②: 자신 스탠바이 페이즈에, 자신 필드에 "원석" 몬스터가 존재할 경우에 발동할 수 있다. 묘지의 이 카드를 자신 필드에 세트한다. 이 효과로 세트한 이 카드는 필드에서 벗어났을 경우에 제외된다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 토큰이 아닌, 일반 몬스터 또는 레벨 5 이상의 &quot;원석&quot; 몬스터가 자신 필드에 존재하고, 상대가 몬스터를 일반 소환 / 특수 소환할 시기에 발동할 수 있다. 그것을 무효로 하고, 그 몬스터를 제외한다. ②: 자신 스탠바이 페이즈에, 자신 필드에 &quot;원석&quot; 몬스터가 존재할 경우에 발동할 수 있다. 묘지의 이 카드를 자신 필드에 세트한다. 이 효과로 세트한 이 카드는 필드에서 벗어났을 경우에 제외된다.
 								</dd>
 		
 		
@@ -1850,7 +2119,7 @@
 
 								<input type="hidden" class="cnm" value='원석의 반규'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20813">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20813&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1908,8 +2177,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									①: 일반 몬스터의 카드명을 1개 선언하고 발동할 수 있다. 이 턴에, 자신의 선언한 일반 몬스터 및 자신의 "원석" 몬스터의 전투로 발생하는 자신에게로의 전투 데미지는 0 이 된다. 자신 필드에 몬스터가 존재하지 않을 경우, 추가로 선언한 일반 몬스터 1장을 자신의 덱 / 묘지에서 특수 소환할 수 있다. ②: 상대 턴에 묘지의 이 카드를 제외하고, 자신의 필드 / 묘지의 일반 몬스터 1장을 대상으로 하여 발동할 수 있다. 그 몬스터보다 높은 공격력을 가지는 상대 필드의 몬스터 1장의 컨트롤을 엔드 페이즈까지 얻는다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									①: 일반 몬스터의 카드명을 1개 선언하고 발동할 수 있다. 이 턴에, 자신의 선언한 일반 몬스터 및 자신의 &quot;원석&quot; 몬스터의 전투로 발생하는 자신에게로의 전투 데미지는 0 이 된다. 자신 필드에 몬스터가 존재하지 않을 경우, 추가로 선언한 일반 몬스터 1장을 자신의 덱 / 묘지에서 특수 소환할 수 있다. ②: 상대 턴에 묘지의 이 카드를 제외하고, 자신의 필드 / 묘지의 일반 몬스터 1장을 대상으로 하여 발동할 수 있다. 그 몬스터보다 높은 공격력을 가지는 상대 필드의 몬스터 1장의 컨트롤을 엔드 페이즈까지 얻는다.
 								</dd>
 		
 		
@@ -1926,7 +2195,7 @@
 
 								<input type="hidden" class="cnm" value='원석의 호포'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20552">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20552&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1991,8 +2260,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드의 발동시의 효과 처리로서, 덱에서 "원석의 황맥" 이외의 "원석" 카드 1장을 패에 넣는다. ②: 자신 필드의 일반 몬스터 및 "원석" 몬스터의 공격력은, 자신 묘지의 일반 몬스터의 종류 × 300 올린다. ③: 일반 몬스터의 카드명을 1개 선언하고 발동할 수 있다. 선언한 일반 몬스터 1장을 자신의 패 / 덱 / 묘지에서 수비 표시로 특수 소환한다. 이 턴에, 자신은 특수 소환된 필드의 몬스터의 효과를 발동할 수 없다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드의 발동시의 효과 처리로서, 덱에서 &quot;원석의 황맥&quot; 이외의 &quot;원석&quot; 카드 1장을 패에 넣는다. ②: 자신 필드의 일반 몬스터 및 &quot;원석&quot; 몬스터의 공격력은, 자신 묘지의 일반 몬스터의 종류 &times; 300 올린다. ③: 일반 몬스터의 카드명을 1개 선언하고 발동할 수 있다. 선언한 일반 몬스터 1장을 자신의 패 / 덱 / 묘지에서 수비 표시로 특수 소환한다. 이 턴에, 자신은 특수 소환된 필드의 몬스터의 효과를 발동할 수 없다.
 								</dd>
 		
 		
@@ -2009,7 +2278,7 @@
 
 								<input type="hidden" class="cnm" value='원석의 황맥'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20534">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20534&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3438,6 +3707,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3612,6 +3883,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3695,7 +3968,9 @@
 						<p>유희왕 오피셜 카드게임의 공식 사이트입니다. <br>Yu-Gi-Oh! OCG의 모든 카드를 검색하거나 세부 규칙, 금지 및 제한 카드를 참조할 수 있습니다. <br>이미 소지하고 있는 카드나 덱을 마이덱에 등록해서 관리하거나 공개된 덱 레시피를 검색해서 자신의 덱을 구축하는 데 참고할 수도 있습니다.</p>
 						<a class="btn" href="https://www.yugioh.co.kr/site/game_method.php" target="_blank">
 							<img class="ocg" src="external/image/ko/00_logo_ocgtcg.png" />
+
 							<img class="rush" src="external/image/ko/00_logo_rush.png" />
+
 							<span>게임하는 방법</span>
 						</a>
 					</div>
@@ -4073,6 +4348,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -4174,7 +4450,7 @@
 			<p>Privacy Settings</p>
 		</div>
 		<div class="ps_body">
-			<p>Yu-Gi-Oh! Neuron(OFFICIAL CARD GAME CARD DATABASE)을 이용하려면 이용 약관에 동의해야 합니다. <br>이용 약관이 개정된 경우, 서비스를 계속 이용하시려면 개정된 내용에 다시 동의하셔야 합니다.</p>
+			<p>Yu-Gi-Oh! Neuron(OFFICIAL CARD GAME CARD DATABASE) 을 이용하려면 이용 약관에 동의해야 합니다. <br>이용 약관이 개정된 경우, 서비스를 계속 이용하시려면 개정된 내용에 다시 동의하셔야 합니다.</p>
 		</div>
 		<div class="ps_footer">
 			<div class="ps_button">
@@ -4730,6 +5006,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=115&cb=530017770" async></script></body>
+</body>
 </html>
 

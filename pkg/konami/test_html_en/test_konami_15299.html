@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="Forbidden Droplet,KONAMI,yugioh,Yu-Gi-Oh,TCG,card,database,card,list,Forbidden,Limited,Semi-limited,Cards,Included in,"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="Forbidden Droplet: Send any number of other cards from your hand and/or field to the GY; choose that many Effect Monste"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D15299%26request_locale%3Den%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D15299%26request_locale%3Den%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=en&amp;cid=15299"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D15299%26request_locale%3Den%26a%3D202611040938"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>Forbidden Droplet | Card Details | Yu-Gi-Oh! Neuron(TRADING CARD GAME CARD DATABASE)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=15299&ciid=1&enc=CjEDoijDZMzCu0lxKYVerQ').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=15299&ciid=1&enc=CjEDoijDZMzCu0lxKYVerQ').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=15299&ciid=1&enc=CjEDoijDZMzCu0lxKYVerQ').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=15299&ciid=1&enc=CjEDoijDZMzCu0lxKYVerQ').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=15299&ciid=1&enc=CjEDoijDZMzCu0lxKYVerQ').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -311,9 +378,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=15299'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=15299&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -327,32 +394,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=15299'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=15299&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -417,7 +514,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -818,7 +915,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>These are the card details for the Yu-Gi-Oh! TCG card "Forbidden Droplet." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Forbidden Droplet." <br>Please go to "<a href="deck_search.action?cardid=15299" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Forbidden Droplet."</span>
+			<span class="text_linebreak">These are the card details for the Yu-Gi-Oh! TCG card "Forbidden Droplet." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Forbidden Droplet." <br>Please go to "<a href="deck_search.action?cardid=15299" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Forbidden Droplet."</span>
 		</nav>
 	
 
@@ -854,13 +951,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			Forbidden Droplet
-	
-		</h1>
-	</div>
 
 
 
@@ -868,10 +959,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="Forbidden Droplet" title="Forbidden Droplet" class="none">
@@ -881,13 +973,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -896,11 +989,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					Forbidden Droplet
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -928,7 +1023,7 @@
 					<div class="text_title">
 						Card Text
 					</div>
-					Send any number of other cards from your hand and/or field to the GY; choose that many Effect Monsters your opponent controls, and until the end of this turn, their ATK is halved, also their effects are negated. In response to this card's activation, your opponent cannot activate cards, or the effects of cards, with the same original type (Monster/Spell/Trap) as the cards sent to the GY to activate this card. You can only activate 1 "Forbidden Droplet" per turn.
+					<div class="text_linebreak">Send any number of other cards from your hand and/or field to the GY; choose that many Effect Monsters your opponent controls, and until the end of this turn, their ATK is halved, also their effects are negated. In response to this card's activation, your opponent cannot activate cards, or the effects of cards, with the same original type (Monster/Spell/Trap) as the cards sent to the GY to activate this card. You can only activate 1 &quot;Forbidden Droplet&quot; per turn.</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -956,21 +1051,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=15299"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=15299"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -983,13 +1077,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>Search For Decks Containing This Card</h4>
-			</span></a>
+					<h4>Search For Decks Containing This Card</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -999,30 +1093,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>View Cards Related to This Card</h4>
-			</span></a>
+					<h4>View Cards Related to This Card</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1045,17 +1153,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D15299%26request_locale%3Den%26a%3D202604301956&amp;lang=en&amp;count=horizontal&amp;hashtags=YugiohDB_EN" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D15299%26request_locale%3Den%26a%3D202611040938&amp;hashtags=YugiohDB_EN" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D15299%26request_locale%3Den%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=en_US" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D15299%26request_locale%3Den%26a%3D202611040938" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=15299&request_locale=en&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="en" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=15299&request_locale=en&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=15299&request_locale=en&a=202611040938" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1070,112 +1181,35 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>Sets</div>
+					<div>Organized by Illustration</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
-								2026-03-13
+								2026-07-15
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
-									L26D-ENM13
+									WI26-EN030
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
-									LEGENDARY MODERN DECKS 2026
+									WINNER'S PACK 2026-2027
 								</div>
-
-
-
-								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001598000&rp=99999">
-
-							</div>
-		
-			
-			
-							<div class="icon rarity">
-								<div class="lr_icon rid_1" style="background-color:#9c9c9c;color:#9c9c9c">
-									<p>C</p>
-									<span style="background-color:#ffffff;border-color:#9c9c9c;color:#9c9c9c; ">
-										Common
-									</span>
-								</div>
-							</div><!-- .icon -->
-			
-		
-						</div>
-					</div>
-
-	
-					<div class="t_row ">
-						<div class="inside">
-							<div class="time">
-		
-								2025-11-07
-		
-							</div>
-
-							<div class="flex_1 contents " >
-								<div class="card_number">
-		
-									L5DD-ENY29
-		
-								</div>
-								<div class="pack_name flex_1" >
-									Legendary 5D's Decks
-								</div>
-
-
-
-								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001549000&rp=99999">
-
-							</div>
-		
-			
-			
-							<div class="icon rarity">
-								<div class="lr_icon rid_1" style="background-color:#9c9c9c;color:#9c9c9c">
-									<p>C</p>
-									<span style="background-color:#ffffff;border-color:#9c9c9c;color:#9c9c9c; ">
-										Common
-									</span>
-								</div>
-							</div><!-- .icon -->
-			
-		
-						</div>
-					</div>
-
-	
-					<div class="t_row ">
-						<div class="inside">
-							<div class="time">
-		
-								2025-06-13
-		
-							</div>
-
-							<div class="flex_1 contents " >
-								<div class="card_number">
-		
-									BLMM-EN171
-		
-								</div>
-								<div class="pack_name flex_1" >
-									BATTLES OF LEGEND: MONSTER MAYHEM
-								</div>
-
-
-
-								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001487000&rp=99999">
-
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001649000&rp=99999">
 							</div>
 		
 			
@@ -1194,28 +1228,144 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
+						<div class="inside">
+							<div class="time">
+		
+								2026-03-13
+		
+							</div>
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
+							<div class="flex_1 contents " >
+								<div class="card_number">
+		
+									L26D-ENM13
+									
+		
+								</div>
+								<div class="pack_name flex_1" >
+									LEGENDARY MODERN DECKS 2026
+								</div>
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001598000&rp=99999">
+							</div>
+		
+			
+			
+							<div class="icon rarity">
+								<div class="lr_icon rid_1" style="background-color:#9c9c9c;color:#9c9c9c">
+									<p>C</p>
+									<span style="background-color:#ffffff;border-color:#9c9c9c;color:#9c9c9c; ">
+										Common
+									</span>
+								</div>
+							</div><!-- .icon -->
+			
+		
+						</div>
+					</div>
+
+	
+					<div class="t_row  pack_iid_1">
+						<div class="inside">
+							<div class="time">
+		
+								2025-11-07
+		
+							</div>
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
+							<div class="flex_1 contents " >
+								<div class="card_number">
+		
+									L5DD-ENY29
+									
+		
+								</div>
+								<div class="pack_name flex_1" >
+									Legendary 5D's Decks
+								</div>
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001549000&rp=99999">
+							</div>
+		
+			
+			
+							<div class="icon rarity">
+								<div class="lr_icon rid_1" style="background-color:#9c9c9c;color:#9c9c9c">
+									<p>C</p>
+									<span style="background-color:#ffffff;border-color:#9c9c9c;color:#9c9c9c; ">
+										Common
+									</span>
+								</div>
+							</div><!-- .icon -->
+			
+		
+						</div>
+					</div>
+
+	
+					<div class="t_row  pack_iid_1">
+						<div class="inside">
+							<div class="time">
+		
+								2025-06-13
+		
+							</div>
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
+							<div class="flex_1 contents " >
+								<div class="card_number">
+		
+									BLMM-EN171
+									
+		
+								</div>
+								<div class="pack_name flex_1" >
+									BATTLES OF LEGEND: MONSTER MAYHEM
+								</div>
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001487000&rp=99999">
+							</div>
+		
+			
+			
+							<div class="icon rarity">
+								<div class="lr_icon rid_4" style="background-color:#cfa15e;color:#cfa15e">
+									<p>UR</p>
+									<span style="background-color:#fff8ee;border-color:#cfa15e;color:#cfa15e; ">
+										Ultra Rare
+									</span>
+								</div>
+							</div><!-- .icon -->
+			
+		
+						</div>
+					</div>
+
+	
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN064
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1234,28 +1384,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN064
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1274,28 +1423,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN064
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1314,28 +1462,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN064
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1354,28 +1501,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN064
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1394,28 +1540,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN064
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1434,28 +1579,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN064
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1474,28 +1618,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2022-09-16
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									MP22-EN254
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									2022 TIN OF THE PHARAOH'S GODS
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001195000&rp=99999">
-
 							</div>
 		
 			
@@ -1514,28 +1657,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2022-06-17
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									LED9-EN056
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									LEGENDARY DUELISTS: DUELS FROM THE DEEP
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001164000&rp=99999">
-
 							</div>
 		
 			
@@ -1554,28 +1696,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2021-12-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									BROL-EN090
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									BROTHERS OF LEGEND
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001136000&rp=99999">
-
 							</div>
 		
 			
@@ -1594,28 +1735,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2021-06-10
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									OP16-EN003
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									OTS TOURNAMENT PACK 16
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001119000&rp=99999">
-
 							</div>
 		
 			
@@ -1634,28 +1774,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2020-08-07
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									ROTD-EN065
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									RISE OF THE DUELIST
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=11119006&rp=99999">
-
 							</div>
 		
 			
@@ -1862,8 +2001,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									When this card is Normal Summoned: You can add 1 "Forbidden" Quick-Play Spell from your Deck to your hand. During your opponent's Main Phase (Quick Effect): You can Tribute this card; Special Summon 1 Level 4 Fairy monster from your Deck, except "Condemned Witch". You can only use each effect of "Condemned Witch" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									When this card is Normal Summoned: You can add 1 &quot;Forbidden&quot; Quick-Play Spell from your Deck to your hand. During your opponent's Main Phase (Quick Effect): You can Tribute this card; Special Summon 1 Level 4 Fairy monster from your Deck, except &quot;Condemned Witch&quot;. You can only use each effect of &quot;Condemned Witch&quot; once per turn.
 								</dd>
 		
 		
@@ -1880,7 +2019,7 @@
 
 								<input type="hidden" class="cnm" value='Condemned Witch'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13915">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13915&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1972,8 +2111,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									If this card is Normal or Special Summoned: You can Special Summon 1 "Darklord" monster from your Deck in Defense Position, except "Darklord Djehuty", also you cannot Special Summon for the rest of this turn, except Fairy monsters. If you control a DARK Fairy Fusion Monster: You can banish this card from your GY, then target 1 "Darklord" card or "Forbidden" Quick-Play Spell in your GY; add it to your hand. You can only use each effect of "Darklord Djehuty" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									If this card is Normal or Special Summoned: You can Special Summon 1 &quot;Darklord&quot; monster from your Deck in Defense Position, except &quot;Darklord Djehuty&quot;, also you cannot Special Summon for the rest of this turn, except Fairy monsters. If you control a DARK Fairy Fusion Monster: You can banish this card from your GY, then target 1 &quot;Darklord&quot; card or &quot;Forbidden&quot; Quick-Play Spell in your GY; add it to your hand. You can only use each effect of &quot;Darklord Djehuty&quot; once per turn.
 								</dd>
 		
 		
@@ -1990,7 +2129,7 @@
 
 								<input type="hidden" class="cnm" value='Darklord Djehuty'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=22125">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=22125&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2082,8 +2221,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									You can only Special Summon "Darklord Gulgolet(s)" once per turn. If this card is Special Summoned: You can Special Summon 2 "Darklord Tokens" (Fairy/DARK/Level 6/ATK 0/DEF 0), also you cannot Special Summon for the rest of this turn, except Fairy monsters. If this card is sent to the GY: You can add 1 "Darklord" card, except "Darklord Gulgolet", or 1 "Forbidden" Quick-Play Spell, from your Deck to your hand. You can only use this effect of "Darklord Gulgolet" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									You can only Special Summon &quot;Darklord Gulgolet(s)&quot; once per turn. If this card is Special Summoned: You can Special Summon 2 &quot;Darklord Tokens&quot; (Fairy/DARK/Level 6/ATK 0/DEF 0), also you cannot Special Summon for the rest of this turn, except Fairy monsters. If this card is sent to the GY: You can add 1 &quot;Darklord&quot; card, except &quot;Darklord Gulgolet&quot;, or 1 &quot;Forbidden&quot; Quick-Play Spell, from your Deck to your hand. You can only use this effect of &quot;Darklord Gulgolet&quot; once per turn.
 								</dd>
 		
 		
@@ -2100,7 +2239,7 @@
 
 								<input type="hidden" class="cnm" value='Darklord Gulgolet'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=22124">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=22124&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3519,6 +3658,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3693,6 +3834,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3776,7 +3919,7 @@
 						<p>This is an official site for the Yu-Gi-Oh! Trading Card Game. <br>You can search through all Yu-Gi-Oh! TCG cards, check detailed rules, and view the Forbidden & Limited List. <br>You can also manage your own cards and Decks by registering them in My Deck, and search publicly available Deck Recipes to help you build your own Deck.</p>
 						<a class="btn" href="https://www.yugioh-card.com/en/rulebook/index.html" target="_blank">
 							<img class="ocg" src="external/image/en/00_logo_ocgtcg.png" />
-							<img class="rush" src="external/image/en/00_logo_rush.png" />
+
 							<span>How to Play</span>
 						</a>
 					</div>
@@ -4794,6 +4937,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=23&cb=292718120" async></script></body>
+</body>
 </html>
 

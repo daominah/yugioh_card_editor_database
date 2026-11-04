@@ -20,25 +20,24 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="マジシャン・オブ・ブラックカオス,ラッシュデュエル,遊戯王,ルール,カード,デッキ,カードリスト,収録,デッキレシピ,RUSH,RUSHDUEL,Yugioh,コナミ,KONAMI,禁止,制限,パック,禁止カード"/>
 
 
 	<meta name="description" content="マジシャン・オブ・ブラックカオス: 墓地にいるこのカードのカード名は「ブラック・マジシャン」になる。 【条件】なし 【効果】なし"/>
-	<meta name="title" content="マジシャン・オブ・ブラックカオス | カード詳細 | 遊戯王ニューロン ( ラッシュデュエル カードデータベース ）"/>
-	<meta property="og:title" content="マジシャン・オブ・ブラックカオス | カード詳細 | 遊戯王ニューロン ( ラッシュデュエル カードデータベース ）"/>
+	<meta name="title" content="マジシャン・オブ・ブラックカオス | カード詳細 | 遊戯王ニューロン(ラッシュデュエル カードデータベース)"/>
+	<meta property="og:title" content="マジシャン・オブ・ブラックカオス | カード詳細 | 遊戯王ニューロン(ラッシュデュエル カードデータベース)"/>
 
 
 	<meta name="og:description" content="マジシャン・オブ・ブラックカオス: 墓地にいるこのカードのカード名は「ブラック・マジシャン」になる。 【条件】なし 【効果】なし"/>
-	<meta name="twitter:title" content="マジシャン・オブ・ブラックカオス | カード詳細 | 遊戯王ニューロン ( ラッシュデュエル カードデータベース ）"/>
+	<meta name="twitter:title" content="マジシャン・オブ・ブラックカオス | カード詳細 | 遊戯王ニューロン(ラッシュデュエル カードデータベース)"/>
 
 
 	<meta name="twitter:description" content="マジシャン・オブ・ブラックカオス: 墓地にいるこのカードのカード名は「ブラック・マジシャン」になる。 【条件】なし 【効果】なし"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dja%26a%3D202604131103"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dja%26a%3D202604131103"/>
+	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dja%26a%3D202611040939"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dja%26a%3D202611040939"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -49,7 +48,7 @@
 	<meta http-equiv="Content-Script-Type" content="text/javascript">
 	<meta http-equiv="imagetoolbar" content="no">
 
-	<meta property="og:site_name" content="遊戯王ニューロン ( ラッシュデュエル カードデータベース ）">
+	<meta property="og:site_name" content="遊戯王ニューロン(ラッシュデュエル カードデータベース)">
 
 	<meta property="og:type" content="product" />
 	<meta property="og:locale" content="ja_JP" />
@@ -78,9 +77,8 @@
 
 
 
-
 	
-		<title>マジシャン・オブ・ブラックカオス | カード詳細 | 遊戯王ニューロン ( ラッシュデュエル カードデータベース ）</title>
+		<title>マジシャン・オブ・ブラックカオス | カード詳細 | 遊戯王ニューロン(ラッシュデュエル カードデータベース)</title>
 	
 	
 
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,15 +231,21 @@
 		
 	   
 		$('#card_image_1').attr('src', '/rushdb/get_image.action?type=2&cid=21588&ciid=1&enc=CfgDCe6ioHvVyIremGxguA').show();
-		$('#thumbnail_card_image_1').attr('src', '/rushdb/get_image.action?type=1&cid=21588&ciid=1&enc=CfgDCe6ioHvVyIremGxguA').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/rushdb/get_image.action?type=2&cid=21588&ciid=1&enc=CfgDCe6ioHvVyIremGxguA').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/rushdb/get_image.action?type=1&cid=21588&ciid=1&enc=CfgDCe6ioHvVyIremGxguA').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/rushdb/get_image.action?type=2&cid=21588&ciid=1&enc=CfgDCe6ioHvVyIremGxguA').show();
 	   
 		$('#card_image_101').attr('src', '/rushdb/get_image.action?type=2&cid=21588&ciid=101&enc=CfgDCe6ioHvVyIremGxguA');
-		$('#thumbnail_card_image_101').attr('src', '/rushdb/get_image.action?type=1&cid=21588&ciid=101&enc=CfgDCe6ioHvVyIremGxguA').show();
-		$('#pop_card_image_101').attr('src', '/rushdb/get_image.action?type=2&cid=21588&ciid=101&enc=CfgDCe6ioHvVyIremGxguA');
+		$('#thumbnail_card_image_101,#popup_card_image_101').attr('src', '/rushdb/get_image.action?type=1&cid=21588&ciid=101&enc=CfgDCe6ioHvVyIremGxguA').show();
+		$('#pop_card_image_101,#update_list_card_image_101').attr('src', '/rushdb/get_image.action?type=2&cid=21588&ciid=101&enc=CfgDCe6ioHvVyIremGxguA');
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -247,10 +262,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -259,43 +326,43 @@
 		
 		
 			
-				$('#card_image_0_1').attr('src', '/rushdb/get_image.action?type=1&cid=19597&ciid=1&enc=Y9FmLAjq04PlVonoZ3oI6g').show();
+				$('#card_image_0_1').attr('src', '/rushdb/get_image.action?type=1&cid=23954&ciid=1&enc=IyIckJwu7RNi9tYnKP_4Vw').show();
 			
 		
 			
-				$('#card_image_1_1').attr('src', '/rushdb/get_image.action?type=1&cid=22030&ciid=1&enc=PcW4gQ0uoEVG4I6sav9onQ').show();
+				$('#card_image_1_1').attr('src', '/rushdb/get_image.action?type=1&cid=19597&ciid=1&enc=Y9FmLAjq04PlVonoZ3oI6g').show();
 			
 		
 			
-				$('#card_image_2_1').attr('src', '/rushdb/get_image.action?type=1&cid=15450&ciid=1&enc=v6le6tRHvY-FDAQKsUNICg').show();
+				$('#card_image_2_1').attr('src', '/rushdb/get_image.action?type=1&cid=23912&ciid=1&enc=81RuxVfirFouhIT4Z7Qz7A').show();
 			
 		
 			
-				$('#card_image_3_1').attr('src', '/rushdb/get_image.action?type=1&cid=21500&ciid=1&enc=Ii3ngQ6tchDLIH3BcBK54A').show();
+				$('#card_image_3_1').attr('src', '/rushdb/get_image.action?type=1&cid=22030&ciid=1&enc=PcW4gQ0uoEVG4I6sav9onQ').show();
 			
 		
 			
-				$('#card_image_4_1').attr('src', '/rushdb/get_image.action?type=1&cid=21496&ciid=1&enc=DJjLcSTSPUMrG8QNM_lHIw').show();
+				$('#card_image_4_1').attr('src', '/rushdb/get_image.action?type=1&cid=15450&ciid=1&enc=v6le6tRHvY-FDAQKsUNICg').show();
 			
 		
 			
-				$('#card_image_5_1').attr('src', '/rushdb/get_image.action?type=1&cid=21709&ciid=1&enc=mfrwEehwJc-pOZIsb7cL9Q').show();
+				$('#card_image_5_1').attr('src', '/rushdb/get_image.action?type=1&cid=23906&ciid=1&enc=8OIlQp3ILZ5kW-OzxFTkYQ').show();
 			
 		
 			
-				$('#card_image_6_1').attr('src', '/rushdb/get_image.action?type=1&cid=19773&ciid=1&enc=4H1yjK-Y72i22SwdRqQYiw').show();
+				$('#card_image_6_1').attr('src', '/rushdb/get_image.action?type=1&cid=21500&ciid=1&enc=Ii3ngQ6tchDLIH3BcBK54A').show();
 			
 		
 			
-				$('#card_image_7_1').attr('src', '/rushdb/get_image.action?type=1&cid=15410&ciid=1&enc=2cGqI0XnGrnO-2GE1DLGLQ').show();
+				$('#card_image_7_1').attr('src', '/rushdb/get_image.action?type=1&cid=21496&ciid=1&enc=DJjLcSTSPUMrG8QNM_lHIw').show();
 			
 		
 			
-				$('#card_image_8_1').attr('src', '/rushdb/get_image.action?type=1&cid=16371&ciid=1&enc=VPB07qIwP7VNi45dkPqWuA').show();
+				$('#card_image_8_1').attr('src', '/rushdb/get_image.action?type=1&cid=23911&ciid=1&enc=PCT19KDkPFQrYAvQE5_hDg').show();
 			
 		
 			
-				$('#card_image_9_1').attr('src', '/rushdb/get_image.action?type=1&cid=15451&ciid=1&enc=pi_rbiriXll8tJw-aBP-0w').show();
+				$('#card_image_9_1').attr('src', '/rushdb/get_image.action?type=1&cid=21709&ciid=1&enc=mfrwEehwJc-pOZIsb7cL9Q').show();
 			
 		
 
@@ -343,9 +410,9 @@
 				
 				location.href = '/rushdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=21588'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=21588&stype=1&othercon=2&releaseYStart=2020&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -359,32 +426,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/rushdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=21588'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=21588&stype=1&othercon=2&releaseYStart=2020&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -442,13 +539,14 @@
 				 		
 				 		
 				 		
+				 		
 					</div>
 					
 					<div id="lang_mane">
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" class="current">日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -456,7 +554,8 @@
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" class="current">日本語</a></li>
 								<li><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
-								<li><a href="javascript:ChangeLanguage('ae')" >English(Asia)</a></li>
+								<li class="ae"><a href="javascript:ChangeLanguage('ae')" >English(Asia)</a></li>
+								<li class="cn"><a href="javascript:ChangeLanguage('cn')" >簡体字</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -541,8 +640,8 @@
 						</a>
 						<ul>
 							<li><a href="/rushdb/card_list.action?clm=3&wname=CardSearch">発売日の新しい順</a></li>
-							<li><a href="/rushdb/card_list.action?clm=1&wname=CardSearch">一般商品</a></li>
-							<li><a href="/rushdb/card_list.action?clm=2&wname=CardSearch">特典・同梱系</a></li>
+							<li><a href="/rushdb/card_list.action?clm=1&wname=CardSearch">カテゴリ順</a></li>
+							
 				
 							<li><a href="/rushdb/card_calendar.action">カード誕生日</a></li>
 				
@@ -590,6 +689,29 @@
 							<li><a href="/rushdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
 						</ul>
 					</li>
+				
+					<li class="menu_trends sab_menu rush">
+						<a class="bg main" href="/rushdb/trends_search.action?ope=1"><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
+  <g>
+    <g id="trendssvg">
+      <path class="svg_stroke_bold" d="M319.81,95.49l77.67,2.33-2.49,77.81"/>
+      <path class="svg_stroke_bold" d="M39.07,321.57l150.98-142.19,56.56,60.05,148.07-139.45"/>
+      <path class="svg_stroke_lighter" d="M411.08,369.05h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M411.08,333.33h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M250,297.62h188.78l-64.63,83.33h-202.38l78.23-83.33Z"/>
+    </g>
+  </g>
+</svg><h3>トレンド</h3></a>
+						<ul>
+							
+							<li><a href="/rushdb/trends_search.action?ope=1">人気デッキランキング</a></li>
+							
+							<li><a href="/rushdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
+						</ul>
+					</li>
+				
 			
 			
 
@@ -740,8 +862,8 @@
 						</a>
 						<ul>
 							<li><a href="/rushdb/card_list.action?clm=3&wname=CardSearch">発売日の新しい順</a></li>
-							<li><a href="/rushdb/card_list.action?clm=1&wname=CardSearch">一般商品</a></li>
-							<li><a href="/rushdb/card_list.action?clm=2&wname=CardSearch">特典・同梱系</a></li>
+							<li><a href="/rushdb/card_list.action?clm=1&wname=CardSearch">カテゴリ順</a></li>
+							
 				
 							<li><a href="/rushdb/card_calendar.action">カード誕生日</a></li>
 				
@@ -789,6 +911,29 @@
 							<li><a href="/rushdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
 						</ul>
 					</li>
+				
+					<li class="menu_trends sab_menu rush">
+						<a class="bg main" href="/rushdb/trends_search.action?ope=1"><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
+  <g>
+    <g id="trendssvg">
+      <path class="svg_stroke_bold" d="M319.81,95.49l77.67,2.33-2.49,77.81"/>
+      <path class="svg_stroke_bold" d="M39.07,321.57l150.98-142.19,56.56,60.05,148.07-139.45"/>
+      <path class="svg_stroke_lighter" d="M411.08,369.05h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M411.08,333.33h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M250,297.62h188.78l-64.63,83.33h-202.38l78.23-83.33Z"/>
+    </g>
+  </g>
+</svg><h3>トレンド</h3></a>
+						<ul>
+							
+							<li><a href="/rushdb/trends_search.action?ope=1">人気デッキランキング</a></li>
+							
+							<li><a href="/rushdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
+						</ul>
+					</li>
+				
 			
 			
 
@@ -890,7 +1035,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>遊戯王ラッシュデュエル「マジシャン・オブ・ブラックカオス」のカード詳細です。<br>「マジシャン・オブ・ブラックカオス」の遊戯王ラッシュデュエル公式ルールはこちらのページで確認してください。<br>「マジシャン・オブ・ブラックカオス」の使い方に関する質問等は「<a href="faq_search.action?ope=4&cid=21588" target=_blank>このカードのＱ＆Ａを表示</a>」より確認ができます。<br>「マジシャン・オブ・ブラックカオス」を使用したデッキを検索したい場合は「<a href="deck_search.action?cardid=21588" target=_blank>このカードを使用したデッキを検索</a>」より確認ができます。</span>
+			<span class="text_linebreak">遊戯王ラッシュデュエル「マジシャン・オブ・ブラックカオス」のカード詳細です。<br>「マジシャン・オブ・ブラックカオス」の遊戯王ラッシュデュエル公式ルールはこちらのページで確認してください。<br>「マジシャン・オブ・ブラックカオス」の使い方に関する質問等は「<a href="faq_search.action?ope=4&cid=21588" target=_blank>このカードのＱ＆Ａを表示</a>」より確認ができます。<br>「マジシャン・オブ・ブラックカオス」を使用したデッキを検索したい場合は「<a href="deck_search.action?cardid=21588" target=_blank>このカードを使用したデッキを検索</a>」より確認ができます。</span>
 		</nav>
 	
 
@@ -937,15 +1082,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			<span class="ruby">マジシャン・オブ・ブラックカオス</span>
-	
-			マジシャン・オブ・ブラックカオス
-	
-		</h1>
-	</div>
 
 
 
@@ -953,10 +1090,14 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
+					<div class="left_btn"><span class="arrow"></span></div>
+					<div class="right_btns"><span class="arrow"></span></div>
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="マジシャン・オブ・ブラックカオス" title="マジシャン・オブ・ブラックカオス" class="none">
@@ -968,20 +1109,16 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
-				<img id="thumbnail_card_image_101" alt="101" class="none">
+				<img id="thumbnail_card_image_101" alt="101" class="none iid_101">
 		
 			</div>
-		
-			<ul class="img_yaji">
-				<li class="left_btn btn"><</li>
-				<li class="right_btns btn">></li>
-			</ul>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -990,13 +1127,15 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					<span class="ruby">マジシャン・オブ・ブラックカオス</span>
 		
 					マジシャン・オブ・ブラックカオス
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -1083,7 +1222,7 @@
 					<div class="text_title">
 						カードテキスト
 					</div>
-					墓地にいるこのカードのカード名は「ブラック・マジシャン」になる。<br>【条件】なし<br>【効果】なし
+					<div class="text_linebreak">墓地にいるこのカードのカード名は「ブラック・マジシャン」になる。&lt;br&gt;【条件】なし&lt;br&gt;【効果】なし</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1111,21 +1250,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/rushdb/deck_search.action?cardid=21588"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/rushdb/deck_search.action?cardid=21588"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1138,13 +1276,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>このカードを使用したデッキを検索</h4>
-			</span></a>
+					<h4>このカードを使用したデッキを検索</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1154,25 +1292,30 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>このカードの関連カードを見る</h4>
-			</span></a>
+					<h4>このカードの関連カードを見る</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
-				<div class="btn_set"><span class="left_btn btn"><</span></div>
+					<div class="left_btn"><span class="arrow"></span></div>
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
@@ -1180,10 +1323,21 @@
 					<img id="pop_card_image_101" alt="101" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
-				<div class="btn_set"><span class="right_btns btn">></span></div>
+					<div class="right_btns"><span class="arrow"></span></div>
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+				<img id="popup_card_image_101" alt="101" class="none iid_101">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1206,17 +1360,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dja%26a%3D202604131103&amp;lang=ja&amp;count=horizontal&amp;hashtags=rushdb_JP" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dja%26a%3D202611040939&amp;hashtags=rushdb_JP" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dja%26a%3D202604131103&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=ja_JP" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Frushdb%2Fcard_search.action%3Fope%3D2%26cid%3D21588%26request_locale%3Dja%26a%3D202611040939" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/rushdb/card_search.action?ope=2&cid=21588&request_locale=ja&a=202604131103" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="ja" data-type="share-a" data-url="https://www.db.yugioh-card.com/rushdb/card_search.action?ope=2&cid=21588&request_locale=ja&a=202604131103"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/rushdb/card_search.action?ope=2&cid=21588&request_locale=ja&a=202611040939" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1231,32 +1388,41 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>収録シリーズ</div>
+					<div>イラスト別収録</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
+					<div class="btn_set">
+						<span class="all">ALL</span>
+						<span class="left_btn btn">＜</span>
+						<span class="right_btns btn">＞</span>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2025-04-26
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RD/SD0E-JP001
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									ストラクチャーデッキ 黒魔術の儀式
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=1&sess=1&pid=1000100607000&rp=99999">
-
 							</div>
 		
 			
@@ -1275,28 +1441,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_101">
 						<div class="inside">
 							<div class="time">
 		
 								2025-04-26
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_101" alt="101" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RD/SD0E-JPS01
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									ストラクチャーデッキ 黒魔術の儀式 特典カード
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=1&sess=1&pid=1000100608000&rp=99999">
-
 							</div>
 		
 			
@@ -1360,7 +1525,7 @@
 	<div class="sort_set">
 		
 		<div class="text">
-			検索結果 13件中 1～10件を表示
+			検索結果 18件中 1～10件を表示
 		</div>
 
 		<div class="pulldown">
@@ -1425,7 +1590,117 @@
 								<div class="cardimg">
 		
 		
-								<img id="card_image_0_1" alt="円熟の黒魔術師" title="円熟の黒魔術師" class="none">
+								<img id="card_image_0_1" alt="呪符竜" title="呪符竜" class="none">
+		
+								</div>
+		
+
+							</div>
+							<dl class="flex_1">
+								<dd class="box_card_name flex_1 top_set">
+									<span class="card_ruby">アミュレット・ドラゴン</span>
+									<span class="card_name">
+										呪符竜
+					
+									</span>
+
+								</dd>
+
+
+								
+								<dd class="remove_btn top_set">
+									<a href="javascript:void(0);" class="btn hex red"  title="このカードをリストから削除">
+										<span>X</span>
+										<input type="hidden" class="lang" value="">
+										<input type="hidden" class="cid" value="23954">
+									</a>
+								</dd>
+								
+
+								<dd class="box_card_spec flex_1">
+		
+									<span class="box_card_attribute">
+										<img class="icon_img" src="external/image/parts/attribute/attribute_icon_dark.png" alt="闇属性" title="闇属性">
+										<span>闇属性</span>
+									</span>
+		
+		
+
+		
+		
+			
+			
+									<span class="box_card_level_rank level">
+										<img class="icon_img" src="external/image/parts/icon_level.png" alt="レベル" title="レベル">
+										<span>レベル 8</span>
+									</span>
+			
+		
+
+		
+									<span class="card_info_species_and_other_item"><span>
+										【
+										ドラゴン族<!--
+			--><!--
+										-->／フュージョン／効果<!--
+			--><!--
+			--><!--
+			-->
+										】
+									</span></span>
+<div class="atkdef">
+			
+
+									<span class="atk_power">
+										<span>ATK 2900</span>
+									</span>
+
+
+									<span class="def_power"><span>
+			
+			
+										DEF 2500
+			
+									</span></span>
+</div>
+		
+
+								</dd>
+		
+		
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									「ブラック・マジシャン」＋モンスター（ドラゴン族）&lt;br&gt;【条件】このカードをフュージョン召喚した自分メインフェイズに発動できる。&lt;br&gt;【効果】お互いの墓地の魔法カードを好きな数だけ選ぶ。このカードが表側表示でいる限り、その攻撃力は［選んだカードの数］&times;１００アップする。その後、選んだカードを持ち主のデッキに戻す。
+								</dd>
+		
+		
+
+
+
+
+
+							</dl>
+
+
+		
+
+
+								<input type="hidden" class="cnm" value='呪符竜'>
+								<input type="hidden" class="fltype" value=''>
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=23954&iid=1">
+						</div><!-- .t_row c_normal -->
+		  
+			
+
+<!-- ///CardDisplay_Normal  -->
+
+
+						<div class="t_row c_normal open">
+
+							<div class="box_card_img icon">
+								<div class="cardimg">
+		
+		
+								<img id="card_image_1_1" alt="円熟の黒魔術師" title="円熟の黒魔術師" class="none">
 		
 								</div>
 		
@@ -1503,8 +1778,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									【条件】手札のモンスター（闇属性／魔法使い族）１体を墓地へ送って発動できる。<br>【効果】自分は１枚ドローする。その後、自分の墓地の「ブラック・マジシャン」１体を選んで自分フィールドに表側表示で特殊召喚できる。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									【条件】手札のモンスター（闇属性／魔法使い族）１体を墓地へ送って発動できる。&lt;br&gt;【効果】自分は１枚ドローする。その後、自分の墓地の「ブラック・マジシャン」１体を選んで自分フィールドに表側表示で特殊召喚できる。
 								</dd>
 		
 		
@@ -1521,7 +1796,7 @@
 
 								<input type="hidden" class="cnm" value='円熟の黒魔術師'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=19597">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=19597&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1535,7 +1810,83 @@
 								<div class="cardimg">
 		
 		
-								<img id="card_image_1_1" alt="奇跡の秘術" title="奇跡の秘術" class="none">
+								<img id="card_image_2_1" alt="騎士の称号" title="騎士の称号" class="none">
+		
+								</div>
+		
+
+							</div>
+							<dl class="flex_1">
+								<dd class="box_card_name flex_1 top_set">
+									<span class="card_ruby">きしのしょうごう</span>
+									<span class="card_name">
+										騎士の称号
+					
+									</span>
+
+								</dd>
+
+
+								
+								<dd class="remove_btn top_set">
+									<a href="javascript:void(0);" class="btn hex red"  title="このカードをリストから削除">
+										<span>X</span>
+										<input type="hidden" class="lang" value="">
+										<input type="hidden" class="cid" value="23912">
+									</a>
+								</dd>
+								
+
+								<dd class="box_card_spec flex_1">
+		
+									<span class="box_card_attribute">
+										<img class="icon_img" src="external/image/parts/attribute/attribute_icon_spell.png" alt="魔法" title="魔法">
+										<span>魔法</span>
+									</span>
+		
+		
+
+		
+		
+
+		
+
+								</dd>
+		
+		
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									【条件】なし&lt;br&gt;【効果】手札のモンスター（魔法使い族）または自分フィールドの表側表示モンスター（魔法使い族）１体を選んで墓地へ送る。その後、自分の墓地に「ブラック・マジシャン」がいる場合、自分の手札・墓地の「ブラック・マジシャンズ・ナイト」１体を選んで自分フィールドに表側表示で特殊召喚できる。
+								</dd>
+		
+		
+
+
+
+
+
+							</dl>
+
+
+		
+
+
+								<input type="hidden" class="cnm" value='騎士の称号'>
+								<input type="hidden" class="fltype" value=''>
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=23912&iid=1">
+						</div><!-- .t_row c_normal -->
+		  
+			
+
+<!-- ///CardDisplay_Normal  -->
+
+
+						<div class="t_row c_normal open">
+
+							<div class="box_card_img icon">
+								<div class="cardimg">
+		
+		
+								<img id="card_image_3_1" alt="奇跡の秘術" title="奇跡の秘術" class="none">
 		
 								</div>
 		
@@ -1579,8 +1930,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									【条件】相手フィールドに攻撃表示モンスターがいる場合に発動できる。<br>【効果】自分フィールドの「ブラック・マジシャン」または「バスター・ブレイダー」１体と、自分の墓地の「ブラック・マジシャン」または「バスター・ブレイダー」１体を素材として持ち主のデッキに戻し、フュージョン召喚する。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									【条件】相手フィールドに攻撃表示モンスターがいる場合に発動できる。&lt;br&gt;【効果】自分フィールドの「ブラック・マジシャン」または「バスター・ブレイダー」１体と、自分の墓地の「ブラック・マジシャン」または「バスター・ブレイダー」１体を素材として持ち主のデッキに戻し、フュージョン召喚する。
 								</dd>
 		
 		
@@ -1597,7 +1948,7 @@
 
 								<input type="hidden" class="cnm" value='奇跡の秘術'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=22030">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=22030&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1611,7 +1962,7 @@
 								<div class="cardimg">
 		
 		
-								<img id="card_image_2_1" alt="千本ナイフ" title="千本ナイフ" class="none">
+								<img id="card_image_4_1" alt="千本ナイフ" title="千本ナイフ" class="none">
 		
 								</div>
 		
@@ -1655,8 +2006,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									【条件】自分フィールドに表側表示の「ブラック・マジシャン」がいる場合に発動できる。<br>【効果】相手フィールドのモンスター１体を選んで破壊する。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									【条件】自分フィールドに表側表示の「ブラック・マジシャン」がいる場合に発動できる。&lt;br&gt;【効果】相手フィールドのモンスター１体を選んで破壊する。
 								</dd>
 		
 		
@@ -1673,7 +2024,7 @@
 
 								<input type="hidden" class="cnm" value='千本ナイフ'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=15450">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=15450&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1687,7 +2038,117 @@
 								<div class="cardimg">
 		
 		
-								<img id="card_image_3_1" alt="超魔導騎士－ブラック・キャバルリー" title="超魔導騎士－ブラック・キャバルリー" class="none">
+								<img id="card_image_5_1" alt="漆黒魔導の遂行者" title="漆黒魔導の遂行者" class="none">
+		
+								</div>
+		
+
+							</div>
+							<dl class="flex_1">
+								<dd class="box_card_name flex_1 top_set">
+									<span class="card_ruby">ジェットブラック・エグゼキューター</span>
+									<span class="card_name">
+										漆黒魔導の遂行者
+					
+									</span>
+
+								</dd>
+
+
+								
+								<dd class="remove_btn top_set">
+									<a href="javascript:void(0);" class="btn hex red"  title="このカードをリストから削除">
+										<span>X</span>
+										<input type="hidden" class="lang" value="">
+										<input type="hidden" class="cid" value="23906">
+									</a>
+								</dd>
+								
+
+								<dd class="box_card_spec flex_1">
+		
+									<span class="box_card_attribute">
+										<img class="icon_img" src="external/image/parts/attribute/attribute_icon_dark.png" alt="闇属性" title="闇属性">
+										<span>闇属性</span>
+									</span>
+		
+		
+
+		
+		
+			
+			
+									<span class="box_card_level_rank level">
+										<img class="icon_img" src="external/image/parts/icon_level.png" alt="レベル" title="レベル">
+										<span>レベル 7</span>
+									</span>
+			
+		
+
+		
+									<span class="card_info_species_and_other_item"><span>
+										【
+										魔法使い族<!--
+			--><!--
+										-->／効果<!--
+			--><!--
+			--><!--
+			-->
+										】
+									</span></span>
+<div class="atkdef">
+			
+
+									<span class="atk_power">
+										<span>ATK 2100</span>
+									</span>
+
+
+									<span class="def_power"><span>
+			
+			
+										DEF 1700
+			
+									</span></span>
+</div>
+		
+
+								</dd>
+		
+		
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									８００LPを払い、このカードは手札から自分フィールドに表側守備表示で特殊召喚できる。墓地にいるこのカードのカード名は「ブラック・マジシャン」になる。&lt;br&gt;【条件】このターンに自分が通常魔法カードを発動している場合に発動できる。&lt;br&gt;【効果】相手に５００ダメージを与える。
+								</dd>
+		
+		
+
+
+
+
+
+							</dl>
+
+
+		
+
+
+								<input type="hidden" class="cnm" value='漆黒魔導の遂行者'>
+								<input type="hidden" class="fltype" value=''>
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=23906&iid=1">
+						</div><!-- .t_row c_normal -->
+		  
+			
+
+<!-- ///CardDisplay_Normal  -->
+
+
+						<div class="t_row c_normal open">
+
+							<div class="box_card_img icon">
+								<div class="cardimg">
+		
+		
+								<img id="card_image_6_1" alt="超魔導騎士－ブラック・キャバルリー" title="超魔導騎士－ブラック・キャバルリー" class="none">
 		
 								</div>
 		
@@ -1765,8 +2226,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									「ブラック・マジシャン」＋モンスター（戦士族／守備力２１００）<br>【条件】なし<br>【永続効果】このカードの攻撃力は、［お互いの墓地の魔法・罠カードの数の合計］×１００アップする。このカードの攻撃は貫通する。自分の手札がある場合、このカード以外の自分フィールドのモンスターは相手の効果では破壊されない。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									「ブラック・マジシャン」＋モンスター（戦士族／守備力２１００）&lt;br&gt;【条件】なし&lt;br&gt;【永続効果】このカードの攻撃力は、［お互いの墓地の魔法・罠カードの数の合計］&times;１００アップする。このカードの攻撃は貫通する。自分の手札がある場合、このカード以外の自分フィールドのモンスターは相手の効果では破壊されない。
 								</dd>
 		
 		
@@ -1783,7 +2244,7 @@
 
 								<input type="hidden" class="cnm" value='超魔導騎士－ブラック・キャバルリー'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21500">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21500&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1797,7 +2258,7 @@
 								<div class="cardimg">
 		
 		
-								<img id="card_image_4_1" alt="超魔導剣士－ブラック・パラディン" title="超魔導剣士－ブラック・パラディン" class="none">
+								<img id="card_image_7_1" alt="超魔導剣士－ブラック・パラディン" title="超魔導剣士－ブラック・パラディン" class="none">
 		
 								</div>
 		
@@ -1875,8 +2336,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									「ブラック・マジシャン」＋「バスター・ブレイダー」<br>【条件】なし<br>【永続効果】このカードの攻撃力は、［お互いのフィールドの表側表示モンスター（ドラゴン族）の数とお互いの墓地のモンスター（ドラゴン族）の数の合計］×５００アップする。自分の手札がある場合、このカードは相手の魔法カードの効果では破壊されず、相手はレジェンド魔法カードを発動できない。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									「ブラック・マジシャン」＋「バスター・ブレイダー」&lt;br&gt;【条件】なし&lt;br&gt;【永続効果】このカードの攻撃力は、［お互いのフィールドの表側表示モンスター（ドラゴン族）の数とお互いの墓地のモンスター（ドラゴン族）の数の合計］&times;５００アップする。自分の手札がある場合、このカードは相手の魔法カードの効果では破壊されず、相手はレジェンド魔法カードを発動できない。
 								</dd>
 		
 		
@@ -1893,7 +2354,7 @@
 
 								<input type="hidden" class="cnm" value='超魔導剣士－ブラック・パラディン'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21496">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21496&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1907,7 +2368,83 @@
 								<div class="cardimg">
 		
 		
-								<img id="card_image_5_1" alt="ティマイオスの眼" title="ティマイオスの眼" class="none">
+								<img id="card_image_8_1" alt="ティマイオスの共闘" title="ティマイオスの共闘" class="none">
+		
+								</div>
+		
+
+							</div>
+							<dl class="flex_1">
+								<dd class="box_card_name flex_1 top_set">
+									<span class="card_ruby">ティマイオスのきょうとう</span>
+									<span class="card_name">
+										ティマイオスの共闘
+					
+									</span>
+
+								</dd>
+
+
+								
+								<dd class="remove_btn top_set">
+									<a href="javascript:void(0);" class="btn hex red"  title="このカードをリストから削除">
+										<span>X</span>
+										<input type="hidden" class="lang" value="">
+										<input type="hidden" class="cid" value="23911">
+									</a>
+								</dd>
+								
+
+								<dd class="box_card_spec flex_1">
+		
+									<span class="box_card_attribute">
+										<img class="icon_img" src="external/image/parts/attribute/attribute_icon_spell.png" alt="魔法" title="魔法">
+										<span>魔法</span>
+									</span>
+		
+		
+
+		
+		
+
+		
+
+								</dd>
+		
+		
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									【条件】自分が「ティマイオスの共闘」を発動していないターンに発動できる。&lt;br&gt;【効果】フュージョンモンスター以外の自分の墓地のモンスター（闇属性）２体を素材としてデッキに戻し、「ブラック・マジシャン」または「ブラック・マジシャン・ガール」のカード名が素材として記されたモンスター（ドラゴン族）をフュージョン召喚する。
+								</dd>
+		
+		
+
+
+
+
+
+							</dl>
+
+
+		
+
+
+								<input type="hidden" class="cnm" value='ティマイオスの共闘'>
+								<input type="hidden" class="fltype" value=''>
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=23911&iid=1">
+						</div><!-- .t_row c_normal -->
+		  
+			
+
+<!-- ///CardDisplay_Normal  -->
+
+
+						<div class="t_row c_normal open">
+
+							<div class="box_card_img icon">
+								<div class="cardimg">
+		
+		
+								<img id="card_image_9_1" alt="ティマイオスの眼" title="ティマイオスの眼" class="none">
 		
 								</div>
 		
@@ -1951,8 +2488,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									【条件】自分が「ティマイオスの眼」を発動していないターンに発動できる。<br>【効果】「ブラック・マジシャン」または「ブラック・マジシャン・ガール」のカード名を１つ宣言し、宣言したカード名の自分フィールドの表側表示モンスター１体のみを素材として墓地へ送り、そのカード名が素材として記されたモンスターをフュージョン召喚する。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									【条件】自分が「ティマイオスの眼」を発動していないターンに発動できる。&lt;br&gt;【効果】「ブラック・マジシャン」または「ブラック・マジシャン・ガール」のカード名を１つ宣言し、そのカード名の自分フィールドの表側表示モンスター１体のみを素材として墓地へ送り、そのカード名が素材として記されたモンスターをフュージョン召喚する。
 								</dd>
 		
 		
@@ -1969,413 +2506,7 @@
 
 								<input type="hidden" class="cnm" value='ティマイオスの眼'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21709">
-						</div><!-- .t_row c_normal -->
-		  
-			
-
-<!-- ///CardDisplay_Normal  -->
-
-
-						<div class="t_row c_normal open">
-
-							<div class="box_card_img icon">
-								<div class="cardimg">
-		
-		
-								<img id="card_image_6_1" alt="黒魔導の遂行者" title="黒魔導の遂行者" class="none">
-		
-								</div>
-		
-
-							</div>
-							<dl class="flex_1">
-								<dd class="box_card_name flex_1 top_set">
-									<span class="card_ruby">ブラック・エグゼキューター</span>
-									<span class="card_name">
-										黒魔導の遂行者
-					
-									</span>
-
-								</dd>
-
-
-								
-								<dd class="remove_btn top_set">
-									<a href="javascript:void(0);" class="btn hex red"  title="このカードをリストから削除">
-										<span>X</span>
-										<input type="hidden" class="lang" value="">
-										<input type="hidden" class="cid" value="19773">
-									</a>
-								</dd>
-								
-
-								<dd class="box_card_spec flex_1">
-		
-									<span class="box_card_attribute">
-										<img class="icon_img" src="external/image/parts/attribute/attribute_icon_dark.png" alt="闇属性" title="闇属性">
-										<span>闇属性</span>
-									</span>
-		
-		
-
-		
-		
-			
-			
-									<span class="box_card_level_rank level">
-										<img class="icon_img" src="external/image/parts/icon_level.png" alt="レベル" title="レベル">
-										<span>レベル 7</span>
-									</span>
-			
-		
-
-		
-									<span class="card_info_species_and_other_item"><span>
-										【
-										魔法使い族<!--
-			--><!--
-										-->／効果<!--
-			--><!--
-			--><!--
-			-->
-										】
-									</span></span>
-<div class="atkdef">
-			
-
-									<span class="atk_power">
-										<span>ATK 2500</span>
-									</span>
-
-
-									<span class="def_power"><span>
-			
-			
-										DEF 2100
-			
-									</span></span>
-</div>
-		
-
-								</dd>
-		
-		
-								<dd class="box_card_text c_text flex_1">
-									【条件】デッキの一番上のカードを墓地へ送って発動できる。<br>【効果】このカードのカード名はこのターン、「ブラック・マジシャン」になる。その後、自分の墓地の魔法カード１０枚を選んでデッキに戻す事ができる。戻した場合、さらに相手フィールドの表側表示モンスター（レベル８以下）１体を選んで破壊できる。
-								</dd>
-		
-		
-
-
-
-
-
-							</dl>
-
-
-		
-
-
-								<input type="hidden" class="cnm" value='黒魔導の遂行者'>
-								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=19773">
-						</div><!-- .t_row c_normal -->
-		  
-			
-
-<!-- ///CardDisplay_Normal  -->
-
-
-						<div class="t_row c_normal open">
-
-							<div class="box_card_img icon">
-								<div class="cardimg">
-		
-		
-								<img id="card_image_7_1" alt="ブラック・マジシャン" title="ブラック・マジシャン" class="none">
-		
-								</div>
-		
-
-							</div>
-							<dl class="flex_1">
-								<dd class="box_card_name flex_1 top_set">
-									<span class="card_ruby">ブラック・マジシャン</span>
-									<span class="card_name">
-										ブラック・マジシャン
-					
-									</span>
-
-								</dd>
-
-
-								
-								<dd class="remove_btn top_set">
-									<a href="javascript:void(0);" class="btn hex red"  title="このカードをリストから削除">
-										<span>X</span>
-										<input type="hidden" class="lang" value="">
-										<input type="hidden" class="cid" value="15410">
-									</a>
-								</dd>
-								
-
-								<dd class="box_card_spec flex_1">
-		
-									<span class="box_card_attribute">
-										<img class="icon_img" src="external/image/parts/attribute/attribute_icon_dark.png" alt="闇属性" title="闇属性">
-										<span>闇属性</span>
-									</span>
-		
-		
-
-		
-		
-			
-			
-									<span class="box_card_level_rank level">
-										<img class="icon_img" src="external/image/parts/icon_level.png" alt="レベル" title="レベル">
-										<span>レベル 7</span>
-									</span>
-			
-		
-
-		
-									<span class="card_info_species_and_other_item"><span>
-										【
-										魔法使い族<!--
-			--><!--
-										-->／通常<!--
-			--><!--
-			--><!--
-			-->
-										】
-									</span></span>
-<div class="atkdef">
-			
-
-									<span class="atk_power">
-										<span>ATK 2500</span>
-									</span>
-
-
-									<span class="def_power"><span>
-			
-			
-										DEF 2100
-			
-									</span></span>
-</div>
-		
-
-								</dd>
-		
-		
-								<dd class="box_card_text c_text flex_1">
-									魔法使いとしては、攻撃力・守備力ともに最高クラス。
-								</dd>
-		
-		
-
-
-
-
-
-							</dl>
-
-
-		
-
-
-								<input type="hidden" class="cnm" value='ブラック・マジシャン'>
-								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=15410">
-						</div><!-- .t_row c_normal -->
-		  
-			
-
-<!-- ///CardDisplay_Normal  -->
-
-
-						<div class="t_row c_normal open">
-
-							<div class="box_card_img icon">
-								<div class="cardimg">
-		
-		
-								<img id="card_image_8_1" alt="ブラック・マジシャン・ガール" title="ブラック・マジシャン・ガール" class="none">
-		
-								</div>
-		
-
-							</div>
-							<dl class="flex_1">
-								<dd class="box_card_name flex_1 top_set">
-									<span class="card_ruby">ブラック・マジシャン・ガール</span>
-									<span class="card_name">
-										ブラック・マジシャン・ガール
-					
-									</span>
-
-								</dd>
-
-
-								
-								<dd class="remove_btn top_set">
-									<a href="javascript:void(0);" class="btn hex red"  title="このカードをリストから削除">
-										<span>X</span>
-										<input type="hidden" class="lang" value="">
-										<input type="hidden" class="cid" value="16371">
-									</a>
-								</dd>
-								
-
-								<dd class="box_card_spec flex_1">
-		
-									<span class="box_card_attribute">
-										<img class="icon_img" src="external/image/parts/attribute/attribute_icon_dark.png" alt="闇属性" title="闇属性">
-										<span>闇属性</span>
-									</span>
-		
-		
-
-		
-		
-			
-			
-									<span class="box_card_level_rank level">
-										<img class="icon_img" src="external/image/parts/icon_level.png" alt="レベル" title="レベル">
-										<span>レベル 6</span>
-									</span>
-			
-		
-
-		
-									<span class="card_info_species_and_other_item"><span>
-										【
-										魔法使い族<!--
-			--><!--
-										-->／効果<!--
-			--><!--
-			--><!--
-			-->
-										】
-									</span></span>
-<div class="atkdef">
-			
-
-									<span class="atk_power">
-										<span>ATK 2000</span>
-									</span>
-
-
-									<span class="def_power"><span>
-			
-			
-										DEF 1700
-			
-									</span></span>
-</div>
-		
-
-								</dd>
-		
-		
-								<dd class="box_card_text c_text flex_1">
-									【条件】なし<br>【永続効果】このカードの攻撃力は、［お互いの墓地の「ブラック・マジシャン」の数］×５００アップする。
-								</dd>
-		
-		
-
-
-
-
-
-							</dl>
-
-
-		
-
-
-								<input type="hidden" class="cnm" value='ブラック・マジシャン・ガール'>
-								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=16371">
-						</div><!-- .t_row c_normal -->
-		  
-			
-
-<!-- ///CardDisplay_Normal  -->
-
-
-						<div class="t_row c_normal open">
-
-							<div class="box_card_img icon">
-								<div class="cardimg">
-		
-		
-								<img id="card_image_9_1" alt="黒・魔・導" title="黒・魔・導" class="none">
-		
-								</div>
-		
-
-							</div>
-							<dl class="flex_1">
-								<dd class="box_card_name flex_1 top_set">
-									<span class="card_ruby">ブラック・マジック</span>
-									<span class="card_name">
-										黒・魔・導
-					
-									</span>
-
-								</dd>
-
-
-								
-								<dd class="remove_btn top_set">
-									<a href="javascript:void(0);" class="btn hex red"  title="このカードをリストから削除">
-										<span>X</span>
-										<input type="hidden" class="lang" value="">
-										<input type="hidden" class="cid" value="15451">
-									</a>
-								</dd>
-								
-
-								<dd class="box_card_spec flex_1">
-		
-									<span class="box_card_attribute">
-										<img class="icon_img" src="external/image/parts/attribute/attribute_icon_spell.png" alt="魔法" title="魔法">
-										<span>魔法</span>
-									</span>
-		
-		
-
-		
-		
-
-		
-
-								</dd>
-		
-		
-								<dd class="box_card_text c_text flex_1">
-									【条件】自分フィールドに表側表示の「ブラック・マジシャン」がいる場合に発動できる。<br>【効果】相手フィールドの魔法・罠カードを全て破壊する。
-								</dd>
-		
-		
-
-
-
-
-
-							</dl>
-
-
-		
-
-
-								<input type="hidden" class="cnm" value='黒・魔・導'>
-								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=15451">
+							<input type="hidden" class="link_value" value="/rushdb/card_search.action?ope=2&cid=21709&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3278,6 +3409,11 @@
 										</span></li>
 			
 										<li><span>
+											ユニオン
+											<input type="checkbox" name="other" class="none" value="6">
+										</span></li>
+			
+										<li><span>
 											マキシマム
 											<input type="checkbox" name="other" class="none" value="100">
 										</span></li>
@@ -3316,6 +3452,11 @@
 										<li><span>
 											フュージョン
 											<input type="checkbox" name="jogai" class="none" value="2">
+										</span></li>
+			
+										<li><span>
+											ユニオン
+											<input type="checkbox" name="jogai" class="none" value="6">
 										</span></li>
 			
 										<li><span>
@@ -3655,6 +3796,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3786,6 +3929,8 @@
 														<option value="2025" >2025</option>
 			
 														<option value="2026" >2026</option>
+			
+														<option value="2027" >2027</option>
 			
 													</select>
 												</span>
@@ -4145,7 +4290,7 @@
 
 				<a class="link_rush_x rush" title="「遊戯王ラッシュデュエル」公式X" href="https://twitter.com/YuGiOh_RUSHDUEL" target="_blank">
 					<img class="" src="external/image/footerimg/banner_top_X_rush.png" title="「遊戯王ラッシュデュエル」公式X" ></a>
-				<a class="link_rush_youtube rush" title="ラッシュデュエルTV" href="https://www.youtube.com/@TV-lb2jq" target="_blank">
+				<a class="link_rush_youtube rush" title="ラッシュデュエルTV" href="https://www.youtube.com/@rushduelTV" target="_blank">
 					<img class="" src="external/image/footerimg/banner_top_rushTV.png" title="ラッシュデュエルTV" ></a>
 
 				<a class="link_tiktok" title="「遊戯王カードゲーム」公式TikTok" href="https://www.tiktok.com/@yugioh_cardgame_official?is_from_webapp=1&sender_device=pc" target="_blank">
@@ -4159,8 +4304,8 @@
 	
 				<a class="link_ksp" title="コナミ サテライトショップ" href="https://www.konami.com/games/card/cgs/" target="_blank">
 					<img class="" src="external/image/footerimg/banner_top_kshop.png" title="コナミ サテライトショップ" ></a>
-				<a class="link_kfs" title="コナミ フレンドリーショップ" href="https://www.konami.com/games/card/friendly_shop/" target="_blank">
-					<img class="" src="external/image/footerimg/banner_top_fshop.png" title="コナミ フレンドリーショップ" ></a>
+				<a class="link_kfs" title="オフィシャルトーナメントストア（OTS）" href="https://www.konami.com/games/card/friendly_shop/" target="_blank">
+					<img class="" src="external/image/footerimg/banner_top_fshop.png" title="オフィシャルトーナメントストア（OTS）" ></a>
 
 				<a class="link_kst" title="コナミスタイル" href="http://www.konamistyle.jp/" target="_blank">
 					<img class="" src="external/image/footerimg/banner_top_style.png" title="コナミスタイル" ></a>
@@ -4249,8 +4394,8 @@
 						</a>
 						<ul>
 							<li><a href="/rushdb/card_list.action?clm=3&wname=CardSearch">発売日の新しい順</a></li>
-							<li><a href="/rushdb/card_list.action?clm=1&wname=CardSearch">一般商品</a></li>
-							<li><a href="/rushdb/card_list.action?clm=2&wname=CardSearch">特典・同梱系</a></li>
+							<li><a href="/rushdb/card_list.action?clm=1&wname=CardSearch">カテゴリ順</a></li>
+							
 				
 							<li><a href="/rushdb/card_calendar.action">カード誕生日</a></li>
 				
@@ -4298,6 +4443,29 @@
 							<li><a href="/rushdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
 						</ul>
 					</li>
+				
+					<li class="menu_trends sab_menu rush">
+						<a class="bg main" href="/rushdb/trends_search.action?ope=1"><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
+  <g>
+    <g id="trendssvg">
+      <path class="svg_stroke_bold" d="M319.81,95.49l77.67,2.33-2.49,77.81"/>
+      <path class="svg_stroke_bold" d="M39.07,321.57l150.98-142.19,56.56,60.05,148.07-139.45"/>
+      <path class="svg_stroke_lighter" d="M411.08,369.05h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M411.08,333.33h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M250,297.62h188.78l-64.63,83.33h-202.38l78.23-83.33Z"/>
+    </g>
+  </g>
+</svg><h3>トレンド</h3></a>
+						<ul>
+							
+							<li><a href="/rushdb/trends_search.action?ope=1">人気デッキランキング</a></li>
+							
+							<li><a href="/rushdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
+						</ul>
+					</li>
+				
 			
 			
 
@@ -4971,6 +5139,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=24&cb=945639253" async></script></body>
+</body>
 </html>
 

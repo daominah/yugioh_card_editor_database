@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="Endymion, the Mighty Master of Magic,KONAMI,yugioh,Yu-Gi-Oh,TCG,card,database,card,list,Forbidden,Limited,Semi-limited,Cards,Included in,"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="Endymion, the Mighty Master of Magic: Once per turn, when a Spell/Trap Card or effect is activated (Quick Effect): You can return 1 card y"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14439%26request_locale%3Den%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14439%26request_locale%3Den%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=en&amp;cid=14439"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14439%26request_locale%3Den%26a%3D202611040938"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>Endymion, the Mighty Master of Magic | Card Details | Yu-Gi-Oh! Neuron(TRADING CARD GAME CARD DATABASE)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=14439&ciid=1&enc=rlJgjOq5OmJFPefx-N3PgQ').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=14439&ciid=1&enc=rlJgjOq5OmJFPefx-N3PgQ').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=14439&ciid=1&enc=rlJgjOq5OmJFPefx-N3PgQ').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=14439&ciid=1&enc=rlJgjOq5OmJFPefx-N3PgQ').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=14439&ciid=1&enc=rlJgjOq5OmJFPefx-N3PgQ').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -339,9 +406,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=14439'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=14439&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -355,32 +422,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=14439'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=14439&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -445,7 +542,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -846,7 +943,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>These are the card details for the Yu-Gi-Oh! TCG card "Endymion, the Mighty Master of Magic." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Endymion, the Mighty Master of Magic." <br>Please go to "<a href="deck_search.action?cardid=14439" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Endymion, the Mighty Master of Magic."</span>
+			<span class="text_linebreak">These are the card details for the Yu-Gi-Oh! TCG card "Endymion, the Mighty Master of Magic." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Endymion, the Mighty Master of Magic." <br>Please go to "<a href="deck_search.action?cardid=14439" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Endymion, the Mighty Master of Magic."</span>
 		</nav>
 	
 
@@ -882,13 +979,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			Endymion, the Mighty Master of Magic
-	
-		</h1>
-	</div>
 
 
 
@@ -896,10 +987,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="Endymion, the Mighty Master of Magic" title="Endymion, the Mighty Master of Magic" class="none">
@@ -909,13 +1001,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -924,11 +1017,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					Endymion, the Mighty Master of Magic
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -1029,7 +1124,7 @@
 				<div class="frame pen_effect">
 					<div class="item_box_text">
 			
-							You can remove 6 Spell Counters from your field; Special Summon this card from the Pendulum Zone, then count the number of cards you control that can have a Spell Counter, destroy up to that many cards on the field, and if you do, place Spell Counters on this card equal to the number of cards destroyed. You can only use this effect of "Endymion, the Mighty Master of Magic" once per turn.
+							<div class="text_linebreak">You can remove 6 Spell Counters from your field; Special Summon this card from the Pendulum Zone, then count the number of cards you control that can have a Spell Counter, destroy up to that many cards on the field, and if you do, place Spell Counters on this card equal to the number of cards destroyed. You can only use this effect of &quot;Endymion, the Mighty Master of Magic&quot; once per turn.</div>
 			
 					</div>
 				</div>
@@ -1041,7 +1136,7 @@
 					<div class="text_title">
 						Card Text
 					</div>
-					Once per turn, when a Spell/Trap Card or effect is activated (Quick Effect): You can return 1 card you control with a Spell Counter to the hand, and if you do, negate the activation, and if you do that, destroy it. Then, you can place the same number of Spell Counters on this card that the returned card had. While this card has a Spell Counter, your opponent cannot target it with card effects, also it cannot be destroyed by your opponent's card effects. When this card with a Spell Counter is destroyed by battle: You can add 1 Normal Spell from your Deck to your hand.
+					<div class="text_linebreak">Once per turn, when a Spell/Trap Card or effect is activated (Quick Effect): You can return 1 card you control with a Spell Counter to the hand, and if you do, negate the activation, and if you do that, destroy it. Then, you can place the same number of Spell Counters on this card that the returned card had. While this card has a Spell Counter, your opponent cannot target it with card effects, also it cannot be destroyed by your opponent's card effects. When this card with a Spell Counter is destroyed by battle: You can add 1 Normal Spell from your Deck to your hand.</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1052,7 +1147,7 @@
 					<ul class="item_box_value">
 						<li><button onclick="javascript:ChangeLanguage('ja')" >日本語</button></li>
 						<li><button onclick="javascript:ChangeLanguage('ko')" >한글</button></li>
-						<li class="ocg"><button onclick="javascript:ChangeLanguage('ae')" disabled>English (Asia)</button></li>
+						<li class="ocg"><button onclick="javascript:ChangeLanguage('ae')" >English (Asia)</button></li>
 						<li class="ocg"><button onclick="javascript:ChangeLanguage('cn')" >簡体字</button></li>
 					</ul>
 				</div>
@@ -1069,21 +1164,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=14439"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=14439"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1096,13 +1190,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>Search For Decks Containing This Card</h4>
-			</span></a>
+					<h4>Search For Decks Containing This Card</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1112,30 +1206,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>View Cards Related to This Card</h4>
-			</span></a>
+					<h4>View Cards Related to This Card</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1158,17 +1266,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14439%26request_locale%3Den%26a%3D202604301956&amp;lang=en&amp;count=horizontal&amp;hashtags=YugiohDB_EN" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14439%26request_locale%3Den%26a%3D202611040938&amp;hashtags=YugiohDB_EN" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14439%26request_locale%3Den%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=en_US" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14439%26request_locale%3Den%26a%3D202611040938" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=14439&request_locale=en&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="en" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=14439&request_locale=en&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=14439&request_locale=en&a=202611040938" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1183,32 +1294,35 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>Sets</div>
+					<div>Organized by Illustration</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2019-04-19
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									SR08-EN001
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									STRUCTURE DECK: ORDER OF THE SPELLCASTERS
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=14415001&rp=99999">
-
 							</div>
 		
 			
@@ -1272,7 +1386,7 @@
 	<div class="sort_set">
 		
 		<div class="text">
-			Search Results: 1 - 10 of 68
+			Search Results: 1 - 10 of 69
 		</div>
 
 		<div class="pulldown">
@@ -1415,7 +1529,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									Once per turn: You can target 1 face-up card you control that you can place a Spell Counter on; change this Attack Position card you control to face-up Defense Position, and if you do, place 1 Spell Counter on that target.
 								</dd>
 		
@@ -1433,7 +1547,7 @@
 
 								<input type="hidden" class="cnm" value='Alchemist of Black Spells'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=8754">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=8754&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1498,7 +1612,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									Remove 2 Spell Counters on your side of the field to negate the activation of a Spell Card and destroy it.
 								</dd>
 		
@@ -1516,7 +1630,7 @@
 
 								<input type="hidden" class="cnm" value='Anti-Spell'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=5684">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=5684&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1608,7 +1722,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									If this card is Summoned: Target 1 face-up card on the field that you can place a Spell Counter on; place 1 Spell Counter on that target. When this card is destroyed by battle: You can Special Summon 1 Level 2 or lower Spellcaster monster from your Deck in face-down Defense Position.
 								</dd>
 		
@@ -1626,7 +1740,7 @@
 
 								<input type="hidden" class="cnm" value='Apprentice Magician'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=5650">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=5650&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1691,7 +1805,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									Each time a face-up Spellcaster monster(s) on the field is destroyed, place 1 Spell Counter on this card (max. 4). You can send this card and 1 face-up Spellcaster monster you control to the GY; draw 1 card for each Spell Counter that was on this card.
 								</dd>
 		
@@ -1709,7 +1823,7 @@
 
 								<input type="hidden" class="cnm" value='Arcane Barrier'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=8056">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=8056&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1801,8 +1915,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 Tuner + 1+ non-Tuner Spellcaster monsters<br>If this card is Synchro Summoned: Place 2 Spell Counters on it. This card gains 1000 ATK for each Spell Counter on it. You can remove 1 Spell Counter from your field, then target 1 card your opponent controls; destroy that target.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 Tuner + 1+ non-Tuner Spellcaster monsters&lt;br&gt;If this card is Synchro Summoned: Place 2 Spell Counters on it. This card gains 1000 ATK for each Spell Counter on it. You can remove 1 Spell Counter from your field, then target 1 card your opponent controls; destroy that target.
 								</dd>
 		
 		
@@ -1819,7 +1933,7 @@
 
 								<input type="hidden" class="cnm" value='Arcanite Magician'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=8038">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=8038&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1911,8 +2025,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									This card cannot be Normal Summoned or Set. This card cannot be Special Summoned except with "Assault Mode Activate". When this card is Special Summoned, place 2 Spell Counters on it. This card gains 1000 ATK for each Spell Counter on it. You can remove 2 Spell Counters from this card to destroy all cards your opponent controls. When this card on the field is destroyed, you can Special Summon 1 "Arcanite Magician" from your Graveyard.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									This card cannot be Normal Summoned or Set. This card cannot be Special Summoned except with &quot;Assault Mode Activate&quot;. When this card is Special Summoned, place 2 Spell Counters on it. This card gains 1000 ATK for each Spell Counter on it. You can remove 2 Spell Counters from this card to destroy all cards your opponent controls. When this card on the field is destroyed, you can Special Summon 1 &quot;Arcanite Magician&quot; from your Graveyard.
 								</dd>
 		
 		
@@ -1929,7 +2043,7 @@
 
 								<input type="hidden" class="cnm" value='Arcanite Magician/Assault Mode'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=8019">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=8019&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2021,7 +2135,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									This card cannot attack in the same turn it is Normal Summoned, Flip Summoned, or Special Summoned. During each of your and your opponent's Standby Phases, remove 1 Spell Counter on your side of the field. If you do not, destroy this card.
 								</dd>
 		
@@ -2039,7 +2153,7 @@
 
 								<input type="hidden" class="cnm" value='Armor Exe'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=5659">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=5659&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2104,8 +2218,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									Remove Spell Counters from your field to activate 1 of these effects.<br>●2: Return 1 "Mythical Beast" Pendulum Monster you control to the hand.<br>●4: Special Summon 1 face-up "Mythical Beast" Pendulum Monster from your Extra Deck, then you can place 2 Spell Counters on it.<br>●6: Special Summon 1 face-up Pendulum Monster from your Extra Deck.<br>You can only activate 1 "Beast Magic Attack" per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									Remove Spell Counters from your field to activate 1 of these effects.&lt;br&gt;●2: Return 1 &quot;Mythical Beast&quot; Pendulum Monster you control to the hand.&lt;br&gt;●4: Special Summon 1 face-up &quot;Mythical Beast&quot; Pendulum Monster from your Extra Deck, then you can place 2 Spell Counters on it.&lt;br&gt;●6: Special Summon 1 face-up Pendulum Monster from your Extra Deck.&lt;br&gt;You can only activate 1 &quot;Beast Magic Attack&quot; per turn.
 								</dd>
 		
 		
@@ -2122,7 +2236,7 @@
 
 								<input type="hidden" class="cnm" value='Beast Magic Attack'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13779">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13779&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2214,7 +2328,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									Each time a Spell Card is activated, place 1 Spell Counter on this card when that Spell Card resolves. You can remove any number of Spell Counters from this card, then target 1 face-up monster on the field with ATK less than or equal to the number of counters you removed x 700; destroy that target.
 								</dd>
 		
@@ -2232,7 +2346,7 @@
 
 								<input type="hidden" class="cnm" value='Blast Magician'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=6250">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=6250&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2324,8 +2438,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									If this card is Normal Summoned: Place 2 Spell Counters on it. If this card is Pendulum Summoned: Place 3 Spell Counters on it. Gains 400 ATK for each Spell Counter on it. You can remove 1 Spell Counter from this card, then target 1 Spell/Trap on the field; destroy it. You can only use this effect of "Breaker the Dark Magical Warrior" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									If this card is Normal Summoned: Place 2 Spell Counters on it. If this card is Pendulum Summoned: Place 3 Spell Counters on it. Gains 400 ATK for each Spell Counter on it. You can remove 1 Spell Counter from this card, then target 1 Spell/Trap on the field; destroy it. You can only use this effect of &quot;Breaker the Dark Magical Warrior&quot; once per turn.
 								</dd>
 		
 		
@@ -2342,7 +2456,7 @@
 
 								<input type="hidden" class="cnm" value='Breaker the Dark Magical Warrior'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=11249">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=11249&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3784,6 +3898,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3958,6 +4074,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4041,7 +4159,7 @@
 						<p>This is an official site for the Yu-Gi-Oh! Trading Card Game. <br>You can search through all Yu-Gi-Oh! TCG cards, check detailed rules, and view the Forbidden & Limited List. <br>You can also manage your own cards and Decks by registering them in My Deck, and search publicly available Deck Recipes to help you build your own Deck.</p>
 						<a class="btn" href="https://www.yugioh-card.com/en/rulebook/index.html" target="_blank">
 							<img class="ocg" src="external/image/en/00_logo_ocgtcg.png" />
-							<img class="rush" src="external/image/en/00_logo_rush.png" />
+
 							<span>How to Play</span>
 						</a>
 					</div>
@@ -5059,6 +5177,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=19&cb=84207790" async></script></body>
+</body>
 </html>
 

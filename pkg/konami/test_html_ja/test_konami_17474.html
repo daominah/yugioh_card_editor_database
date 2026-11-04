@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="壱世壊に奏でる哀唱,遊戯王,デッキ,デュエルモンスターズ,VRAINS,ヴレインズ,禁止,制限,パック,禁止カード,カード,カードリスト,収録,ルール,OCG,コナミ,KONAMI"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="壱世壊に奏でる哀唱: このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分フィールドに「ティアラメンツ」モンスターまたは「ヴィサス＝スタフロスト」が存在する場合、相手フィールドの効果モンスター１体を対"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17474%26request_locale%3Dja%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17474%26request_locale%3Dja%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=ja&amp;cid=17474"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17474%26request_locale%3Dja%26a%3D202611040939"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>壱世壊に奏でる哀唱 | カード詳細 | 遊戯王ニューロン(オフィシャルカードゲーム カードデータベース)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=17474&ciid=1&enc=GUqDJk3SiJsm7Tv7mhT7iA').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=17474&ciid=1&enc=GUqDJk3SiJsm7Tv7mhT7iA').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=17474&ciid=1&enc=GUqDJk3SiJsm7Tv7mhT7iA').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=17474&ciid=1&enc=GUqDJk3SiJsm7Tv7mhT7iA').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=17474&ciid=1&enc=GUqDJk3SiJsm7Tv7mhT7iA').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -339,9 +406,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=17474'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=17474&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -355,32 +422,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=17474'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=17474&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -445,7 +542,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" class="current">日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -588,6 +685,29 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
 						</ul>
 					</li>
+				
+					<li class="menu_trends sab_menu rush">
+						<a class="bg main" href="/yugiohdb/trends_search.action?ope=1"><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
+  <g>
+    <g id="trendssvg">
+      <path class="svg_stroke_bold" d="M319.81,95.49l77.67,2.33-2.49,77.81"/>
+      <path class="svg_stroke_bold" d="M39.07,321.57l150.98-142.19,56.56,60.05,148.07-139.45"/>
+      <path class="svg_stroke_lighter" d="M411.08,369.05h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M411.08,333.33h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M250,297.62h188.78l-64.63,83.33h-202.38l78.23-83.33Z"/>
+    </g>
+  </g>
+</svg><h3>トレンド</h3></a>
+						<ul>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=1">人気デッキランキング</a></li>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
+						</ul>
+					</li>
+				
 			
 			
 
@@ -787,6 +907,29 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
 						</ul>
 					</li>
+				
+					<li class="menu_trends sab_menu rush">
+						<a class="bg main" href="/yugiohdb/trends_search.action?ope=1"><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
+  <g>
+    <g id="trendssvg">
+      <path class="svg_stroke_bold" d="M319.81,95.49l77.67,2.33-2.49,77.81"/>
+      <path class="svg_stroke_bold" d="M39.07,321.57l150.98-142.19,56.56,60.05,148.07-139.45"/>
+      <path class="svg_stroke_lighter" d="M411.08,369.05h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M411.08,333.33h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M250,297.62h188.78l-64.63,83.33h-202.38l78.23-83.33Z"/>
+    </g>
+  </g>
+</svg><h3>トレンド</h3></a>
+						<ul>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=1">人気デッキランキング</a></li>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
+						</ul>
+					</li>
+				
 			
 			
 
@@ -888,7 +1031,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>遊戯王OCGカード「壱世壊に奏でる哀唱」のカード詳細です。<br>「壱世壊に奏でる哀唱」の遊戯王OCG公式ルールはこちらのページで確認してください。<br>「壱世壊に奏でる哀唱」の使い方に関する質問等は「<a href="faq_search.action?ope=4&cid=17474" target=_blank>このカードのＱ＆Ａを表示</a>」より確認ができます。<br>「壱世壊に奏でる哀唱」を使用したデッキを検索したい場合は「<a href="deck_search.action?cardid=17474" target=_blank>このカードを使用したデッキを検索</a>」より確認ができます。</span>
+			<span class="text_linebreak">遊戯王OCGカード「壱世壊に奏でる哀唱」のカード詳細です。<br>「壱世壊に奏でる哀唱」の遊戯王OCG公式ルールはこちらのページで確認してください。<br>「壱世壊に奏でる哀唱」の使い方に関する質問等は「<a href="faq_search.action?ope=4&cid=17474" target=_blank>このカードのＱ＆Ａを表示</a>」より確認ができます。<br>「壱世壊に奏でる哀唱」を使用したデッキを検索したい場合は「<a href="deck_search.action?cardid=17474" target=_blank>このカードを使用したデッキを検索</a>」より確認ができます。</span>
 		</nav>
 	
 
@@ -935,17 +1078,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			<span class="ruby">ティアラメンツ・サリーク</span>
-	
-			壱世壊に奏でる哀唱
-	
-			<span>Tearlaments Sulliek</span>
-	
-		</h1>
-	</div>
 
 
 
@@ -953,10 +1086,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="壱世壊に奏でる哀唱" title="壱世壊に奏でる哀唱" class="none">
@@ -966,13 +1100,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -981,13 +1116,15 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					<span class="ruby">ティアラメンツ・サリーク</span>
 		
 					壱世壊に奏でる哀唱
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -1015,7 +1152,7 @@
 					<div class="text_title">
 						カードテキスト
 					</div>
-					このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分フィールドに「ティアラメンツ」モンスターまたは「ヴィサス＝スタフロスト」が存在する場合、相手フィールドの効果モンスター１体を対象として発動できる。そのモンスターの効果を無効にする。その後、自分フィールドのモンスター１体を選んで墓地へ送る。②：このカードが効果で墓地へ送られた場合に発動できる。デッキから「ティアラメンツ」モンスター１体を手札に加える。
+					<div class="text_linebreak">このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分フィールドに「ティアラメンツ」モンスターまたは「ヴィサス＝スタフロスト」が存在する場合、相手フィールドの効果モンスター１体を対象として発動できる。そのモンスターの効果を無効にする。その後、自分フィールドのモンスター１体を選んで墓地へ送る。②：このカードが効果で墓地へ送られた場合に発動できる。デッキから「ティアラメンツ」モンスター１体を手札に加える。</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1043,21 +1180,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=17474"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=17474"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1070,13 +1206,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>このカードを使用したデッキを検索</h4>
-			</span></a>
+					<h4>このカードを使用したデッキを検索</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1086,30 +1222,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>このカードの関連カードを見る</h4>
-			</span></a>
+					<h4>このカードの関連カードを見る</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1132,17 +1282,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17474%26request_locale%3Dja%26a%3D202604301956&amp;lang=ja&amp;count=horizontal&amp;hashtags=YugiohDB_JP" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17474%26request_locale%3Dja%26a%3D202611040939&amp;hashtags=YugiohDB_JP" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17474%26request_locale%3Dja%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=ja_JP" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17474%26request_locale%3Dja%26a%3D202611040939" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=17474&request_locale=ja&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="ja" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=17474&request_locale=ja&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=17474&request_locale=ja&a=202611040939" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1157,32 +1310,35 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>収録シリーズ</div>
+					<div>イラスト別収録</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2022-04-23
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									POTE-JP072
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									パワー・オブ・ジ・エレメンツ[ POWER OF THE ELEMENTS ]
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1000008900000&rp=99999">
-
 							</div>
 		
 			
@@ -1362,7 +1518,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									このカード名のカードは１ターンに１枚しか発動できず、このカード名の③の効果は１ターンに１度しか使用できない。①：このカードの発動時の効果処理として、デッキから「ティアラメンツ」モンスターまたは「ヴィサス＝スタフロスト」１体を手札に加える事ができる。②：自分フィールドの融合モンスター及び「ティアラメンツ」モンスターの攻撃力は５００アップする。③：自分のフィールド・墓地の「ティアラメンツ」モンスターがデッキ・EXデッキに戻った場合、フィールドのカード１枚を対象として発動できる。そのカードを破壊する。
 								</dd>
 		
@@ -1380,7 +1536,7 @@
 
 								<input type="hidden" class="cnm" value='壱世壊＝ペルレイノ'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17462">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17462&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1472,8 +1628,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									チューナー１体以上＋光属性モンスター１体<br>このカード名の②③の効果はそれぞれ１ターンに１度しか使用できない。<br>①：このカードはモンスターゾーンに存在する限り、カード名を「ヴィサス＝スタフロスト」として扱う。<br>②：このカードがS召喚した場合に発動できる。デッキから「ヴィサス＝スタフロスト」のカード名が記された魔法・罠カード１枚を手札に加える。<br>③：自分メインフェイズに発動できる。自分フィールドのモンスター１体を破壊する。このターン中は自分フィールドのSモンスターの攻撃力が８００アップする。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									チューナー１体以上＋光属性モンスター１体&lt;br&gt;このカード名の②③の効果はそれぞれ１ターンに１度しか使用できない。&lt;br&gt;①：このカードはモンスターゾーンに存在する限り、カード名を「ヴィサス＝スタフロスト」として扱う。&lt;br&gt;②：このカードがS召喚した場合に発動できる。デッキから「ヴィサス＝スタフロスト」のカード名が記された魔法・罠カード１枚を手札に加える。&lt;br&gt;③：自分メインフェイズに発動できる。自分フィールドのモンスター１体を破壊する。このターン中は自分フィールドのSモンスターの攻撃力が８００アップする。
 								</dd>
 		
 		
@@ -1490,7 +1646,7 @@
 
 								<input type="hidden" class="cnm" value='ヴィサス＝アムリターラ'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18826">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18826&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1582,8 +1738,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									このカード名の②の効果は１ターンに１度しか使用できない。<br>①：このカードのカード名は、フィールド・墓地に存在する限り「ヴィサス＝スタフロスト」として扱う。<br>②：自分のフィールド・墓地・除外状態の「ヴィサス」モンスターを任意の数だけ対象として発動できる。その「ヴィサス」モンスターをデッキに戻し、このカードを手札から特殊召喚する。このカードの攻撃力は、この効果で戻した種類×４００アップする。<br>③：自分フィールドのこのカードをS素材とする場合、このカードをチューナー以外のモンスターとして扱う事ができる。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									このカード名の②の効果は１ターンに１度しか使用できない。&lt;br&gt;①：このカードのカード名は、フィールド・墓地に存在する限り「ヴィサス＝スタフロスト」として扱う。&lt;br&gt;②：自分のフィールド・墓地・除外状態の「ヴィサス」モンスターを任意の数だけ対象として発動できる。その「ヴィサス」モンスターをデッキに戻し、このカードを手札から特殊召喚する。このカードの攻撃力は、この効果で戻した種類&times;４００アップする。&lt;br&gt;③：自分フィールドのこのカードをS素材とする場合、このカードをチューナー以外のモンスターとして扱う事ができる。
 								</dd>
 		
 		
@@ -1600,7 +1756,7 @@
 
 								<input type="hidden" class="cnm" value='ヴィサス＝サンサーラ'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19146">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19146&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1692,7 +1848,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									このカード名の①の効果は１ターンに１度しか使用できない。①：このカードが手札に存在する場合、このカードとは種族と属性が異なる自分フィールドのモンスター１体を対象として発動できる。そのモンスターを破壊し、このカードを特殊召喚する。②：このカードが戦闘で相手モンスターを破壊した時に発動できる。そのモンスターの元々の攻撃力と元々の守備力の内、高い方の数値の半分だけこのカードの攻撃力はアップする。
 								</dd>
 		
@@ -1710,7 +1866,7 @@
 
 								<input type="hidden" class="cnm" value='ヴィサス＝スタフロスト'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17120">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17120&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1768,8 +1924,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。<br>①：「ヴィサス＝スタフロスト」のカード名が記された自分の墓地の魔法・罠カード１枚を対象として発動できる。そのカードを自分フィールドにセットする。速攻魔法・罠カードをセットした場合、そのカードはセットしたターンでも発動できる。<br>②：墓地のこのカードを除外し、「新世壊成劫」を除く、「ヴィサス＝スタフロスト」のカード名が記された自分の墓地の魔法・罠カード３枚を対象として発動できる。そのカードをデッキに戻す。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。&lt;br&gt;①：「ヴィサス＝スタフロスト」のカード名が記された自分の墓地の魔法・罠カード１枚を対象として発動できる。そのカードを自分フィールドにセットする。速攻魔法・罠カードをセットした場合、そのカードはセットしたターンでも発動できる。&lt;br&gt;②：墓地のこのカードを除外し、「新世壊成劫」を除く、「ヴィサス＝スタフロスト」のカード名が記された自分の墓地の魔法・罠カード３枚を対象として発動できる。そのカードをデッキに戻す。
 								</dd>
 		
 		
@@ -1786,7 +1942,7 @@
 
 								<input type="hidden" class="cnm" value='新世壊成劫'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18857">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18857&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1878,8 +2034,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									「ティアラメンツ・レイノハート」＋水族モンスター×２<br>このカードは融合素材にできない。このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：このカードが特殊召喚に成功した場合、またはこのカードがフィールドに存在する状態で、水族モンスターが効果で自分の墓地へ送られた場合、相手フィールドのカード１枚を対象として発動できる。そのカードを持ち主のデッキに戻す。②：このカードが効果で墓地へ送られた場合に発動できる。このカードを特殊召喚し、デッキから「ティアラメンツ」カード１枚を墓地へ送る。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									「ティアラメンツ・レイノハート」＋水族モンスター&times;２&lt;br&gt;このカードは融合素材にできない。このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：このカードが特殊召喚に成功した場合、またはこのカードがフィールドに存在する状態で、水族モンスターが効果で自分の墓地へ送られた場合、相手フィールドのカード１枚を対象として発動できる。そのカードを持ち主のデッキに戻す。②：このカードが効果で墓地へ送られた場合に発動できる。このカードを特殊召喚し、デッキから「ティアラメンツ」カード１枚を墓地へ送る。
 								</dd>
 		
 		
@@ -1896,7 +2052,7 @@
 
 								<input type="hidden" class="cnm" value='ティアラメンツ・カレイドハート'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17445">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17445&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1988,8 +2144,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									「ティアラメンツ」モンスター＋水族モンスター<br>このカード名の①②③の効果はそれぞれ１ターンに１度しか使用できない。①：このカードが特殊召喚に成功した場合に発動できる。デッキから「ティアラメンツ」カード１枚を選び、手札に加えるか墓地へ送る。②：自分フィールドのモンスター１体を対象として発動できる。自分の手札・墓地から「ティアラメンツ」モンスター１体を選んで特殊召喚し、対象のモンスターを墓地へ送る。③：このカードが効果で墓地へ送られた場合に発動できる。自分のデッキの上からカードを５枚墓地へ送る。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									「ティアラメンツ」モンスター＋水族モンスター&lt;br&gt;このカード名の①②③の効果はそれぞれ１ターンに１度しか使用できない。①：このカードが特殊召喚に成功した場合に発動できる。デッキから「ティアラメンツ」カード１枚を選び、手札に加えるか墓地へ送る。②：自分フィールドのモンスター１体を対象として発動できる。自分の手札・墓地から「ティアラメンツ」モンスター１体を選んで特殊召喚し、対象のモンスターを墓地へ送る。③：このカードが効果で墓地へ送られた場合に発動できる。自分のデッキの上からカードを５枚墓地へ送る。
 								</dd>
 		
 		
@@ -2006,7 +2162,7 @@
 
 								<input type="hidden" class="cnm" value='ティアラメンツ・キトカロス'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17444">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17444&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2098,7 +2254,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									このカード名の①②③の効果はそれぞれ１ターンに１度しか使用できない。①：自分・相手のメインフェイズに発動できる。このカードを手札から特殊召喚し、自分の手札・墓地から「クシャトリラ」カードまたは「ティアラメンツ」カード１枚を選んで除外する。②：このカードが召喚・特殊召喚に成功した場合に発動できる。自分または相手のデッキの上からカードを３枚墓地へ送る。③：このカードが効果で墓地へ送られた場合に発動できる。自分のデッキの上からカードを２枚墓地へ送る。
 								</dd>
 		
@@ -2116,7 +2272,7 @@
 
 								<input type="hidden" class="cnm" value='ティアラメンツ・クシャトリラ'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18153">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18153&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2181,7 +2337,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									このカード名の①②の効果は１ターンに１度、いずれか１つしか使用できない。①：自分フィールドに「ティアラメンツ」モンスターまたは「ヴィサス＝スタフロスト」が存在し、モンスターの効果・魔法・罠カードが発動した時に発動できる。その発動を無効にし、そのカードを持ち主のデッキに戻す。その後、自分の手札からモンスター１体を選んで墓地へ送る。②：このカードが効果で墓地へ送られた場合、除外されている自分の「ティアラメンツ」モンスター１体を対象として発動できる。そのモンスターを手札に加える。
 								</dd>
 		
@@ -2199,7 +2355,7 @@
 
 								<input type="hidden" class="cnm" value='壱世壊に澄み渡る残響'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17475">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17475&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2257,7 +2413,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									このカード名の①②の効果は１ターンに１度、いずれか１つしか使用できない。①：自分のデッキ・墓地から「ティアラメンツ」モンスターまたは「ヴィサス＝スタフロスト」１体を選んで特殊召喚する。その後、種族または属性がこの効果で特殊召喚したモンスターと同じとなる自分フィールドのモンスター１体を選んで墓地へ送る。②：このカードが効果で墓地へ送られた場合、除外されている自分の「ティアラメンツ」罠カード１枚を対象として発動できる。そのカードを手札に加える。
 								</dd>
 		
@@ -2275,7 +2431,7 @@
 
 								<input type="hidden" class="cnm" value='壱世壊に渦巻く反響'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17811">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17811&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3714,6 +3870,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3888,6 +4046,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3971,7 +4131,9 @@
 						<p>遊戯王 オフィシャルカードゲーム デュエルモンスターズの公式サイトです。<br>全ての遊戯王OCGカードを検索したり、詳細なルールや禁止・制限カードを参照する事ができます。<br>また、自分が持っているカードやデッキをマイデッキに登録して管理したり、公開されているデッキレシピを検索して自分のデッキ構築の参考にする事ができます。</p>
 						<a class="btn" href="https://www.yugioh-card.com/japan/howto/" target="_blank">
 							<img class="ocg" src="external/image/ja/00_logo_ocgtcg.png" />
+
 							<img class="rush" src="external/image/ja/00_logo_rush.png" />
+
 							<span>遊び方はこちら</span>
 						</a>
 					</div>
@@ -4247,7 +4409,7 @@
 
 				<a class="link_rush_x rush" title="「遊戯王ラッシュデュエル」公式X" href="https://twitter.com/YuGiOh_RUSHDUEL" target="_blank">
 					<img class="" src="external/image/footerimg/banner_top_X_rush.png" title="「遊戯王ラッシュデュエル」公式X" ></a>
-				<a class="link_rush_youtube rush" title="ラッシュデュエルTV" href="https://www.youtube.com/@TV-lb2jq" target="_blank">
+				<a class="link_rush_youtube rush" title="ラッシュデュエルTV" href="https://www.youtube.com/@rushduelTV" target="_blank">
 					<img class="" src="external/image/footerimg/banner_top_rushTV.png" title="ラッシュデュエルTV" ></a>
 
 				<a class="link_tiktok" title="「遊戯王カードゲーム」公式TikTok" href="https://www.tiktok.com/@yugioh_cardgame_official?is_from_webapp=1&sender_device=pc" target="_blank">
@@ -4400,6 +4562,29 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
 						</ul>
 					</li>
+				
+					<li class="menu_trends sab_menu rush">
+						<a class="bg main" href="/yugiohdb/trends_search.action?ope=1"><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
+  <g>
+    <g id="trendssvg">
+      <path class="svg_stroke_bold" d="M319.81,95.49l77.67,2.33-2.49,77.81"/>
+      <path class="svg_stroke_bold" d="M39.07,321.57l150.98-142.19,56.56,60.05,148.07-139.45"/>
+      <path class="svg_stroke_lighter" d="M411.08,369.05h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M411.08,333.33h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M250,297.62h188.78l-64.63,83.33h-202.38l78.23-83.33Z"/>
+    </g>
+  </g>
+</svg><h3>トレンド</h3></a>
+						<ul>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=1">人気デッキランキング</a></li>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
+						</ul>
+					</li>
+				
 			
 			
 
@@ -5073,6 +5258,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=67&cb=2083311482" async></script></body>
+</body>
 </html>
 
