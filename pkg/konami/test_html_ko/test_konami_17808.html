@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="복낙인,유희왕,덱,듀얼 몬스터즈,VRAINS,브레인즈,금지,제한,팩,금지 카드,카드,수록,룰,오피셜 카드게임,코나미,KONAM"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="복낙인: 이 카드명의, ①의 효과는 1턴에 1번밖에 사용할 수 없으며, ②의 효과는 동일한 체인 위에서는 1번밖에 발동할 수 없다. ①: 빛 / 어둠 속성 몬스터가 앞면으로 제외되었을 경우"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dko%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dko%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=ko&amp;cid=17808"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dko%26a%3D202611040939"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>복낙인 | 카드 상세 | Yu-Gi-Oh! Neuron(오피셜 카드게임 카드 데이터 베이스)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=17808&ciid=1&enc=DFqUPmvWEk7N8dAJVlhnMw').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=17808&ciid=1&enc=DFqUPmvWEk7N8dAJVlhnMw').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=17808&ciid=1&enc=DFqUPmvWEk7N8dAJVlhnMw').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=17808&ciid=1&enc=DFqUPmvWEk7N8dAJVlhnMw').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=17808&ciid=1&enc=DFqUPmvWEk7N8dAJVlhnMw').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -339,9 +406,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=17808'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=17808&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -355,32 +422,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=17808'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=17808&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -445,7 +542,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" class="current">한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" class="current">한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -586,6 +683,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -767,6 +865,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -852,7 +951,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>Yu-Gi-Oh! OCG 카드 '복낙인'의 카드 상세 정보입니다. <br>'복낙인'의 Yu-Gi-Oh! OCG 공식 규칙은 이 페이지에서 확인하세요. <br>'복낙인' 카드를 사용한 덱을 검색하고 싶다면 '<a href="deck_search.action?cardid=17808" target=_blank>이 카드를 사용한 덱을 검색</a>'에서 확인할 수 있습니다.</span>
+			<span class="text_linebreak">Yu-Gi-Oh! OCG 카드 '복낙인'의 카드 상세 정보입니다. <br>'복낙인'의 Yu-Gi-Oh! OCG 공식 규칙은 이 페이지에서 확인하세요. <br>'복낙인' 카드를 사용한 덱을 검색하고 싶다면 '<a href="deck_search.action?cardid=17808" target=_blank>이 카드를 사용한 덱을 검색</a>'에서 확인할 수 있습니다.</span>
 		</nav>
 	
 
@@ -888,15 +987,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			복낙인
-	
-			<span>Branded Regained</span>
-	
-		</h1>
-	</div>
 
 
 
@@ -904,10 +995,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="복낙인" title="복낙인" class="none">
@@ -917,13 +1009,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -932,11 +1025,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					복낙인
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -964,7 +1059,7 @@
 					<div class="text_title">
 						카드 텍스트
 					</div>
-					이 카드명의, ①의 효과는 1턴에 1번밖에 사용할 수 없으며, ②의 효과는 동일한 체인 위에서는 1번밖에 발동할 수 없다. ①: 빛 / 어둠 속성 몬스터가 앞면으로 제외되었을 경우, 그 중의 1장을 대상으로 하고 발동할 수 있다. 그 몬스터를 덱 맨 아래로 되돌리고, 자신은 1장 드로우한다. ②: 1턴에 1번, 상대가 몬스터를 일반 소환 / 특수 소환했을 경우, 자신 묘지의 "비스테드" 몬스터 1장을 대상으로 하고 발동할 수 있다. 그 몬스터를 특수 소환한다.
+					<div class="text_linebreak">이 카드명의, ①의 효과는 1턴에 1번밖에 사용할 수 없으며, ②의 효과는 동일한 체인 위에서는 1번밖에 발동할 수 없다. ①: 빛 / 어둠 속성 몬스터가 앞면으로 제외되었을 경우, 그 중의 1장을 대상으로 하고 발동할 수 있다. 그 몬스터를 덱 맨 아래로 되돌리고, 자신은 1장 드로우한다. ②: 1턴에 1번, 상대가 몬스터를 일반 소환 / 특수 소환했을 경우, 자신 묘지의 &quot;비스테드&quot; 몬스터 1장을 대상으로 하고 발동할 수 있다. 그 몬스터를 특수 소환한다.</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -992,21 +1087,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=17808"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=17808"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1019,13 +1113,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>이 카드를  사용한 덱을 검색</h4>
-			</span></a>
+					<h4>이 카드를  사용한 덱을 검색</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1035,30 +1129,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>이 카드의 관련 카드 보기</h4>
-			</span></a>
+					<h4>이 카드의 관련 카드 보기</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1081,17 +1189,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dko%26a%3D202604301956&amp;lang=ko&amp;count=horizontal&amp;hashtags=YugiohDB_KO" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dko%26a%3D202611040939&amp;hashtags=YugiohDB_KO" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dko%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=ko_KR" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dko%26a%3D202611040939" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=17808&request_locale=ko&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="ko" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=17808&request_locale=ko&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=17808&request_locale=ko&a=202611040939" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1106,32 +1217,35 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>수록 시리즈</div>
+					<div>일러스트별 수록</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2025-10-28
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									CH01-KR026
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									THE CHRONICLES DECK 순백의 이야기
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001566000&rp=99999">
-
 							</div>
 		
 			
@@ -1150,28 +1264,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2022-10-18
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									DABL-KR053
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									다크윙 블래스트
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001209000&rp=99999">
-
 							</div>
 		
 			
@@ -1351,8 +1464,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 효과는 1턴에 1번, 어느 쪽이든 1개밖에 사용할 수 없다. ①: 몬스터를 특수 소환하는 효과를 포함하는, 몬스터의 효과 / 마법 / 함정 카드가 발동했을 때에 발동할 수 있다. "알버스의 낙윤"을 융합 소재로 하는 융합 몬스터를, 자신 필드의 앞면 표시 몬스터 중에서 1장 또는 자신 묘지에서 2장 골라 엑스트라 덱으로 되돌리고, 그 발동을 무효로 하여 파괴한다. ②: 묘지의 이 카드를 제외하고, "낙인단죄" 이외의 자신 묘지의 "낙인" 마법 / 함정 카드 1장을 대상으로 하여 발동할 수 있다. 그 카드를 패에 넣는다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 효과는 1턴에 1번, 어느 쪽이든 1개밖에 사용할 수 없다. ①: 몬스터를 특수 소환하는 효과를 포함하는, 몬스터의 효과 / 마법 / 함정 카드가 발동했을 때에 발동할 수 있다. &quot;알버스의 낙윤&quot;을 융합 소재로 하는 융합 몬스터를, 자신 필드의 앞면 표시 몬스터 중에서 1장 또는 자신 묘지에서 2장 골라 엑스트라 덱으로 되돌리고, 그 발동을 무효로 하여 파괴한다. ②: 묘지의 이 카드를 제외하고, &quot;낙인단죄&quot; 이외의 자신 묘지의 &quot;낙인&quot; 마법 / 함정 카드 1장을 대상으로 하여 발동할 수 있다. 그 카드를 패에 넣는다.
 								</dd>
 		
 		
@@ -1369,7 +1482,7 @@
 
 								<input type="hidden" class="cnm" value='낙인단죄'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17068">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17068&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1461,8 +1574,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									"알버스의 낙윤" ＋ 빛 속성 몬스터<br>이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 융합 소환했을 경우에 발동할 수 있다. 자신의 패 / 필드 / 묘지의 몬스터를 융합 소재로서 제외하고, "낙인룡 알비온"이 아닌 레벨 8 이하의 융합 몬스터 1장을 융합 소환한다. ②: 이 카드가 묘지로 보내진 턴의 엔드 페이즈에 발동할 수 있다. 덱에서 "낙인" 마법 / 함정 카드 1장을 고르고, 패에 넣거나 자신 필드에 세트한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									&quot;알버스의 낙윤&quot; ＋ 빛 속성 몬스터&lt;br&gt;이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 융합 소환했을 경우에 발동할 수 있다. 자신의 패 / 필드 / 묘지의 몬스터를 융합 소재로서 제외하고, &quot;낙인룡 알비온&quot;이 아닌 레벨 8 이하의 융합 몬스터 1장을 융합 소환한다. ②: 이 카드가 묘지로 보내진 턴의 엔드 페이즈에 발동할 수 있다. 덱에서 &quot;낙인&quot; 마법 / 함정 카드 1장을 고르고, 패에 넣거나 자신 필드에 세트한다.
 								</dd>
 		
 		
@@ -1479,7 +1592,7 @@
 
 								<input type="hidden" class="cnm" value='낙인룡 알비온'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=15994">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=15994&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1537,8 +1650,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 효과는 1턴에 1번, 어느 쪽이든 1개밖에 사용할 수 없다. ①: 자신 묘지에서 "낙인" 마법 / 함정 카드를 임의의 수만큼 제외하고 발동할 수 있다. 제외한 수만큼 자신 필드에 "빙검 토큰"(드래곤족 / 어둠 / 레벨 8 / 공 2500 / 수 2000)을 특수 소환한다. ②: 묘지의 이 카드를 제외하고, 자신의 제외 상태인 "알버스의 낙윤" 또는 그 카드명이 쓰여진 몬스터 1장을 대상으로 하여 발동할 수 있다. 그 몬스터를 패에 넣는다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 효과는 1턴에 1번, 어느 쪽이든 1개밖에 사용할 수 없다. ①: 자신 묘지에서 &quot;낙인&quot; 마법 / 함정 카드를 임의의 수만큼 제외하고 발동할 수 있다. 제외한 수만큼 자신 필드에 &quot;빙검 토큰&quot;(드래곤족 / 어둠 / 레벨 8 / 공 2500 / 수 2000)을 특수 소환한다. ②: 묘지의 이 카드를 제외하고, 자신의 제외 상태인 &quot;알버스의 낙윤&quot; 또는 그 카드명이 쓰여진 몬스터 1장을 대상으로 하여 발동할 수 있다. 그 몬스터를 패에 넣는다.
 								</dd>
 		
 		
@@ -1555,7 +1668,7 @@
 
 								<input type="hidden" class="cnm" value='낙인의 검'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17067">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17067&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1620,8 +1733,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ②의 효과는 1턴에 1번밖에 사용할 수 없다. ①: 1턴에 1번, 자신 / 상대의 메인 페이즈에, 자신 필드에 "비스테드" 몬스터가 존재할 경우, 자신 필드의 드래곤족 몬스터 1장을 릴리스하고, 상대 필드의 카드 1장을 대상으로 하여 발동할 수 있다. 그 카드를 파괴한다. ②: 자신 / 상대의 엔드 페이즈에, 자신 묘지의 "낙인" 지속 마법 / 지속 함정 카드 1장을 대상으로 하고 발동할 수 있다. 그 카드를 자신 필드에 앞면 표시로 놓는다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ②의 효과는 1턴에 1번밖에 사용할 수 없다. ①: 1턴에 1번, 자신 / 상대의 메인 페이즈에, 자신 필드에 &quot;비스테드&quot; 몬스터가 존재할 경우, 자신 필드의 드래곤족 몬스터 1장을 릴리스하고, 상대 필드의 카드 1장을 대상으로 하여 발동할 수 있다. 그 카드를 파괴한다. ②: 자신 / 상대의 엔드 페이즈에, 자신 묘지의 &quot;낙인&quot; 지속 마법 / 지속 함정 카드 1장을 대상으로 하고 발동할 수 있다. 그 카드를 자신 필드에 앞면 표시로 놓는다.
 								</dd>
 		
 		
@@ -1638,7 +1751,7 @@
 
 								<input type="hidden" class="cnm" value='낙인의 야수'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17828">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17828&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1730,8 +1843,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드는 통상 소환할 수 없다. "더 비스테드 루벨리온"은 1턴에 1번, 자신 필드의 레벨 6 이상의 드래곤족 / 어둠 속성 몬스터 1장을 릴리스했을 경우에만 패 / 묘지에서 특수 소환할 수 있다. 이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 패에서 묘지로 보내고 발동할 수 있다. 덱에서 "더 비스테드 루벨리온" 이외의 "비스테드" 몬스터 1장을 패에 넣는다. ②: 자신 메인 페이즈에 발동할 수 있다. 덱에서 "낙인" 지속 마법 / 지속 함정 카드 1장을 자신 필드에 앞면 표시로 놓는다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드는 통상 소환할 수 없다. &quot;더 비스테드 루벨리온&quot;은 1턴에 1번, 자신 필드의 레벨 6 이상의 드래곤족 / 어둠 속성 몬스터 1장을 릴리스했을 경우에만 패 / 묘지에서 특수 소환할 수 있다. 이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 패에서 묘지로 보내고 발동할 수 있다. 덱에서 &quot;더 비스테드 루벨리온&quot; 이외의 &quot;비스테드&quot; 몬스터 1장을 패에 넣는다. ②: 자신 메인 페이즈에 발동할 수 있다. 덱에서 &quot;낙인&quot; 지속 마법 / 지속 함정 카드 1장을 자신 필드에 앞면 표시로 놓는다.
 								</dd>
 		
 		
@@ -1748,7 +1861,7 @@
 
 								<input type="hidden" class="cnm" value='더 비스테드 루벨리온'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17765">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17765&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1840,8 +1953,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드는 통상 소환할 수 없다. 자신 필드의 "비스테드" 몬스터 2장을 릴리스했을 경우에만 패 / 묘지에서 특수 소환할 수 있다. ①: 이 방법으로 특수 소환한 이 카드가 몬스터 존에 존재하는 한, 필드의 앞면 표시의 의식 / 융합 / 싱크로 / 엑시즈 / 링크 몬스터의 효과는 무효화된다. ②: 앞면 표시의 이 카드가 상대 효과로 필드에서 벗어났을 경우에 발동할 수 있다. 상대 엔드 페이즈까지, 서로의 엑스트라 덱의 뒷면 표시의 카드를 전부 앞면 표시로 제외한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드는 통상 소환할 수 없다. 자신 필드의 &quot;비스테드&quot; 몬스터 2장을 릴리스했을 경우에만 패 / 묘지에서 특수 소환할 수 있다. ①: 이 방법으로 특수 소환한 이 카드가 몬스터 존에 존재하는 한, 필드의 앞면 표시의 의식 / 융합 / 싱크로 / 엑시즈 / 링크 몬스터의 효과는 무효화된다. ②: 앞면 표시의 이 카드가 상대 효과로 필드에서 벗어났을 경우에 발동할 수 있다. 상대 엔드 페이즈까지, 서로의 엑스트라 덱의 뒷면 표시의 카드를 전부 앞면 표시로 제외한다.
 								</dd>
 		
 		
@@ -1858,7 +1971,7 @@
 
 								<input type="hidden" class="cnm" value='더 비스테드 알버 로스'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17766">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17766&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1950,8 +2063,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ②의 효과는 1턴에 1번밖에 사용할 수 없다. ①: 이 카드의 카드명은, 필드 / 묘지에 존재하는 한 "알버스의 낙윤"으로 취급한다. ②: 이 카드가 일반 소환 / 특수 소환에 성공했을 경우, 패를 1장 버리고, 상대의 필드 / 묘지의 드래곤족 몬스터 1장을 대상으로 하고, 이하의 효과에서 1개를 선택하여 발동할 수 있다. ●이 카드를 묘지로 보내고, 대상 필드의 몬스터의 컨트롤을 엔드 페이즈까지 얻는다. ●이 카드를 묘지로 보내고, 대상 묘지의 몬스터를 자신 필드에 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ②의 효과는 1턴에 1번밖에 사용할 수 없다. ①: 이 카드의 카드명은, 필드 / 묘지에 존재하는 한 &quot;알버스의 낙윤&quot;으로 취급한다. ②: 이 카드가 일반 소환 / 특수 소환에 성공했을 경우, 패를 1장 버리고, 상대의 필드 / 묘지의 드래곤족 몬스터 1장을 대상으로 하고, 이하의 효과에서 1개를 선택하여 발동할 수 있다. ●이 카드를 묘지로 보내고, 대상 필드의 몬스터의 컨트롤을 엔드 페이즈까지 얻는다. ●이 카드를 묘지로 보내고, 대상 묘지의 몬스터를 자신 필드에 특수 소환한다.
 								</dd>
 		
 		
@@ -1968,7 +2081,7 @@
 
 								<input type="hidden" class="cnm" value='더 비스테드 알베르'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18471">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18471&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2060,8 +2173,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 효과는 1턴에 1번, 어느 쪽이든 1개밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우에 발동할 수 있다. 덱에서 "낙인" 마법 / 함정 카드 1장을 패에 넣는다. ②: 이 카드가 묘지에 존재하는 상태에서, 자신 필드의 앞면 표시의 융합 몬스터가 상대의 효과로 필드에서 벗어났을 경우, 또는 전투로 파괴되었을 경우, 상대 필드의 효과 몬스터 1장을 대상으로 하고 발동할 수 있다. 이 카드를 특수 소환하고, 대상 몬스터의 효과를 턴 종료시까지 무효로 한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 효과는 1턴에 1번, 어느 쪽이든 1개밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우에 발동할 수 있다. 덱에서 &quot;낙인&quot; 마법 / 함정 카드 1장을 패에 넣는다. ②: 이 카드가 묘지에 존재하는 상태에서, 자신 필드의 앞면 표시의 융합 몬스터가 상대의 효과로 필드에서 벗어났을 경우, 또는 전투로 파괴되었을 경우, 상대 필드의 효과 몬스터 1장을 대상으로 하고 발동할 수 있다. 이 카드를 특수 소환하고, 대상 몬스터의 효과를 턴 종료시까지 무효로 한다.
 								</dd>
 		
 		
@@ -2078,7 +2191,7 @@
 
 								<input type="hidden" class="cnm" value='데스피아의 도화 알베르'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16195">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16195&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2170,8 +2283,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 효과는 1턴에 1번, 어느 쪽이든 1개밖에 사용할 수 없다. ①: 이 카드가 효과로 묘지로 보내졌을 경우, 또는 효과로 제외되었을 경우에 발동할 수 있다. 덱에서 "비극의 데스피아안" 이외의 "데스피아" 몬스터 1장을 패에 넣는다. ②: 묘지의 이 카드를 제외하고, 자신 묘지의 "낙인" 마법 / 함정 카드 1장을 대상으로 하여 발동할 수 있다. 그 카드를 자신 필드에 세트한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 효과는 1턴에 1번, 어느 쪽이든 1개밖에 사용할 수 없다. ①: 이 카드가 효과로 묘지로 보내졌을 경우, 또는 효과로 제외되었을 경우에 발동할 수 있다. 덱에서 &quot;비극의 데스피아안&quot; 이외의 &quot;데스피아&quot; 몬스터 1장을 패에 넣는다. ②: 묘지의 이 카드를 제외하고, 자신 묘지의 &quot;낙인&quot; 마법 / 함정 카드 1장을 대상으로 하여 발동할 수 있다. 그 카드를 자신 필드에 세트한다.
 								</dd>
 		
 		
@@ -2188,7 +2301,7 @@
 
 								<input type="hidden" class="cnm" value='비극의 데스피아안'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16194">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16194&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2280,7 +2393,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 자신이나 상대 묘지의 빛 / 어둠 속성 몬스터 1장을 대상으로 하고 발동할 수 있다(상대 필드에 몬스터가 존재할 경우, 이 효과는 상대 턴에도 발동할 수 있다). 그 몬스터를 제외하고, 이 카드를 패에서 특수 소환한다. ②: 이 카드가 필드에서 묘지로 보내졌을 경우, 상대 필드의 특수 소환된 몬스터 1장을 대상으로 하고 발동할 수 있다. 그 몬스터를 묘지로 보낸다.
 								</dd>
 		
@@ -2298,7 +2411,7 @@
 
 								<input type="hidden" class="cnm" value='비스테드 드루이드브룸'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17764">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17764&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3732,6 +3845,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3906,6 +4021,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3989,7 +4106,9 @@
 						<p>유희왕 오피셜 카드게임의 공식 사이트입니다. <br>Yu-Gi-Oh! OCG의 모든 카드를 검색하거나 세부 규칙, 금지 및 제한 카드를 참조할 수 있습니다. <br>이미 소지하고 있는 카드나 덱을 마이덱에 등록해서 관리하거나 공개된 덱 레시피를 검색해서 자신의 덱을 구축하는 데 참고할 수도 있습니다.</p>
 						<a class="btn" href="https://www.yugioh.co.kr/site/game_method.php" target="_blank">
 							<img class="ocg" src="external/image/ko/00_logo_ocgtcg.png" />
+
 							<img class="rush" src="external/image/ko/00_logo_rush.png" />
+
 							<span>게임하는 방법</span>
 						</a>
 					</div>
@@ -4367,6 +4486,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -4468,7 +4588,7 @@
 			<p>Privacy Settings</p>
 		</div>
 		<div class="ps_body">
-			<p>Yu-Gi-Oh! Neuron(OFFICIAL CARD GAME CARD DATABASE)을 이용하려면 이용 약관에 동의해야 합니다. <br>이용 약관이 개정된 경우, 서비스를 계속 이용하시려면 개정된 내용에 다시 동의하셔야 합니다.</p>
+			<p>Yu-Gi-Oh! Neuron(OFFICIAL CARD GAME CARD DATABASE) 을 이용하려면 이용 약관에 동의해야 합니다. <br>이용 약관이 개정된 경우, 서비스를 계속 이용하시려면 개정된 내용에 다시 동의하셔야 합니다.</p>
 		</div>
 		<div class="ps_footer">
 			<div class="ps_button">
@@ -5024,6 +5144,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=108&cb=1473232728" async></script></body>
+</body>
 </html>
 

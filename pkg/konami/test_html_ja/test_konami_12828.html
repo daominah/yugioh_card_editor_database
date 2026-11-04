@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="クリアウィング・ファスト・ドラゴン,遊戯王,デッキ,デュエルモンスターズ,VRAINS,ヴレインズ,禁止,制限,パック,禁止カード,カード,カードリスト,収録,ルール,OCG,コナミ,KONAMI"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="クリアウィング・ファスト・ドラゴン: チューナー＋チューナー以外の風属性モンスター１体以上 「クリアウィング・ファスト・ドラゴン」の①のモンスター効果は１ターンに１度しか使用できない。①：エクストラデッキから特殊召喚された相手フィー"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Dja%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Dja%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=ja&amp;cid=12828"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Dja%26a%3D202611040939"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>クリアウィング・ファスト・ドラゴン | カード詳細 | 遊戯王ニューロン(オフィシャルカードゲーム カードデータベース)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=12828&ciid=1&enc=gXuuko30AVODc2nKcxSFjg').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=12828&ciid=1&enc=gXuuko30AVODc2nKcxSFjg').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=12828&ciid=1&enc=gXuuko30AVODc2nKcxSFjg').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=12828&ciid=1&enc=gXuuko30AVODc2nKcxSFjg').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=12828&ciid=1&enc=gXuuko30AVODc2nKcxSFjg').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -339,9 +406,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=12828'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=12828&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -355,32 +422,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=12828'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=12828&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -445,7 +542,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" class="current">日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -588,6 +685,29 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
 						</ul>
 					</li>
+				
+					<li class="menu_trends sab_menu rush">
+						<a class="bg main" href="/yugiohdb/trends_search.action?ope=1"><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
+  <g>
+    <g id="trendssvg">
+      <path class="svg_stroke_bold" d="M319.81,95.49l77.67,2.33-2.49,77.81"/>
+      <path class="svg_stroke_bold" d="M39.07,321.57l150.98-142.19,56.56,60.05,148.07-139.45"/>
+      <path class="svg_stroke_lighter" d="M411.08,369.05h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M411.08,333.33h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M250,297.62h188.78l-64.63,83.33h-202.38l78.23-83.33Z"/>
+    </g>
+  </g>
+</svg><h3>トレンド</h3></a>
+						<ul>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=1">人気デッキランキング</a></li>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
+						</ul>
+					</li>
+				
 			
 			
 
@@ -787,6 +907,29 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
 						</ul>
 					</li>
+				
+					<li class="menu_trends sab_menu rush">
+						<a class="bg main" href="/yugiohdb/trends_search.action?ope=1"><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
+  <g>
+    <g id="trendssvg">
+      <path class="svg_stroke_bold" d="M319.81,95.49l77.67,2.33-2.49,77.81"/>
+      <path class="svg_stroke_bold" d="M39.07,321.57l150.98-142.19,56.56,60.05,148.07-139.45"/>
+      <path class="svg_stroke_lighter" d="M411.08,369.05h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M411.08,333.33h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M250,297.62h188.78l-64.63,83.33h-202.38l78.23-83.33Z"/>
+    </g>
+  </g>
+</svg><h3>トレンド</h3></a>
+						<ul>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=1">人気デッキランキング</a></li>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
+						</ul>
+					</li>
+				
 			
 			
 
@@ -888,7 +1031,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>遊戯王OCGカード「クリアウィング・ファスト・ドラゴン」のカード詳細です。<br>「クリアウィング・ファスト・ドラゴン」の遊戯王OCG公式ルールはこちらのページで確認してください。<br>「クリアウィング・ファスト・ドラゴン」の使い方に関する質問等は「<a href="faq_search.action?ope=4&cid=12828" target=_blank>このカードのＱ＆Ａを表示</a>」より確認ができます。<br>「クリアウィング・ファスト・ドラゴン」を使用したデッキを検索したい場合は「<a href="deck_search.action?cardid=12828" target=_blank>このカードを使用したデッキを検索</a>」より確認ができます。</span>
+			<span class="text_linebreak">遊戯王OCGカード「クリアウィング・ファスト・ドラゴン」のカード詳細です。<br>「クリアウィング・ファスト・ドラゴン」の遊戯王OCG公式ルールはこちらのページで確認してください。<br>「クリアウィング・ファスト・ドラゴン」の使い方に関する質問等は「<a href="faq_search.action?ope=4&cid=12828" target=_blank>このカードのＱ＆Ａを表示</a>」より確認ができます。<br>「クリアウィング・ファスト・ドラゴン」を使用したデッキを検索したい場合は「<a href="deck_search.action?cardid=12828" target=_blank>このカードを使用したデッキを検索</a>」より確認ができます。</span>
 		</nav>
 	
 
@@ -935,17 +1078,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			<span class="ruby">クリアウィング・ファスト・ドラゴン</span>
-	
-			クリアウィング・ファスト・ドラゴン
-	
-			<span>Clear Wing Fast Dragon</span>
-	
-		</h1>
-	</div>
 
 
 
@@ -953,10 +1086,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="クリアウィング・ファスト・ドラゴン" title="クリアウィング・ファスト・ドラゴン" class="none">
@@ -966,13 +1100,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -981,13 +1116,15 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					<span class="ruby">クリアウィング・ファスト・ドラゴン</span>
 		
 					クリアウィング・ファスト・ドラゴン
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -1088,7 +1225,7 @@
 				<div class="frame pen_effect">
 					<div class="item_box_text">
 			
-							「クリアウィング・ファスト・ドラゴン」のP効果は１ターンに１度しか使用できない。①：レベルの合計が７になるように、自分フィールドの表側表示の、「スピードロイド」チューナー１体とチューナー以外のモンスター１体を墓地へ送って発動できる。Pゾーンのこのカードを特殊召喚する。
+							<div class="text_linebreak">「クリアウィング・ファスト・ドラゴン」のP効果は１ターンに１度しか使用できない。①：レベルの合計が７になるように、自分フィールドの表側表示の、「スピードロイド」チューナー１体とチューナー以外のモンスター１体を墓地へ送って発動できる。Pゾーンのこのカードを特殊召喚する。</div>
 			
 					</div>
 				</div>
@@ -1100,7 +1237,7 @@
 					<div class="text_title">
 						カードテキスト
 					</div>
-					チューナー＋チューナー以外の風属性モンスター１体以上<br>「クリアウィング・ファスト・ドラゴン」の①のモンスター効果は１ターンに１度しか使用できない。①：エクストラデッキから特殊召喚された相手フィールドの表側表示モンスター１体を対象として発動できる。ターン終了時まで、そのモンスターの攻撃力は０になり、効果は無効化される。この効果は相手ターンでも発動できる。②：モンスターゾーンのこのカードが戦闘・効果で破壊された場合に発動できる。このカードを自分のPゾーンに置く。
+					<div class="text_linebreak">チューナー＋チューナー以外の風属性モンスター１体以上&lt;br&gt;「クリアウィング・ファスト・ドラゴン」の①のモンスター効果は１ターンに１度しか使用できない。①：エクストラデッキから特殊召喚された相手フィールドの表側表示モンスター１体を対象として発動できる。ターン終了時まで、そのモンスターの攻撃力は０になり、効果は無効化される。この効果は相手ターンでも発動できる。②：モンスターゾーンのこのカードが戦闘・効果で破壊された場合に発動できる。このカードを自分のPゾーンに置く。</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1128,21 +1265,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=12828"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=12828"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1155,13 +1291,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>このカードを使用したデッキを検索</h4>
-			</span></a>
+					<h4>このカードを使用したデッキを検索</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1171,30 +1307,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>このカードの関連カードを見る</h4>
-			</span></a>
+					<h4>このカードの関連カードを見る</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1217,17 +1367,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Dja%26a%3D202604301956&amp;lang=ja&amp;count=horizontal&amp;hashtags=YugiohDB_JP" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Dja%26a%3D202611040939&amp;hashtags=YugiohDB_JP" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Dja%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=ja_JP" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Dja%26a%3D202611040939" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=12828&request_locale=ja&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="ja" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=12828&request_locale=ja&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=12828&request_locale=ja&a=202611040939" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1242,32 +1395,35 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>収録シリーズ</div>
+					<div>イラスト別収録</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2016-10-04
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									YA02-JP001
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									遊戯王ARC-V 第2巻 付録カード
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=121218016&rp=99999">
-
 							</div>
 		
 			
@@ -1474,8 +1630,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									チューナー２体以上またはSモンスターのチューナー＋「クリアウィング・シンクロ・ドラゴン」<br>このカードはS召喚でしか特殊召喚できない。<br>①：１ターンに１度、他のカードの効果が発動した時に発動できる。その発動を無効にし破壊する。この効果でモンスターを破壊した場合、その元々の攻撃力分だけこのカードの攻撃力はターン終了時までアップする。<br>②：S召喚した表側表示のこのカードが相手によってフィールドから離れた場合に発動できる。EXデッキから「クリアウィング」モンスター１体を特殊召喚する。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									チューナー２体以上またはSモンスターのチューナー＋「クリアウィング・シンクロ・ドラゴン」&lt;br&gt;このカードはS召喚でしか特殊召喚できない。&lt;br&gt;①：１ターンに１度、他のカードの効果が発動した時に発動できる。その発動を無効にし破壊する。この効果でモンスターを破壊した場合、その元々の攻撃力分だけこのカードの攻撃力はターン終了時までアップする。&lt;br&gt;②：S召喚した表側表示のこのカードが相手によってフィールドから離れた場合に発動できる。EXデッキから「クリアウィング」モンスター１体を特殊召喚する。
 								</dd>
 		
 		
@@ -1492,7 +1648,7 @@
 
 								<input type="hidden" class="cnm" value='クリスタルクリアウィング・オーバー・シンクロ・ドラゴン'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20776">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20776&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1584,8 +1740,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									Sモンスターのチューナー＋チューナー以外の「クリアウィング」モンスター１体<br>①：１ターンに１度、相手がモンスターの効果を発動した時に発動できる。このカードはターン終了時まで、攻撃力がその相手モンスターの元々の攻撃力分アップし、相手が発動したモンスターの効果を受けない。<br>②：１ターンに１度、魔法・罠カードの効果が発動した時に発動できる。その発動を無効にし破壊する。<br>③：S召喚したこのカードが相手によって墓地へ送られた場合に発動できる。デッキから風属性モンスター１体を手札に加える。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									Sモンスターのチューナー＋チューナー以外の「クリアウィング」モンスター１体&lt;br&gt;①：１ターンに１度、相手がモンスターの効果を発動した時に発動できる。このカードはターン終了時まで、攻撃力がその相手モンスターの元々の攻撃力分アップし、相手が発動したモンスターの効果を受けない。&lt;br&gt;②：１ターンに１度、魔法・罠カードの効果が発動した時に発動できる。その発動を無効にし破壊する。&lt;br&gt;③：S召喚したこのカードが相手によって墓地へ送られた場合に発動できる。デッキから風属性モンスター１体を手札に加える。
 								</dd>
 		
 		
@@ -1602,7 +1758,7 @@
 
 								<input type="hidden" class="cnm" value='クリスタルクリアウィング・シンクロ・ドラゴン'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16379">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16379&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1694,8 +1850,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									チューナー＋チューナー以外のモンスター１体以上<br>このカード名はルール上「スピードロイド」カードとしても扱う。<br>このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。<br>①：このカードが特殊召喚した場合に発動できる。相手フィールドの効果モンスター１体を破壊し、その元々の攻撃力分だけこのカードの攻撃力をアップする。<br>②：相手が効果を発動した時に発動できる。自分の手札・墓地からレベル４以下の風属性チューナー１体を効果を無効にして特殊召喚する。その後、風属性Sモンスター１体のS召喚を行う事ができる。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									チューナー＋チューナー以外のモンスター１体以上&lt;br&gt;このカード名はルール上「スピードロイド」カードとしても扱う。&lt;br&gt;このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。&lt;br&gt;①：このカードが特殊召喚した場合に発動できる。相手フィールドの効果モンスター１体を破壊し、その元々の攻撃力分だけこのカードの攻撃力をアップする。&lt;br&gt;②：相手が効果を発動した時に発動できる。自分の手札・墓地からレベル４以下の風属性チューナー１体を効果を無効にして特殊召喚する。その後、風属性Sモンスター１体のS召喚を行う事ができる。
 								</dd>
 		
 		
@@ -1712,7 +1868,7 @@
 
 								<input type="hidden" class="cnm" value='四天の龍 クリアウィング・シンクロ・ドラゴン'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=22729">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=22729&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1804,7 +1960,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									①：このカードが召喚・特殊召喚に成功した時、「SR赤目のダイス」以外の自分フィールドの「スピードロイド」モンスター１体を対象とし、１～６までの任意のレベルを宣言して発動できる。そのモンスターのレベルはターン終了時まで、宣言したレベルになる。
 								</dd>
 		
@@ -1822,7 +1978,7 @@
 
 								<input type="hidden" class="cnm" value='SR赤目のダイス'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12054">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12054&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1914,7 +2070,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									「SRアクマグネ」の効果は１ターンに１度しか使用できない。このカードはこのカードの効果によるS召喚でしかS素材にできない。①：このカードが自分メインフェイズに召喚・特殊召喚に成功した場合、相手フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターとこのカードのみを素材として風属性Sモンスター１体をS召喚する。
 								</dd>
 		
@@ -1932,7 +2088,7 @@
 
 								<input type="hidden" class="cnm" value='SRアクマグネ'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12921">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12921&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2029,15 +2185,15 @@
 										<img class="icon_img" src="external/image/parts/icon_pendulum.png" alt="ペンデュラムスケール" title="ペンデュラムスケール">
 										Pスケール 4
 									</span>
-									<span class="box_card_pen_effect c_text flex_1">
+									<span class="box_card_pen_effect c_text flex_1 text_linebreak">
 										①：１ターンに１度、発動できる。自分のPゾーンの風属性・レベル２のPモンスターカード１枚とこのカードを破壊し、EXデッキから「クリアウィング・シンクロ・ドラゴン」１体をS召喚扱いで特殊召喚する。このターン、自分のPゾーンのカードは効果では破壊されず、自分は風属性モンスターしか特殊召喚できない。
 									</span>
 								</dd>
 			
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									このカード名のモンスター効果は１ターンに１度しか使用できない。<br>①：このカードがEXデッキに表側で加わった場合、自分フィールドの風属性Sモンスターの種族が２種類以上であれば発動できる。デッキから「スピードロイド」魔法・罠カード１枚を墓地へ送る。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									このカード名のモンスター効果は１ターンに１度しか使用できない。&lt;br&gt;①：このカードがEXデッキに表側で加わった場合、自分フィールドの風属性Sモンスターの種族が２種類以上であれば発動できる。デッキから「スピードロイド」魔法・罠カード１枚を墓地へ送る。
 								</dd>
 		
 		
@@ -2054,7 +2210,7 @@
 
 								<input type="hidden" class="cnm" value='SRウィング・シンクロン'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20746">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20746&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2146,7 +2302,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									①：このカードが召喚に成功した時、自分または相手の墓地のチューナー１体を対象として発動できる。そのモンスターを自分フィールドに特殊召喚し、そのモンスターとこのカードのみを素材として風属性のSモンスター１体をS召喚する。
 								</dd>
 		
@@ -2164,7 +2320,7 @@
 
 								<input type="hidden" class="cnm" value='SRオハジキッド'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12053">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12053&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2256,7 +2412,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									①：自分・相手のバトルフェイズに自分が戦闘・効果でダメージを受けた場合に発動できる。このカードを手札から特殊召喚する。②：このカードの効果でこのカードが特殊召喚に成功したバトルフェイズに発動できる。このカードを含む自分フィールドの風属性モンスターのみをS素材としてS召喚する。③：このカードがS素材として墓地へ送られた場合に発動できる。自分のデッキの一番上のカードを墓地へ送り、そのカードが「スピードロイド」モンスターだった場合、このカードをS素材としたSモンスターの攻撃力は１０００アップする。
 								</dd>
 		
@@ -2274,7 +2430,7 @@
 
 								<input type="hidden" class="cnm" value='SR－OMKガム'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12740">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12740&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2366,7 +2522,7 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
+								<dd class="box_card_text c_text flex_1 text_linebreak">
 									このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分フィールドに風属性モンスターが存在する場合に発動できる。このカードを手札から特殊召喚する。この効果の発動後、ターン終了時まで自分は風属性以外のモンスターの効果を発動できない。②：自分の墓地からこのカードと「スピードロイド」モンスター１体を除外して発動できる。自分フィールドの全ての風属性モンスターの攻撃力はターン終了時まで８００アップする。
 								</dd>
 		
@@ -2384,7 +2540,7 @@
 
 								<input type="hidden" class="cnm" value='SRカールターボ'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=15180">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=15180&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2481,15 +2637,15 @@
 										<img class="icon_img" src="external/image/parts/icon_pendulum.png" alt="ペンデュラムスケール" title="ペンデュラムスケール">
 										Pスケール 8
 									</span>
-									<span class="box_card_pen_effect c_text flex_1">
-										このカード名のP効果は１ターンに１度しか使用できない。<br>①：自分の墓地から「スピードロイド」カード１枚を除外して発動できる。デッキから「スピードロイド」Pモンスター１体を自分のPゾーンに置く。このターン、自分は風属性モンスターしか特殊召喚できない。
+									<span class="box_card_pen_effect c_text flex_1 text_linebreak">
+										このカード名のP効果は１ターンに１度しか使用できない。&lt;br&gt;①：自分の墓地から「スピードロイド」カード１枚を除外して発動できる。デッキから「スピードロイド」Pモンスター１体を自分のPゾーンに置く。このターン、自分は風属性モンスターしか特殊召喚できない。
 									</span>
 								</dd>
 			
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									このカード名の①②のモンスター効果はそれぞれ１ターンに１度しか使用できない。<br>①：フィールドのこのカードが戦闘・効果で破壊された場合に発動できる。自分の手札・デッキ・墓地から「SRクラッカーネル」１体をチューナー扱いで特殊召喚する。<br>②：このカードがEXデッキに表側で存在する状態で、自分の「クリアウィング」モンスターが戦闘を行うダメージ計算時に発動できる。このカードを除外し、そのモンスターの攻撃力を７００アップする。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									このカード名の①②のモンスター効果はそれぞれ１ターンに１度しか使用できない。&lt;br&gt;①：フィールドのこのカードが戦闘・効果で破壊された場合に発動できる。自分の手札・デッキ・墓地から「SRクラッカーネル」１体をチューナー扱いで特殊召喚する。&lt;br&gt;②：このカードがEXデッキに表側で存在する状態で、自分の「クリアウィング」モンスターが戦闘を行うダメージ計算時に発動できる。このカードを除外し、そのモンスターの攻撃力を７００アップする。
 								</dd>
 		
 		
@@ -2506,7 +2662,7 @@
 
 								<input type="hidden" class="cnm" value='SRクラッカーネル'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20745">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20745&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3960,6 +4116,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4134,6 +4292,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4217,7 +4377,9 @@
 						<p>遊戯王 オフィシャルカードゲーム デュエルモンスターズの公式サイトです。<br>全ての遊戯王OCGカードを検索したり、詳細なルールや禁止・制限カードを参照する事ができます。<br>また、自分が持っているカードやデッキをマイデッキに登録して管理したり、公開されているデッキレシピを検索して自分のデッキ構築の参考にする事ができます。</p>
 						<a class="btn" href="https://www.yugioh-card.com/japan/howto/" target="_blank">
 							<img class="ocg" src="external/image/ja/00_logo_ocgtcg.png" />
+
 							<img class="rush" src="external/image/ja/00_logo_rush.png" />
+
 							<span>遊び方はこちら</span>
 						</a>
 					</div>
@@ -4493,7 +4655,7 @@
 
 				<a class="link_rush_x rush" title="「遊戯王ラッシュデュエル」公式X" href="https://twitter.com/YuGiOh_RUSHDUEL" target="_blank">
 					<img class="" src="external/image/footerimg/banner_top_X_rush.png" title="「遊戯王ラッシュデュエル」公式X" ></a>
-				<a class="link_rush_youtube rush" title="ラッシュデュエルTV" href="https://www.youtube.com/@TV-lb2jq" target="_blank">
+				<a class="link_rush_youtube rush" title="ラッシュデュエルTV" href="https://www.youtube.com/@rushduelTV" target="_blank">
 					<img class="" src="external/image/footerimg/banner_top_rushTV.png" title="ラッシュデュエルTV" ></a>
 
 				<a class="link_tiktok" title="「遊戯王カードゲーム」公式TikTok" href="https://www.tiktok.com/@yugioh_cardgame_official?is_from_webapp=1&sender_device=pc" target="_blank">
@@ -4646,6 +4808,29 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
 						</ul>
 					</li>
+				
+					<li class="menu_trends sab_menu rush">
+						<a class="bg main" href="/yugiohdb/trends_search.action?ope=1"><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
+  <g>
+    <g id="trendssvg">
+      <path class="svg_stroke_bold" d="M319.81,95.49l77.67,2.33-2.49,77.81"/>
+      <path class="svg_stroke_bold" d="M39.07,321.57l150.98-142.19,56.56,60.05,148.07-139.45"/>
+      <path class="svg_stroke_lighter" d="M411.08,369.05h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M411.08,333.33h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M250,297.62h188.78l-64.63,83.33h-202.38l78.23-83.33Z"/>
+    </g>
+  </g>
+</svg><h3>トレンド</h3></a>
+						<ul>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=1">人気デッキランキング</a></li>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
+						</ul>
+					</li>
+				
 			
 			
 
@@ -5319,6 +5504,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=53&cb=244165909" async></script></body>
+</body>
 </html>
 

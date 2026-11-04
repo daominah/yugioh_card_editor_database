@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="Clear Wing Fast Dragon,KONAMI,yugioh,Yu-Gi-Oh,TCG,card,database,card,list,Forbidden,Limited,Semi-limited,Cards,Included in,"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="Clear Wing Fast Dragon: 1 Tuner + 1+ non-Tuner WIND monsters (Quick Effect): You can target 1 face-up monster your oppone"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Den%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Den%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=en&amp;cid=12828"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Den%26a%3D202611040938"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>Clear Wing Fast Dragon | Card Details | Yu-Gi-Oh! Neuron(TRADING CARD GAME CARD DATABASE)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=12828&ciid=1&enc=gXuuko30AVODc2nKcxSFjg').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=12828&ciid=1&enc=gXuuko30AVODc2nKcxSFjg').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=12828&ciid=1&enc=gXuuko30AVODc2nKcxSFjg').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=12828&ciid=1&enc=gXuuko30AVODc2nKcxSFjg').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=12828&ciid=1&enc=gXuuko30AVODc2nKcxSFjg').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -339,9 +406,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=12828'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=12828&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -355,32 +422,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=12828'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=12828&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -445,7 +542,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -846,7 +943,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>These are the card details for the Yu-Gi-Oh! TCG card "Clear Wing Fast Dragon." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Clear Wing Fast Dragon." <br>Please go to "<a href="deck_search.action?cardid=12828" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Clear Wing Fast Dragon."</span>
+			<span class="text_linebreak">These are the card details for the Yu-Gi-Oh! TCG card "Clear Wing Fast Dragon." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Clear Wing Fast Dragon." <br>Please go to "<a href="deck_search.action?cardid=12828" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Clear Wing Fast Dragon."</span>
 		</nav>
 	
 
@@ -882,13 +979,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			Clear Wing Fast Dragon
-	
-		</h1>
-	</div>
 
 
 
@@ -896,10 +987,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="Clear Wing Fast Dragon" title="Clear Wing Fast Dragon" class="none">
@@ -909,13 +1001,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -924,11 +1017,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					Clear Wing Fast Dragon
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -1029,7 +1124,7 @@
 				<div class="frame pen_effect">
 					<div class="item_box_text">
 			
-							You can send 1 face-up "Speedroid" Tuner and 1 face-up non-Tuner monster you control to the GY, whose total Levels equal 7; Special Summon this card from your Pendulum Zone. You can only use this effect of "Clear Wing Fast Dragon" once per turn.
+							<div class="text_linebreak">You can send 1 face-up &quot;Speedroid&quot; Tuner and 1 face-up non-Tuner monster you control to the GY, whose total Levels equal 7; Special Summon this card from your Pendulum Zone. You can only use this effect of &quot;Clear Wing Fast Dragon&quot; once per turn.</div>
 			
 					</div>
 				</div>
@@ -1041,7 +1136,7 @@
 					<div class="text_title">
 						Card Text
 					</div>
-					1 Tuner + 1+ non-Tuner WIND monsters<br>(Quick Effect): You can target 1 face-up monster your opponent controls that was Special Summoned from the Extra Deck; until the end of this turn, change its ATK to 0, also negate that face-up monster's effects. You can only use this effect of "Clear Wing Fast Dragon" once per turn. If this card in the Monster Zone is destroyed by battle or card effect: You can place this card in your Pendulum Zone.
+					<div class="text_linebreak">1 Tuner + 1+ non-Tuner WIND monsters&lt;br&gt;(Quick Effect): You can target 1 face-up monster your opponent controls that was Special Summoned from the Extra Deck; until the end of this turn, change its ATK to 0, also negate that face-up monster's effects. You can only use this effect of &quot;Clear Wing Fast Dragon&quot; once per turn. If this card in the Monster Zone is destroyed by battle or card effect: You can place this card in your Pendulum Zone.</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1069,21 +1164,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=12828"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=12828"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1096,13 +1190,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>Search For Decks Containing This Card</h4>
-			</span></a>
+					<h4>Search For Decks Containing This Card</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1112,30 +1206,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>View Cards Related to This Card</h4>
-			</span></a>
+					<h4>View Cards Related to This Card</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1158,17 +1266,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Den%26a%3D202604301956&amp;lang=en&amp;count=horizontal&amp;hashtags=YugiohDB_EN" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Den%26a%3D202611040938&amp;hashtags=YugiohDB_EN" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Den%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=en_US" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12828%26request_locale%3Den%26a%3D202611040938" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=12828&request_locale=en&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="en" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=12828&request_locale=en&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=12828&request_locale=en&a=202611040938" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1183,32 +1294,74 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>Sets</div>
+					<div>Organized by Illustration</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
+						<div class="inside">
+							<div class="time">
+		
+								2026-08-07
+		
+							</div>
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
+							<div class="flex_1 contents " >
+								<div class="card_number">
+		
+									LAVD-ENS29
+									
+		
+								</div>
+								<div class="pack_name flex_1" >
+									LEGENDARY ARC-V DECKS
+								</div>
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001679000&rp=99999">
+							</div>
+		
+			
+			
+							<div class="icon rarity">
+								<div class="lr_icon rid_1" style="background-color:#9c9c9c;color:#9c9c9c">
+									<p>C</p>
+									<span style="background-color:#ffffff;border-color:#9c9c9c;color:#9c9c9c; ">
+										Common
+									</span>
+								</div>
+							</div><!-- .icon -->
+			
+		
+						</div>
+					</div>
+
+	
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2019-10-11
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									DUDE-EN011
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									Duel Devastator
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=18813002&rp=99999">
-
 							</div>
 		
 			
@@ -1227,28 +1380,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2017-09-05
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									YA02-EN001
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									Yu-Gi-Oh! ARC-V volume 2 Promotional Card
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1111113006&rp=99999">
-
 							</div>
 		
 			
@@ -1312,7 +1464,7 @@
 	<div class="sort_set">
 		
 		<div class="text">
-			Search Results: 1 - 10 of 41
+			Search Results: 1 - 10 of 43
 		</div>
 
 		<div class="pulldown">
@@ -1455,8 +1607,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									2+ Tuners or 1 Tuner Synchro Monster + "Clear Wing Synchro Dragon"<br>Must be Synchro Summoned. Once per turn, when another card, or its effect, is activated (Quick Effect): You can negate the activation, and if you do, destroy that card, and if you destroyed a monster, this card gains ATK equal to that monster's original ATK until the end of this turn. If this face-up Synchro Summoned card in its owner's control leaves the field by an opponent's card: You can Special Summon 1 "Clear Wing" monster from your Extra Deck.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									2+ Tuners or 1 Tuner Synchro Monster + &quot;Clear Wing Synchro Dragon&quot;&lt;br&gt;Must be Synchro Summoned. Once per turn, when another card, or its effect, is activated (Quick Effect): You can negate the activation, and if you do, destroy that card, and if you destroyed a monster, this card gains ATK equal to that monster's original ATK until the end of this turn. If this face-up Synchro Summoned card in its owner's control leaves the field by an opponent's card: You can Special Summon 1 &quot;Clear Wing&quot; monster from your Extra Deck.
 								</dd>
 		
 		
@@ -1473,7 +1625,7 @@
 
 								<input type="hidden" class="cnm" value='Crystal Clear Wing Over Synchro Dragon'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20776">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20776&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1565,8 +1717,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 Tuner Synchro Monster + 1 non-Tuner "Clear Wing" monster<br>Once per turn, when your opponent activates a monster effect (except during the Damage Step) (Quick Effect): You can activate this effect; until the end of this turn, this face-up card is unaffected by the activated effects of your opponent's monsters, also this card gains ATK equal to that opponent's monster's original ATK. Once per turn, when a Spell/Trap Card or effect is activated (Quick Effect): You can negate the activation, and if you do, destroy that card. If this Synchro Summoned card you control is sent to your GY by an opponent's card: You can add 1 WIND monster from your Deck to your hand.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 Tuner Synchro Monster + 1 non-Tuner &quot;Clear Wing&quot; monster&lt;br&gt;Once per turn, when your opponent activates a monster effect (except during the Damage Step) (Quick Effect): You can activate this effect; until the end of this turn, this face-up card is unaffected by the activated effects of your opponent's monsters, also this card gains ATK equal to that opponent's monster's original ATK. Once per turn, when a Spell/Trap Card or effect is activated (Quick Effect): You can negate the activation, and if you do, destroy that card. If this Synchro Summoned card you control is sent to your GY by an opponent's card: You can add 1 WIND monster from your Deck to your hand.
 								</dd>
 		
 		
@@ -1583,7 +1735,7 @@
 
 								<input type="hidden" class="cnm" value='Crystal Clear Wing Synchro Dragon'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16379">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16379&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1675,8 +1827,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 Tuner + 1+ non-Tuner monsters<br>This card can make a second attack during each Battle Phase. At the start of the Damage Step, if this card battles: It gains 200 ATK. If this card is sent to the GY: You can target 1 of your banished "Speedroid" cards; add it to your hand. You can only Special Summon "Hi-Speedroid Chanbara(s)" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 Tuner + 1+ non-Tuner monsters&lt;br&gt;This card can make a second attack during each Battle Phase. At the start of the Damage Step, if this card battles: It gains 200 ATK. If this card is sent to the GY: You can target 1 of your banished &quot;Speedroid&quot; cards; add it to your hand. You can only Special Summon &quot;Hi-Speedroid Chanbara(s)&quot; once per turn.
 								</dd>
 		
 		
@@ -1693,7 +1845,7 @@
 
 								<input type="hidden" class="cnm" value='Hi-Speedroid Chanbara'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12055">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12055&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1785,8 +1937,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 WIND Tuner + 1 non-Tuner WIND Synchro Monster<br>Once per turn, during your Main Phase: You can roll a six-sided die and shuffle WIND monsters from your GY into your Deck, up to the result, then, you can destroy cards your opponent controls up to the number shuffled, and if you do, this card gains 500 ATK for each card destroyed by this effect, until the end of this turn. During your opponent's Main Phase (Quick Effect): You can Tribute this Synchro Summoned card; Special Summon up to 2 Level 7 WIND Synchro Monsters with different names from each other from your Extra Deck.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 WIND Tuner + 1 non-Tuner WIND Synchro Monster&lt;br&gt;Once per turn, during your Main Phase: You can roll a six-sided die and shuffle WIND monsters from your GY into your Deck, up to the result, then, you can destroy cards your opponent controls up to the number shuffled, and if you do, this card gains 500 ATK for each card destroyed by this effect, until the end of this turn. During your opponent's Main Phase (Quick Effect): You can Tribute this Synchro Summoned card; Special Summon up to 2 Level 7 WIND Synchro Monsters with different names from each other from your Extra Deck.
 								</dd>
 		
 		
@@ -1803,7 +1955,7 @@
 
 								<input type="hidden" class="cnm" value='Hi-Speedroid Clear Wing Rider'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16380">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16380&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1895,8 +2047,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 Tuner + 1+ non-Tuner monsters<br>If this card is Synchro Summoned: You can activate 1 of these effects;<br>●Add 1 "Speedroid" Spell/Trap from your Deck to your hand.<br>●If all materials that were used for the Synchro Summon of this card were "Speedroid" monsters, and are all in your GY, Special Summon all of them.<br>You cannot Special Summon monsters the turn you activate this effect, except WIND monsters. You can only use this effect of "Hi-Speedroid Cork Shooter" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 Tuner + 1+ non-Tuner monsters&lt;br&gt;If this card is Synchro Summoned: You can activate 1 of these effects;&lt;br&gt;●Add 1 &quot;Speedroid&quot; Spell/Trap from your Deck to your hand.&lt;br&gt;●If all materials that were used for the Synchro Summon of this card were &quot;Speedroid&quot; monsters, and are all in your GY, Special Summon all of them.&lt;br&gt;You cannot Special Summon the turn you activate this effect, except WIND monsters. You can only use this effect of &quot;Hi-Speedroid Cork Shooter&quot; once per turn.
 								</dd>
 		
 		
@@ -1913,7 +2065,7 @@
 
 								<input type="hidden" class="cnm" value='Hi-Speedroid Cork Shooter'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16378">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16378&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2005,8 +2157,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 WIND Machine Tuner + 1+ non-Tuner monsters<br>If this card is Synchro Summoned: You can target 1 Level 7 or lower WIND non-Tuner Synchro Monster in your GY; Special Summon it. If your opponent Special Summons a monster(s), and you control a "Clear Wing" monster (except during the Damage Step): You can banish this card from your GY; increase the Levels of all monsters your opponent controls by 5. You can only use each effect of "Hi-Speedroid Glider #2" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 WIND Machine Tuner + 1+ non-Tuner monsters&lt;br&gt;If this card is Synchro Summoned: You can target 1 Level 7 or lower WIND non-Tuner Synchro Monster in your GY; Special Summon it. If your opponent Special Summons a monster(s), and you control a &quot;Clear Wing&quot; monster (except during the Damage Step): You can banish this card from your GY; increase the Levels of all monsters your opponent controls by 5. You can only use each effect of &quot;Hi-Speedroid Glider #2&quot; once per turn.
 								</dd>
 		
 		
@@ -2023,7 +2175,7 @@
 
 								<input type="hidden" class="cnm" value='Hi-Speedroid Glider #2'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20777">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20777&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2115,8 +2267,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 Tuner + 1 or more non-Tuner monsters<br>During either player's turn: You can Tribute this card; increase the Levels of all monsters currently on the field by 1, until the end of this turn. If this card is in your Graveyard and you control a "Speedroid" Tuner monster: You can Special Summon this card, also you cannot Special Summon monsters for the rest of this turn, except WIND monsters. You can only use this effect of "Hi-Speedroid Hagoita" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 Tuner + 1 or more non-Tuner monsters&lt;br&gt;(Quick Effect): You can Tribute this card; increase the Levels of all monsters currently on the field by 1, until the end of this turn. If this card is in your GY and you control a &quot;Speedroid&quot; Tuner monster: You can Special Summon this card, also you cannot Special Summon for the rest of this turn, except WIND monsters. You can only use this effect of &quot;Hi-Speedroid Hagoita&quot; once per turn.
 								</dd>
 		
 		
@@ -2133,7 +2285,7 @@
 
 								<input type="hidden" class="cnm" value='Hi-Speedroid Hagoita'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12157">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12157&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2225,8 +2377,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 Tuner + 1 or more non-Tuner monsters<br>If this card attacks a Defense Position monster, inflict piercing battle damage to your opponent. You can only use each of the following effects of "Hi-Speedroid Kendama" once per turn.<br>●You can banish 1 Machine-Type monster from your Graveyard; inflict 500 damage to your opponent.<br>●If this card is in your Graveyard and you control no cards: You can Special Summon this card. You cannot Normal Summon/Set the turn you activate this effect.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 Tuner + 1 or more non-Tuner monsters&lt;br&gt;If this card attacks a Defense Position monster, inflict piercing battle damage to your opponent. You can only use each of the following effects of &quot;Hi-Speedroid Kendama&quot; once per turn.&lt;br&gt;●You can banish 1 Machine-Type monster from your Graveyard; inflict 500 damage to your opponent.&lt;br&gt;●If this card is in your Graveyard and you control no cards: You can Special Summon this card. You cannot Normal Summon/Set the turn you activate this effect.
 								</dd>
 		
 		
@@ -2243,7 +2395,7 @@
 
 								<input type="hidden" class="cnm" value='Hi-Speedroid Kendama'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=11640">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=11640&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2335,8 +2487,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 WIND Machine Tuner + 1+ non-Tuner monsters<br>If this card is Synchro Summoned: You can activate 1 of these effects;<br>●Destroy all other cards on the field.<br>●Negate the effects of all face-up cards your opponent currently controls.<br>If this card in your possession is sent to your GY by an opponent's card: You can add 1 "Speedroid" monster from your Deck to your hand.<br>You can only use each effect of "Hi-Speedroid Kitedrake" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 WIND Machine Tuner + 1+ non-Tuner monsters&lt;br&gt;If this card is Synchro Summoned: You can activate 1 of these effects;&lt;br&gt;●Destroy all other cards on the field.&lt;br&gt;●Negate the effects of all face-up cards your opponent currently controls.&lt;br&gt;If this card in your possession is sent to your GY by an opponent's card: You can add 1 &quot;Speedroid&quot; monster from your Deck to your hand.&lt;br&gt;You can only use each effect of &quot;Hi-Speedroid Kitedrake&quot; once per turn.
 								</dd>
 		
 		
@@ -2353,7 +2505,7 @@
 
 								<input type="hidden" class="cnm" value='Hi-Speedroid Kitedrake'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14430">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14430&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2445,8 +2597,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 Tuner + 1 or more non-Tuner monsters<br>At the start of the Damage Step, if this card battles a Special Summoned monster: You can make this card's ATK become double its current ATK until the end of the Damage Step. Once per turn, during the End Phase, if this card is in the Graveyard because this Synchro Summoned card was sent there from the field this turn: You can target 1 "Speedroid" monster in your Graveyard, except "Hi-Speedroid Puzzle"; add it to your hand.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 Tuner + 1 or more non-Tuner monsters&lt;br&gt;At the start of the Damage Step, if this card battles a Special Summoned monster: You can make this card's ATK become double its current ATK until the end of the Damage Step. Once per turn, during the End Phase, if this card is in the GY because this Synchro Summoned card was sent there from the field this turn: You can target 1 &quot;Speedroid&quot; monster in your GY, except &quot;Hi-Speedroid Puzzle&quot;; add it to your hand.
 								</dd>
 		
 		
@@ -2463,7 +2615,7 @@
 
 								<input type="hidden" class="cnm" value='Hi-Speedroid Puzzle'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12322">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12322&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3902,6 +4054,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4076,6 +4230,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4159,7 +4315,7 @@
 						<p>This is an official site for the Yu-Gi-Oh! Trading Card Game. <br>You can search through all Yu-Gi-Oh! TCG cards, check detailed rules, and view the Forbidden & Limited List. <br>You can also manage your own cards and Decks by registering them in My Deck, and search publicly available Deck Recipes to help you build your own Deck.</p>
 						<a class="btn" href="https://www.yugioh-card.com/en/rulebook/index.html" target="_blank">
 							<img class="ocg" src="external/image/en/00_logo_ocgtcg.png" />
-							<img class="rush" src="external/image/en/00_logo_rush.png" />
+
 							<span>How to Play</span>
 						</a>
 					</div>
@@ -5177,6 +5333,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=14&cb=91437987" async></script></body>
+</body>
 </html>
 

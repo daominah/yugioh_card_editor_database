@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="復烙印,遊戯王,デッキ,デュエルモンスターズ,VRAINS,ヴレインズ,禁止,制限,パック,禁止カード,カード,カードリスト,収録,ルール,OCG,コナミ,KONAMI"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="復烙印: このカード名の、①の効果は１ターンに１度しか使用できず、②の効果は同一チェーン上では１度しか発動できない。 ①：光・闇属性モンスターが表側で除外された場合、その内の１体を対象として発動できる。そ"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dja%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dja%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=ja&amp;cid=17808"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dja%26a%3D202611040939"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>復烙印 | カード詳細 | 遊戯王ニューロン(オフィシャルカードゲーム カードデータベース)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=17808&ciid=1&enc=DFqUPmvWEk7N8dAJVlhnMw').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=17808&ciid=1&enc=DFqUPmvWEk7N8dAJVlhnMw').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=17808&ciid=1&enc=DFqUPmvWEk7N8dAJVlhnMw').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=17808&ciid=1&enc=DFqUPmvWEk7N8dAJVlhnMw').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=17808&ciid=1&enc=DFqUPmvWEk7N8dAJVlhnMw').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -339,9 +406,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=17808'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=17808&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -355,32 +422,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=17808'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=17808&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -445,7 +542,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" class="current">日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -588,6 +685,29 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
 						</ul>
 					</li>
+				
+					<li class="menu_trends sab_menu rush">
+						<a class="bg main" href="/yugiohdb/trends_search.action?ope=1"><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
+  <g>
+    <g id="trendssvg">
+      <path class="svg_stroke_bold" d="M319.81,95.49l77.67,2.33-2.49,77.81"/>
+      <path class="svg_stroke_bold" d="M39.07,321.57l150.98-142.19,56.56,60.05,148.07-139.45"/>
+      <path class="svg_stroke_lighter" d="M411.08,369.05h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M411.08,333.33h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M250,297.62h188.78l-64.63,83.33h-202.38l78.23-83.33Z"/>
+    </g>
+  </g>
+</svg><h3>トレンド</h3></a>
+						<ul>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=1">人気デッキランキング</a></li>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
+						</ul>
+					</li>
+				
 			
 			
 
@@ -787,6 +907,29 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
 						</ul>
 					</li>
+				
+					<li class="menu_trends sab_menu rush">
+						<a class="bg main" href="/yugiohdb/trends_search.action?ope=1"><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
+  <g>
+    <g id="trendssvg">
+      <path class="svg_stroke_bold" d="M319.81,95.49l77.67,2.33-2.49,77.81"/>
+      <path class="svg_stroke_bold" d="M39.07,321.57l150.98-142.19,56.56,60.05,148.07-139.45"/>
+      <path class="svg_stroke_lighter" d="M411.08,369.05h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M411.08,333.33h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M250,297.62h188.78l-64.63,83.33h-202.38l78.23-83.33Z"/>
+    </g>
+  </g>
+</svg><h3>トレンド</h3></a>
+						<ul>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=1">人気デッキランキング</a></li>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
+						</ul>
+					</li>
+				
 			
 			
 
@@ -888,7 +1031,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>遊戯王OCGカード「復烙印」のカード詳細です。<br>「復烙印」の遊戯王OCG公式ルールはこちらのページで確認してください。<br>「復烙印」の使い方に関する質問等は「<a href="faq_search.action?ope=4&cid=17808" target=_blank>このカードのＱ＆Ａを表示</a>」より確認ができます。<br>「復烙印」を使用したデッキを検索したい場合は「<a href="deck_search.action?cardid=17808" target=_blank>このカードを使用したデッキを検索</a>」より確認ができます。</span>
+			<span class="text_linebreak">遊戯王OCGカード「復烙印」のカード詳細です。<br>「復烙印」の遊戯王OCG公式ルールはこちらのページで確認してください。<br>「復烙印」の使い方に関する質問等は「<a href="faq_search.action?ope=4&cid=17808" target=_blank>このカードのＱ＆Ａを表示</a>」より確認ができます。<br>「復烙印」を使用したデッキを検索したい場合は「<a href="deck_search.action?cardid=17808" target=_blank>このカードを使用したデッキを検索</a>」より確認ができます。</span>
 		</nav>
 	
 
@@ -935,17 +1078,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			<span class="ruby">ふくらくいん</span>
-	
-			復烙印
-	
-			<span>Branded Regained</span>
-	
-		</h1>
-	</div>
 
 
 
@@ -953,10 +1086,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="復烙印" title="復烙印" class="none">
@@ -966,13 +1100,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -981,13 +1116,15 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					<span class="ruby">ふくらくいん</span>
 		
 					復烙印
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -1015,7 +1152,7 @@
 					<div class="text_title">
 						カードテキスト
 					</div>
-					このカード名の、①の効果は１ターンに１度しか使用できず、②の効果は同一チェーン上では１度しか発動できない。<br>①：光・闇属性モンスターが表側で除外された場合、その内の１体を対象として発動できる。そのモンスターをデッキの一番下に戻し、自分は１枚ドローする。<br>②：１ターンに１度、相手がモンスターを召喚・特殊召喚した場合、自分の墓地の「ビーステッド」モンスター１体を対象として発動できる。そのモンスターを特殊召喚する。
+					<div class="text_linebreak">このカード名の、①の効果は１ターンに１度しか使用できず、②の効果は同一チェーン上では１度しか発動できない。&lt;br&gt;①：光・闇属性モンスターが表側で除外された場合、その内の１体を対象として発動できる。そのモンスターをデッキの一番下に戻し、自分は１枚ドローする。&lt;br&gt;②：１ターンに１度、相手がモンスターを召喚・特殊召喚した場合、自分の墓地の「ビーステッド」モンスター１体を対象として発動できる。そのモンスターを特殊召喚する。</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1043,21 +1180,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=17808"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=17808"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1070,13 +1206,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>このカードを使用したデッキを検索</h4>
-			</span></a>
+					<h4>このカードを使用したデッキを検索</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1086,30 +1222,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>このカードの関連カードを見る</h4>
-			</span></a>
+					<h4>このカードの関連カードを見る</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1132,17 +1282,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dja%26a%3D202604301956&amp;lang=ja&amp;count=horizontal&amp;hashtags=YugiohDB_JP" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dja%26a%3D202611040939&amp;hashtags=YugiohDB_JP" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dja%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=ja_JP" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D17808%26request_locale%3Dja%26a%3D202611040939" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=17808&request_locale=ja&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="ja" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=17808&request_locale=ja&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=17808&request_locale=ja&a=202611040939" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1157,32 +1310,35 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>収録シリーズ</div>
+					<div>イラスト別収録</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2025-10-25
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									CH01-JP026
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									THE CHRONICLES DECK 白の物語
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1000009534000&rp=99999">
-
 							</div>
 		
 			
@@ -1201,28 +1357,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2024-09-14
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									CF01-JP141
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									COMPLETE FILE－白の物語－
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1000008510000&rp=99999">
-
 							</div>
 		
 			
@@ -1241,28 +1396,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2022-07-16
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									DABL-JP053
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									ダークウィング・ブラスト[ DARKWING BLAST ]
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1000008901000&rp=99999">
-
 							</div>
 		
 			
@@ -1469,8 +1623,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									このカード名の②の効果は１ターンに１度しか使用できない。<br>①：このカードのカード名は、フィールド・墓地に存在する限り「アルバスの落胤」として扱う。<br>②：このカードが手札・墓地に存在する場合、「アルバスの落胤」１体か「烙印」魔法・罠カード１枚を手札・デッキから墓地へ送って発動できる。そのカードをどこから墓地へ送ったかによって以下の効果を適用する。<br>●手札：このカードを特殊召喚する。<br>●デッキ：このカードをデッキの一番下に戻す。手札から戻した場合、さらに自分は１枚ドローする。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									このカード名の②の効果は１ターンに１度しか使用できない。&lt;br&gt;①：このカードのカード名は、フィールド・墓地に存在する限り「アルバスの落胤」として扱う。&lt;br&gt;②：このカードが手札・墓地に存在する場合、「アルバスの落胤」１体か「烙印」魔法・罠カード１枚を手札・デッキから墓地へ送って発動できる。そのカードをどこから墓地へ送ったかによって以下の効果を適用する。&lt;br&gt;●手札：このカードを特殊召喚する。&lt;br&gt;●デッキ：このカードをデッキの一番下に戻す。手札から戻した場合、さらに自分は１枚ドローする。
 								</dd>
 		
 		
@@ -1487,7 +1641,7 @@
 
 								<input type="hidden" class="cnm" value='黒衣竜アルビオン'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16197">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16197&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1579,8 +1733,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									このカードは通常召喚できない。<br>自分フィールドの「ビーステッド」モンスター２体をリリースした場合のみ手札・墓地から特殊召喚できる。<br>①：この方法で特殊召喚したこのカードがモンスターゾーンに存在する限り、フィールドの表側表示の儀式・融合・S・X・Lモンスターの効果は無効化される。<br>②：表側表示のこのカードが相手の効果でフィールドから離れた場合に発動できる。相手エンドフェイズまで、お互いのEXデッキの裏側のカードを全て表側で除外する。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									このカードは通常召喚できない。&lt;br&gt;自分フィールドの「ビーステッド」モンスター２体をリリースした場合のみ手札・墓地から特殊召喚できる。&lt;br&gt;①：この方法で特殊召喚したこのカードがモンスターゾーンに存在する限り、フィールドの表側表示の儀式・融合・S・X・Lモンスターの効果は無効化される。&lt;br&gt;②：表側表示のこのカードが相手の効果でフィールドから離れた場合に発動できる。相手エンドフェイズまで、お互いのEXデッキの裏側のカードを全て表側で除外する。
 								</dd>
 		
 		
@@ -1597,7 +1751,7 @@
 
 								<input type="hidden" class="cnm" value='深淵の獣アルバ・ロス'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17766">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17766&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1689,8 +1843,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									このカード名の②の効果は１ターンに１度しか使用できない。<br>①：このカードのカード名は、フィールド・墓地に存在する限り「アルバスの落胤」として扱う。<br>②：このカードが召喚・特殊召喚した場合、手札を１枚捨て、相手のフィールド・墓地のドラゴン族モンスター１体を対象とし、以下の効果から１つを選択して発動できる。<br>●このカードを墓地へ送り、対象のフィールドのモンスターのコントロールをエンドフェイズまで得る。<br>●このカードを墓地へ送り、対象の墓地のモンスターを自分フィールドに特殊召喚する。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									このカード名の②の効果は１ターンに１度しか使用できない。&lt;br&gt;①：このカードのカード名は、フィールド・墓地に存在する限り「アルバスの落胤」として扱う。&lt;br&gt;②：このカードが召喚・特殊召喚した場合、手札を１枚捨て、相手のフィールド・墓地のドラゴン族モンスター１体を対象とし、以下の効果から１つを選択して発動できる。&lt;br&gt;●このカードを墓地へ送り、対象のフィールドのモンスターのコントロールをエンドフェイズまで得る。&lt;br&gt;●このカードを墓地へ送り、対象の墓地のモンスターを自分フィールドに特殊召喚する。
 								</dd>
 		
 		
@@ -1707,7 +1861,7 @@
 
 								<input type="hidden" class="cnm" value='深淵の獣アルベル'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18471">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18471&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1799,8 +1953,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									このカードは通常召喚できない。<br>「深淵の獣ルベリオン」は１ターンに１度、自分フィールドのレベル６以上のドラゴン族・闇属性モンスター１体をリリースした場合のみ手札・墓地から特殊召喚できる。<br>このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。<br>①：このカードを手札から墓地へ送って発動できる。デッキから「深淵の獣ルベリオン」以外の「ビーステッド」モンスター１体を手札に加える。<br>②：自分メインフェイズに発動できる。デッキから「烙印」永続魔法・永続罠カード１枚を自分フィールドに表側表示で置く。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									このカードは通常召喚できない。&lt;br&gt;「深淵の獣ルベリオン」は１ターンに１度、自分フィールドのレベル６以上のドラゴン族・闇属性モンスター１体をリリースした場合のみ手札・墓地から特殊召喚できる。&lt;br&gt;このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。&lt;br&gt;①：このカードを手札から墓地へ送って発動できる。デッキから「深淵の獣ルベリオン」以外の「ビーステッド」モンスター１体を手札に加える。&lt;br&gt;②：自分メインフェイズに発動できる。デッキから「烙印」永続魔法・永続罠カード１枚を自分フィールドに表側表示で置く。
 								</dd>
 		
 		
@@ -1817,7 +1971,7 @@
 
 								<input type="hidden" class="cnm" value='深淵の獣ルベリオン'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17765">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17765&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1909,8 +2063,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。<br>①：「アルバスの落胤」を融合素材とする融合モンスターが自分のフィールドか墓地に存在する場合に発動できる。このカードを手札から特殊召喚する。<br>②：このカードが召喚・特殊召喚した場合に発動できる。自分のデッキ・墓地・除外状態の「烙印」魔法・罠カード１枚を手札に加える。その後、自分の手札を１枚選んでデッキの一番下に戻す。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。&lt;br&gt;①：「アルバスの落胤」を融合素材とする融合モンスターが自分のフィールドか墓地に存在する場合に発動できる。このカードを手札から特殊召喚する。&lt;br&gt;②：このカードが召喚・特殊召喚した場合に発動できる。自分のデッキ・墓地・除外状態の「烙印」魔法・罠カード１枚を手札に加える。その後、自分の手札を１枚選んでデッキの一番下に戻す。
 								</dd>
 		
 		
@@ -1927,7 +2081,7 @@
 
 								<input type="hidden" class="cnm" value='スプリガンズ・キット'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17063">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17063&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2019,8 +2173,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									このカード名の①②の効果は１ターンに１度、いずれか１つしか使用できない。<br>①：このカードが召喚・特殊召喚した場合に発動できる。デッキから「烙印」魔法・罠カード１枚を手札に加える。<br>②：このカードが墓地に存在する状態で、自分フィールドの表側表示の融合モンスターが相手の効果でフィールドから離れた場合、または戦闘で破壊された場合、相手フィールドの効果モンスター１体を対象として発動できる。このカードを特殊召喚し、対象のモンスターの効果をターン終了時まで無効にする。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									このカード名の①②の効果は１ターンに１度、いずれか１つしか使用できない。&lt;br&gt;①：このカードが召喚・特殊召喚した場合に発動できる。デッキから「烙印」魔法・罠カード１枚を手札に加える。&lt;br&gt;②：このカードが墓地に存在する状態で、自分フィールドの表側表示の融合モンスターが相手の効果でフィールドから離れた場合、または戦闘で破壊された場合、相手フィールドの効果モンスター１体を対象として発動できる。このカードを特殊召喚し、対象のモンスターの効果をターン終了時まで無効にする。
 								</dd>
 		
 		
@@ -2037,7 +2191,7 @@
 
 								<input type="hidden" class="cnm" value='デスピアの導化アルベル'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16195">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16195&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2129,8 +2283,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									このカード名の①②の効果は１ターンに１度、いずれか１つしか使用できない。<br>①：このカードが効果で墓地へ送られた場合、または効果で除外された場合に発動できる。デッキから「悲劇のデスピアン」以外の「デスピア」モンスター１体を手札に加える。<br>②：墓地のこのカードを除外し、自分の墓地の「烙印」魔法・罠カード１枚を対象として発動できる。そのカードを自分フィールドにセットする。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									このカード名の①②の効果は１ターンに１度、いずれか１つしか使用できない。&lt;br&gt;①：このカードが効果で墓地へ送られた場合、または効果で除外された場合に発動できる。デッキから「悲劇のデスピアン」以外の「デスピア」モンスター１体を手札に加える。&lt;br&gt;②：墓地のこのカードを除外し、自分の墓地の「烙印」魔法・罠カード１枚を対象として発動できる。そのカードを自分フィールドにセットする。
 								</dd>
 		
 		
@@ -2147,7 +2301,7 @@
 
 								<input type="hidden" class="cnm" value='悲劇のデスピアン'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16194">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16194&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2239,8 +2393,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。<br>①：自分か相手の墓地の光・闇属性モンスター１体を対象として発動できる（相手フィールドにモンスターが存在する場合、この効果は相手ターンでも発動できる）。そのモンスターを除外し、このカードを手札から特殊召喚する。<br>②：このカードが墓地へ送られた場合に発動できる。「深淵の獣サロニール」以外の「ビーステッド」モンスター１体か「烙印」魔法・罠カード１枚をデッキから墓地へ送る。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。&lt;br&gt;①：自分か相手の墓地の光・闇属性モンスター１体を対象として発動できる（相手フィールドにモンスターが存在する場合、この効果は相手ターンでも発動できる）。そのモンスターを除外し、このカードを手札から特殊召喚する。&lt;br&gt;②：このカードが墓地へ送られた場合に発動できる。「深淵の獣サロニール」以外の「ビーステッド」モンスター１体か「烙印」魔法・罠カード１枚をデッキから墓地へ送る。
 								</dd>
 		
 		
@@ -2257,7 +2411,7 @@
 
 								<input type="hidden" class="cnm" value='深淵の獣サロニール'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17763">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17763&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2349,8 +2503,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									チューナー＋チューナー以外のドラゴン族モンスター１体以上<br>このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。<br>①：自分か相手の除外状態の光・闇属性モンスター１体を対象として発動できる。そのモンスターを自分フィールドに特殊召喚する。<br>②：相手がモンスターの効果を発動した時、自分か相手の除外状態のカード１枚を対象として発動できる。そのカードをデッキに戻す。さらに、対象のカードの持ち主が自分の場合、そのモンスターは破壊される。相手の場合、その発動した効果を無効にする。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									チューナー＋チューナー以外のドラゴン族モンスター１体以上&lt;br&gt;このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。&lt;br&gt;①：自分か相手の除外状態の光・闇属性モンスター１体を対象として発動できる。そのモンスターを自分フィールドに特殊召喚する。&lt;br&gt;②：相手がモンスターの効果を発動した時、自分か相手の除外状態のカード１枚を対象として発動できる。そのカードをデッキに戻す。さらに、対象のカードの持ち主が自分の場合、その効果を発動したモンスターは破壊される。相手の場合、その発動した効果を無効にする。
 								</dd>
 		
 		
@@ -2367,7 +2521,7 @@
 
 								<input type="hidden" class="cnm" value='深淵の神獣ディス・パテル'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18504">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18504&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2459,8 +2613,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。<br>①：自分か相手の墓地の光・闇属性モンスター１体を対象として発動できる（相手フィールドにモンスターが存在する場合、この効果は相手ターンでも発動できる）。そのモンスターを除外し、このカードを手札から特殊召喚する。<br>②：このカードがフィールドから墓地へ送られた場合、相手フィールドの特殊召喚されたモンスター１体を対象として発動できる。そのモンスターを墓地へ送る。
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。&lt;br&gt;①：自分か相手の墓地の光・闇属性モンスター１体を対象として発動できる（相手フィールドにモンスターが存在する場合、この効果は相手ターンでも発動できる）。そのモンスターを除外し、このカードを手札から特殊召喚する。&lt;br&gt;②：このカードがフィールドから墓地へ送られた場合、相手フィールドの特殊召喚されたモンスター１体を対象として発動できる。そのモンスターを墓地へ送る。
 								</dd>
 		
 		
@@ -2477,7 +2631,7 @@
 
 								<input type="hidden" class="cnm" value='深淵の獣ドルイドヴルム'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17764">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17764&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3916,6 +4070,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4090,6 +4246,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4173,7 +4331,9 @@
 						<p>遊戯王 オフィシャルカードゲーム デュエルモンスターズの公式サイトです。<br>全ての遊戯王OCGカードを検索したり、詳細なルールや禁止・制限カードを参照する事ができます。<br>また、自分が持っているカードやデッキをマイデッキに登録して管理したり、公開されているデッキレシピを検索して自分のデッキ構築の参考にする事ができます。</p>
 						<a class="btn" href="https://www.yugioh-card.com/japan/howto/" target="_blank">
 							<img class="ocg" src="external/image/ja/00_logo_ocgtcg.png" />
+
 							<img class="rush" src="external/image/ja/00_logo_rush.png" />
+
 							<span>遊び方はこちら</span>
 						</a>
 					</div>
@@ -4449,7 +4609,7 @@
 
 				<a class="link_rush_x rush" title="「遊戯王ラッシュデュエル」公式X" href="https://twitter.com/YuGiOh_RUSHDUEL" target="_blank">
 					<img class="" src="external/image/footerimg/banner_top_X_rush.png" title="「遊戯王ラッシュデュエル」公式X" ></a>
-				<a class="link_rush_youtube rush" title="ラッシュデュエルTV" href="https://www.youtube.com/@TV-lb2jq" target="_blank">
+				<a class="link_rush_youtube rush" title="ラッシュデュエルTV" href="https://www.youtube.com/@rushduelTV" target="_blank">
 					<img class="" src="external/image/footerimg/banner_top_rushTV.png" title="ラッシュデュエルTV" ></a>
 
 				<a class="link_tiktok" title="「遊戯王カードゲーム」公式TikTok" href="https://www.tiktok.com/@yugioh_cardgame_official?is_from_webapp=1&sender_device=pc" target="_blank">
@@ -4602,6 +4762,29 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
 						</ul>
 					</li>
+				
+					<li class="menu_trends sab_menu rush">
+						<a class="bg main" href="/yugiohdb/trends_search.action?ope=1"><?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
+  <g>
+    <g id="trendssvg">
+      <path class="svg_stroke_bold" d="M319.81,95.49l77.67,2.33-2.49,77.81"/>
+      <path class="svg_stroke_bold" d="M39.07,321.57l150.98-142.19,56.56,60.05,148.07-139.45"/>
+      <path class="svg_stroke_lighter" d="M411.08,369.05h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M411.08,333.33h27.7l-64.63,83.33h-202.38l33.53-35.71"/>
+      <path class="svg_stroke_lighter" d="M250,297.62h188.78l-64.63,83.33h-202.38l78.23-83.33Z"/>
+    </g>
+  </g>
+</svg><h3>トレンド</h3></a>
+						<ul>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=1">人気デッキランキング</a></li>
+							
+							<li><a href="/yugiohdb/trends_search.action?ope=2">注目カテゴリーランキング</a></li>
+						</ul>
+					</li>
+				
 			
 			
 
@@ -5275,6 +5458,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=69&cb=2052193653" async></script></body>
+</body>
 </html>
 

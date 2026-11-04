@@ -167,7 +167,7 @@ var (
 	//go:embed test_html_ko/test_konami_22617.html
 	test_konami_ko_22617 []byte
 	// 22617: Stealth Ange - Cradle (latest Korean release as of 2026-04;
-	// KO page lists the card but the EN-name span is still empty)
+	// KO page lists the card)
 
 	//go:embed test_html_ko/test_konami_23141.html
 	test_konami_ko_23141 []byte
@@ -201,8 +201,7 @@ func TestParseKonamiCardHTML_KO_DevPanelSmoke(t *testing.T) {
 		{cardID: "19521", pageHTML: test_konami_ko_19521},
 		{cardID: "20536", pageHTML: test_konami_ko_20536},
 		{cardID: "20578", pageHTML: test_konami_ko_20578},
-		// 21627 (Miracle Raven) is EN-only at crawl time; the KO page is an
-		// empty stub. Re-add once Konami publishes the KO card page.
+		{cardID: "21627", pageHTML: test_konami_ko_21627},
 	} {
 		// WHEN parsing the KO card page
 		got := ParseKonamiCardHTML(c.pageHTML, CardID(c.cardID))
@@ -338,11 +337,10 @@ func TestParseCardLocaleText_KO(t *testing.T) {
 		pageHTML []byte
 		want     CardLocaleText
 	}{
-		// GIVEN a KO monster page (Hangul name + EN-name span; no kana ruby on KO)
+		// GIVEN a KO monster page (Hangul name; no kana ruby on KO)
 		{cardID: "4007", pageHTML: test_konami_ko_4007, want: CardLocaleText{
 			Name:              "푸른 눈의 백룡",
 			NamePronunciation: "",
-			NameEnglishOnPage: "Blue-Eyes White Dragon",
 			Effect:            "높은 공격력을 자랑하는 전설의 드래곤. 어떠한 상대라도 분쇄해 버리는 파괴력은 상상을 초월한다.",
 			AttributeText:     "빛",
 			MonsterTypeText:   "드래곤족",
@@ -352,7 +350,6 @@ func TestParseCardLocaleText_KO(t *testing.T) {
 		{cardID: "4343", pageHTML: test_konami_ko_4343, want: CardLocaleText{
 			Name:              "번개",
 			NamePronunciation: "",
-			NameEnglishOnPage: "Raigeki",
 			Effect:            "①: 상대 필드의 몬스터를 전부 파괴한다.",
 		}},
 
@@ -360,7 +357,6 @@ func TestParseCardLocaleText_KO(t *testing.T) {
 		{cardID: "4960", pageHTML: test_konami_ko_4960, want: CardLocaleText{
 			Name:              "왕궁의 칙명",
 			NamePronunciation: "",
-			NameEnglishOnPage: "Imperial Order",
 			Effect:            "이 카드의 컨트롤러는 서로의 스탠바이 페이즈마다 700 LP를 지불한다. 700 LP 지불할 수 없을 경우 이 카드를 파괴한다. ①: 이 카드가 마법 & 함정 존에 존재하는 한, 필드의 모든 마법 카드의 효과는 무효화된다.",
 		}},
 	} {
@@ -368,7 +364,7 @@ func TestParseCardLocaleText_KO(t *testing.T) {
 		got := ParseCardLocaleText(c.pageHTML, CardID(c.cardID))
 
 		// THEN every locale field matches; KO has no kana so NamePronunciation is empty,
-		// and the EN-name span is captured separately in NameEnglishOnPage
+		// and no English name because Konami removed it from KO pages around 2026-10-28
 		if got.Name != c.want.Name {
 			t.Errorf("cardID %v Name got %q, want %q", c.cardID, got.Name, c.want.Name)
 		}
@@ -386,75 +382,6 @@ func TestParseCardLocaleText_KO(t *testing.T) {
 		}
 		if got.MonsterTypeText != c.want.MonsterTypeText {
 			t.Errorf("cardID %v MonsterTypeText got %q, want %q", c.cardID, got.MonsterTypeText, c.want.MonsterTypeText)
-		}
-	}
-}
-
-func TestParseCardLocaleText_KO_NameEnglishOnPage(t *testing.T) {
-	// Konami's KO card pages embed the official English name in a bare
-	// <span> next to the hangul <h1>. This single source covers all
-	// KO-cataloged cards, including OCG-only releases that have no EN page.
-	// 21627 (Miracle Raven, TCG-exclusive) has no KO page, so the parser
-	// returns an empty NameEnglishOnPage.
-	for _, c := range []struct {
-		cardID   string
-		pageHTML []byte
-		want     string
-	}{
-		{cardID: "4007", pageHTML: test_konami_ko_4007, want: "Blue-Eyes White Dragon"},
-		{cardID: "4343", pageHTML: test_konami_ko_4343, want: "Raigeki"},
-		{cardID: "4386", pageHTML: test_konami_ko_4386, want: "Blue-Eyes Ultimate Dragon"},
-		{cardID: "4861", pageHTML: test_konami_ko_4861, want: "Solemn Judgment"},
-		{cardID: "4960", pageHTML: test_konami_ko_4960, want: "Imperial Order"},
-		{cardID: "6341", pageHTML: test_konami_ko_6341, want: "King of the Skull Servants"},
-		{cardID: "6996", pageHTML: test_konami_ko_6996, want: "Advanced Ritual Art"},
-		{cardID: "8409", pageHTML: test_konami_ko_8409, want: "Ally of Justice Cycle Reader"},
-		{cardID: "8933", pageHTML: test_konami_ko_8933, want: "Effect Veiler"},
-		{cardID: "11232", pageHTML: test_konami_ko_11232, want: "Shaddoll Falco"},
-		{cardID: "11353", pageHTML: test_konami_ko_11353, want: "Qliphort Scout"},
-		{cardID: "11973", pageHTML: test_konami_ko_11973, want: "Majespecter Unicorn - Kirin"},
-		{cardID: "12788", pageHTML: test_konami_ko_12788, want: "Zoodiac Drident"},
-		{cardID: "12828", pageHTML: test_konami_ko_12828, want: "Clear Wing Fast Dragon"},
-		{cardID: "12953", pageHTML: test_konami_ko_12953, want: "Supreme King Z-ARC"},
-		{cardID: "13587", pageHTML: test_konami_ko_13587, want: "Ghost Belle & Haunted Mansion"},
-		{cardID: "13631", pageHTML: test_konami_ko_13631, want: "Infinite Impermanence"},
-		{cardID: "14356", pageHTML: test_konami_ko_14356, want: "Time Thief Redoer"},
-		{cardID: "14439", pageHTML: test_konami_ko_14439, want: "Endymion, the Mighty Master of Magic"},
-		{cardID: "14491", pageHTML: test_konami_ko_14491, want: "Monk of the Tenyi"},
-		{cardID: "14496", pageHTML: test_konami_ko_14496, want: "Apollousa, Bow of the Goddess"},
-		{cardID: "15296", pageHTML: test_konami_ko_15296, want: "Triple Tactics Talent"},
-		{cardID: "15299", pageHTML: test_konami_ko_15299, want: "Forbidden Droplet"},
-		{cardID: "15524", pageHTML: test_konami_ko_15524, want: "Divine Arsenal AA-ZEUS - Sky Thunder"},
-		{cardID: "15741", pageHTML: test_konami_ko_15741, want: "Underworld Goddess of the Closed World"},
-		{cardID: "16386", pageHTML: test_konami_ko_16386, want: "Baronne de Fleur"},
-		{cardID: "16849", pageHTML: test_konami_ko_16849, want: "D/D/D Deviser King Deus Machinex"},
-		{cardID: "17474", pageHTML: test_konami_ko_17474, want: "Tearlaments Sulliek"},
-		{cardID: "17746", pageHTML: test_konami_ko_17746, want: "Garura, Wings of Resonant Life"},
-		{cardID: "17808", pageHTML: test_konami_ko_17808, want: "Branded Regained"},
-		{cardID: "18022", pageHTML: test_konami_ko_18022, want: "Mikanko Water Arabesque"},
-		{cardID: "18177", pageHTML: test_konami_ko_18177, want: "Evigishki Neremanas"},
-		{cardID: "18792", pageHTML: test_konami_ko_18792, want: "Cornfield Coatl"},
-		{cardID: "19188", pageHTML: test_konami_ko_19188, want: "S:P Little Knight"},
-		{cardID: "19376", pageHTML: test_konami_ko_19376, want: "Stand Up Centur-Ion!"},
-		{cardID: "19521", pageHTML: test_konami_ko_19521, want: "Prayers of the Voiceless Voice"},
-		{cardID: "20536", pageHTML: test_konami_ko_20536, want: "Primite Drillbeam"},
-		{cardID: "20578", pageHTML: test_konami_ko_20578, want: "Ryzeal Detonator"},
-		// 21627 Miracle Raven: TCG-exclusive, KO page is an empty stub
-		{cardID: "21627", pageHTML: test_konami_ko_21627, want: ""},
-		// 22617: latest Korean release 2026-04, KO page lists the card but
-		// Konami has not published the official English name yet
-		{cardID: "22617", pageHTML: test_konami_ko_22617, want: ""},
-		// 23141: latest Japanese release 2026-04, KO page is an empty stub
-		// (Korean release not yet published)
-		{cardID: "23141", pageHTML: test_konami_ko_23141, want: ""},
-	} {
-		// WHEN parsing locale text from the KO page
-		got := ParseCardLocaleText(c.pageHTML, CardID(c.cardID))
-
-		// THEN the English-name span on the KO page matches the expected name
-		if got.NameEnglishOnPage != c.want {
-			t.Errorf("cardID %v NameEnglishOnPage got %q, want %q",
-				c.cardID, got.NameEnglishOnPage, c.want)
 		}
 	}
 }

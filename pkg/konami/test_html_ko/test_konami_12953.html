@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="패왕룡 즈아크,유희왕,덱,듀얼 몬스터즈,VRAINS,브레인즈,금지,제한,팩,금지 카드,카드,수록,룰,오피셜 카드게임,코나미,KONAM"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="패왕룡 즈아크: 드래곤족의 융합 / 싱크로 / 엑시즈 / 펜듈럼 몬스터 1장씩 합계 4장 이 카드는 융합 소환으로밖에 특수 소환할 수 없다. ①: 이 카드를 특수 소환했을 경우에 발동한다. "/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Dko%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Dko%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=ko&amp;cid=12953"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Dko%26a%3D202611040939"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>패왕룡 즈아크 | 카드 상세 | Yu-Gi-Oh! Neuron(오피셜 카드게임 카드 데이터 베이스)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,21 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=12953&ciid=1&enc=mHgG1oFHZY9jrXZlkDrQrQ').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=12953&ciid=1&enc=mHgG1oFHZY9jrXZlkDrQrQ').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=12953&ciid=1&enc=mHgG1oFHZY9jrXZlkDrQrQ').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=12953&ciid=1&enc=mHgG1oFHZY9jrXZlkDrQrQ').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=12953&ciid=1&enc=mHgG1oFHZY9jrXZlkDrQrQ').show();
 	   
+		$('#card_image_2').attr('src', '/yugiohdb/get_image.action?type=2&cid=12953&ciid=2&enc=mHgG1oFHZY9jrXZlkDrQrQ');
+		$('#thumbnail_card_image_2,#popup_card_image_2').attr('src', '/yugiohdb/get_image.action?type=1&cid=12953&ciid=2&enc=mHgG1oFHZY9jrXZlkDrQrQ').show();
+		$('#pop_card_image_2,#update_list_card_image_2').attr('src', '/yugiohdb/get_image.action?type=2&cid=12953&ciid=2&enc=mHgG1oFHZY9jrXZlkDrQrQ');
+	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +262,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -339,9 +410,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=12953'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=12953&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -355,32 +426,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=12953'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=12953&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -445,7 +546,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" class="current">한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" class="current">한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -586,6 +687,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -767,6 +869,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -852,7 +955,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>Yu-Gi-Oh! OCG 카드 '패왕룡 즈아크'의 카드 상세 정보입니다. <br>'패왕룡 즈아크'의 Yu-Gi-Oh! OCG 공식 규칙은 이 페이지에서 확인하세요. <br>'패왕룡 즈아크' 카드를 사용한 덱을 검색하고 싶다면 '<a href="deck_search.action?cardid=12953" target=_blank>이 카드를 사용한 덱을 검색</a>'에서 확인할 수 있습니다.</span>
+			<span class="text_linebreak">Yu-Gi-Oh! OCG 카드 '패왕룡 즈아크'의 카드 상세 정보입니다. <br>'패왕룡 즈아크'의 Yu-Gi-Oh! OCG 공식 규칙은 이 페이지에서 확인하세요. <br>'패왕룡 즈아크' 카드를 사용한 덱을 검색하고 싶다면 '<a href="deck_search.action?cardid=12953" target=_blank>이 카드를 사용한 덱을 검색</a>'에서 확인할 수 있습니다.</span>
 		</nav>
 	
 
@@ -888,15 +991,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			패왕룡 즈아크
-	
-			<span>Supreme King Z-ARC</span>
-	
-		</h1>
-	</div>
 
 
 
@@ -904,26 +999,35 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
+					<div class="left_btn"><span class="arrow"></span></div>
+					<div class="right_btns"><span class="arrow"></span></div>
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="패왕룡 즈아크" title="패왕룡 즈아크" class="none">
+		
+						<img id="card_image_2" alt="패왕룡 즈아크" title="패왕룡 즈아크" class="none">
 		
 						<?xml version="1.0" encoding="UTF-8"?><svg id="a" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.63 55.5"><defs><style>.c{fill:#ccfeff;}.d{fill:#3e96ff;}</style></defs><g id="b"><g><path class="c" d="M28.13,40.4l1.5-1.3-.1-.1c-2.6,1.2-5.5,1.9-8.4,1.9-5.8,0-11.3-2.5-15.1-7C-.87,25.6,.13,13.2,8.43,6.2,11.93,3.2,16.43,1.6,21.13,1.6c5.8,0,11.3,2.5,15.1,7,5.6,6.6,6.2,16,1.6,23.2l.3,.3,1.5-1.3,10.9,13.1-11.5,9.5-10.9-13Zm-6.9-30.6c-2.7,0-5.3,1-7.4,2.7-4.7,4-5.3,11.3-1.3,16.1,2.2,2.5,5.3,4,8.7,4,2.7,0,5.3-1,7.4-2.7,4.8-4,5.3-11.3,1.3-16.1-2.2-2.6-5.4-4-8.7-4Zm-3.7,20.9v-6h-6v-7h6v-6h7v6h6v7h-6v6h-7Z"/><path class="d" d="M21.13,3c5.2,0,10.3,2.2,13.9,6.5,5.5,6.5,5.7,15.7,.9,22.3l2,2.3,1.5-1.3,9,10.8-9.2,7.7-9-10.7,1.5-1.3-1.8-2.2c-2.8,1.5-5.8,2.2-8.8,2.2-5.2,0-10.3-2.2-13.9-6.4C.83,25.3,1.73,13.8,9.43,7.3c3.4-2.8,7.5-4.3,11.7-4.3m0,31c2.9,0,5.9-1,8.4-3,5.4-4.6,6.1-12.7,1.5-18.2-2.6-3-6.2-4.5-9.8-4.5-2.9,0-5.9,1-8.4,3-5.4,4.6-6.1,12.7-1.5,18.2,2.6,3,6.2,4.5,9.8,4.5m1.9-20.8v6h6v4h-6v6h-4v-6h-6v-4h6v-6h4M21.13,0h0c-5,0-9.8,1.8-13.6,5C-1.37,12.5-2.57,25.9,4.93,34.8c4.1,4.8,10,7.5,16.2,7.5,2,0,4-.3,5.9-.8l.9,1,9,10.7,1.9,2.3,2.3-1.9,9.2-7.7,2.3-1.9-1.9-2.3-9-10.8-1.1-1.3c3.1-7.2,2-15.7-3.3-22C33.33,2.8,27.43,0,21.13,0h0Zm4.9,16.2v-3.7c1,.6,1.9,1.3,2.7,2.2,.4,.5,.7,.9,1,1.5h-3.7Zm-13.4,0c.6-1,1.3-1.9,2.2-2.6,.4-.3,.8-.6,1.3-.9v3.5h-3.5Zm13.4,10h3.7c-.5,.9-1.2,1.8-2.1,2.5-.5,.4-1,.8-1.6,1.1v-3.6h0Zm-13.4,0h3.4v3.4c-.9-.5-1.7-1.2-2.4-2.1-.4-.4-.7-.8-1-1.3h0Z"/></g><g><path class="c" d="M28.13,40.4l1.5-1.3-.1-.1c-2.6,1.2-5.5,1.9-8.4,1.9-5.8,0-11.3-2.5-15.1-7C-.87,25.6,.13,13.2,8.43,6.2,11.93,3.2,16.43,1.6,21.13,1.6c5.8,0,11.3,2.5,15.1,7,5.6,6.6,6.2,16,1.6,23.2l.3,.3,1.5-1.3,10.9,13.1-11.5,9.5-10.9-13Zm-6.9-30.6c-2.7,0-5.3,1-7.4,2.7-4.7,4-5.3,11.3-1.3,16.1,2.2,2.5,5.3,4,8.7,4,2.7,0,5.3-1,7.4-2.7,4.8-4,5.3-11.3,1.3-16.1-2.2-2.6-5.4-4-8.7-4Zm-3.7,20.9v-6h-6v-7h6v-6h7v6h6v7h-6v6h-7Z"/><path class="d" d="M21.13,3c5.2,0,10.3,2.2,13.9,6.5,5.5,6.5,5.7,15.7,.9,22.3l2,2.3,1.5-1.3,9,10.8-9.2,7.7-9-10.7,1.5-1.3-1.8-2.2c-2.8,1.5-5.8,2.2-8.8,2.2-5.2,0-10.3-2.2-13.9-6.4C.83,25.3,1.73,13.8,9.43,7.3c3.4-2.8,7.5-4.3,11.7-4.3m0,31c2.9,0,5.9-1,8.4-3,5.4-4.6,6.1-12.7,1.5-18.2-2.6-3-6.2-4.5-9.8-4.5-2.9,0-5.9,1-8.4,3-5.4,4.6-6.1,12.7-1.5,18.2,2.6,3,6.2,4.5,9.8,4.5m1.9-20.8v6h6v4h-6v6h-4v-6h-6v-4h6v-6h4M21.13,0h0c-5,0-9.8,1.8-13.6,5C-1.37,12.5-2.57,25.9,4.93,34.8c4.1,4.8,10,7.5,16.2,7.5,2,0,4-.3,5.9-.8l.9,1,9,10.7,1.9,2.3,2.3-1.9,9.2-7.7,2.3-1.9-1.9-2.3-9-10.8-1.1-1.3c3.1-7.2,2-15.7-3.3-22C33.33,2.8,27.43,0,21.13,0h0Zm4.9,16.2v-3.7c1,.6,1.9,1.3,2.7,2.2,.4,.5,.7,.9,1,1.5h-3.7Zm-13.4,0c.6-1,1.3-1.9,2.2-2.6,.4-.3,.8-.6,1.3-.9v3.5h-3.5Zm13.4,10h3.7c-.5,.9-1.2,1.8-2.1,2.5-.5,.4-1,.8-1.6,1.1v-3.6h0Zm-13.4,0h3.4v3.4c-.9-.5-1.7-1.2-2.4-2.1-.4-.4-.7-.8-1-1.3h0Z"/></g></g></svg>
 					</a>
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
+		
+				<img id="thumbnail_card_image_2" alt="2" class="none iid_2">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -932,11 +1036,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					패왕룡 즈아크
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -1037,7 +1143,7 @@
 				<div class="frame pen_effect">
 					<div class="item_box_text">
 			
-							①: 이 카드가 펜듈럼 존에 존재하는 한, 상대는 필드의 융합 / 싱크로 / 엑시즈 몬스터의 효과를 발동할 수 없다. ②: 1턴에 1번, 드로우 페이즈 이외로 덱에서 상대의 패에 카드가 넣어졌을 때에 발동할 수 있다. 그 카드를 파괴한다.
+							<div class="text_linebreak">①: 이 카드가 펜듈럼 존에 존재하는 한, 상대는 필드의 융합 / 싱크로 / 엑시즈 몬스터의 효과를 발동할 수 없다. ②: 1턴에 1번, 드로우 페이즈 이외로 덱에서 상대의 패에 카드가 넣어졌을 때에 발동할 수 있다. 그 카드를 파괴한다.</div>
 			
 					</div>
 				</div>
@@ -1049,7 +1155,7 @@
 					<div class="text_title">
 						카드 텍스트
 					</div>
-					드래곤족의 융합 / 싱크로 / 엑시즈 / 펜듈럼 몬스터 1장씩 합계 4장<br>이 카드는 융합 소환으로밖에 특수 소환할 수 없다. ①: 이 카드를 특수 소환했을 경우에 발동한다. 상대 필드의 카드를 전부 파괴한다. ②: 이 카드는 상대 효과로는 파괴되지 않으며, 상대는 이 카드를 효과의 대상으로 할 수 없다. ③: 이 카드가 전투로 상대 몬스터를 파괴했을 때에 발동할 수 있다. 덱 / 엑스트라 덱에서 "패왕권룡" 몬스터 1장을 특수 소환한다. ④: 몬스터 존의 이 카드가 전투 / 효과로 파괴되었을 경우에 발동할 수 있다. 이 카드를 자신의 펜듈럼 존에 놓는다.
+					<div class="text_linebreak">드래곤족의 융합 / 싱크로 / 엑시즈 / 펜듈럼 몬스터 1장씩 합계 4장&lt;br&gt;이 카드는 융합 소환으로밖에 특수 소환할 수 없다. ①: 이 카드를 특수 소환했을 경우에 발동한다. 상대 필드의 카드를 전부 파괴한다. ②: 이 카드는 상대 효과로는 파괴되지 않으며, 상대는 이 카드를 효과의 대상으로 할 수 없다. ③: 이 카드가 전투로 상대 몬스터를 파괴했을 때에 발동할 수 있다. 덱 / 엑스트라 덱에서 &quot;패왕권룡&quot; 몬스터 1장을 특수 소환한다. ④: 몬스터 존의 이 카드가 전투 / 효과로 파괴되었을 경우에 발동할 수 있다. 이 카드를 자신의 펜듈럼 존에 놓는다.</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1077,21 +1183,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=12953"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=12953"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1104,13 +1209,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>이 카드를  사용한 덱을 검색</h4>
-			</span></a>
+					<h4>이 카드를  사용한 덱을 검색</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1120,30 +1225,52 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>이 카드의 관련 카드 보기</h4>
-			</span></a>
+					<h4>이 카드의 관련 카드 보기</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+					<div class="left_btn"><span class="arrow"></span></div>
+			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
-				</div>
+					<img id="pop_card_image_2" alt="2" class="none">
 			
+				</div>
+				<div class="btn_set">
+			
+					<div class="right_btns"><span class="arrow"></span></div>
+			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+				<img id="popup_card_image_2" alt="2" class="none iid_2">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1166,17 +1293,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Dko%26a%3D202604301956&amp;lang=ko&amp;count=horizontal&amp;hashtags=YugiohDB_KO" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Dko%26a%3D202611040939&amp;hashtags=YugiohDB_KO" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Dko%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=ko_KR" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Dko%26a%3D202611040939" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=12953&request_locale=ko&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="ko" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=12953&request_locale=ko&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=12953&request_locale=ko&a=202611040939" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1191,32 +1321,80 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>수록 시리즈</div>
+					<div>일러스트별 수록</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
+					<div class="btn_set">
+						<span class="all">ALL</span>
+						<span class="left_btn btn">＜</span>
+						<span class="right_btns btn">＞</span>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_2">
+						<div class="inside">
+							<div class="time">
+		
+								2026-06-23
+		
+							</div>
+							<div class="card_img">
+								<img id="update_list_card_image_2" alt="2" class="">
+							</div>
+							<div class="flex_1 contents " >
+								<div class="card_number">
+		
+									LOSP-KR015
+									
+		
+								</div>
+								<div class="pack_name flex_1" >
+									리미트 오버 스페셜 팩 Vol.2
+								</div>
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001648000&rp=99999">
+							</div>
+		
+			
+			
+							<div class="icon rarity">
+								<div class="lr_icon rid_36" style="background-color:#e86d6d;color:#e86d6d">
+									<p>PSE</p>
+									<span style="background-color:#fff4f4;border-color:#e86d6d;color:#e86d6d; ">
+										프리즈마틱 시크릿 레어
+									</span>
+								</div>
+							</div><!-- .icon -->
+			
+		
+						</div>
+					</div>
+
+	
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-10-13
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									AGOV-KRS01
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									에이지 오브 오버로드
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001305000&rp=99999">
-
 							</div>
 		
 			
@@ -1235,28 +1413,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2022-05-20
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									HC01-KR038
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									히스토리 아카이브 컬렉션
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001192000&rp=99999">
-
 							</div>
 		
 			
@@ -1275,28 +1452,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2022-05-20
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									HC01-KR038
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									히스토리 아카이브 컬렉션
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001192000&rp=99999">
-
 							</div>
 		
 			
@@ -1315,28 +1491,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2022-05-20
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									HC01-KR038
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									히스토리 아카이브 컬렉션
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001192000&rp=99999">
-
 							</div>
 		
 			
@@ -1355,28 +1530,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2020-01-10
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									SP19-KR029
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									스페셜 팩 Vol.3
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=78815000&rp=99999">
-
 							</div>
 		
 			
@@ -1395,28 +1569,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2020-01-10
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									SP19-KR029
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									스페셜 팩 Vol.3
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=78815000&rp=99999">
-
 							</div>
 		
 			
@@ -1435,28 +1608,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2017-04-11
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									MACR-KR039
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									맥시멈 크라이시스
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=71115001&rp=99999">
-
 							</div>
 		
 			
@@ -1475,28 +1647,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2017-04-11
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									MACR-KR039
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									맥시멈 크라이시스
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=71115001&rp=99999">
-
 							</div>
 		
 			
@@ -1515,28 +1686,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2017-04-11
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									MACR-KR039
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									맥시멈 크라이시스
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=71115001&rp=99999">
-
 							</div>
 		
 			
@@ -1555,28 +1725,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2017-04-11
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									MACR-KR039
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									맥시멈 크라이시스
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=71115001&rp=99999">
-
 							</div>
 		
 			
@@ -1756,8 +1925,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 카드는 1턴에 1장밖에 발동할 수 없다. ①: 자신 / 상대의 메인 페이즈에 발동할 수 있다. 덱에서 "패왕권룡" 펜듈럼 몬스터나 "패왕문" 펜듈럼 몬스터 1장을 패에 넣는다. 자신 필드에 "패왕룡 즈아크"가 존재할 경우, 패에 넣지 않고 특수 소환할 수도 있다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 카드는 1턴에 1장밖에 발동할 수 없다. ①: 자신 / 상대의 메인 페이즈에 발동할 수 있다. 덱에서 &quot;패왕권룡&quot; 펜듈럼 몬스터나 &quot;패왕문&quot; 펜듈럼 몬스터 1장을 패에 넣는다. 자신 필드에 &quot;패왕룡 즈아크&quot;가 존재할 경우, 패에 넣지 않고 특수 소환할 수도 있다.
 								</dd>
 		
 		
@@ -1774,7 +1943,7 @@
 
 								<input type="hidden" class="cnm" value='광익의 용'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19190">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19190&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1871,15 +2040,15 @@
 										<img class="icon_img" src="external/image/parts/icon_pendulum.png" alt="펜듈럼 스케일" title="펜듈럼 스케일">
 										P스케일 1
 									</span>
-									<span class="box_card_pen_effect c_text flex_1">
-										이 카드명의 펜듈럼 효과는 1턴에 1번밖에 사용할 수 없다. ①: 자신 메인 페이즈에 발동할 수 있다. 이 카드를 파괴하고, 패 / 덱에서 "별을 읽는 마술사" 1장을 골라, 자신의 펜듈럼 존에 놓거나 특수 소환한다.
+									<span class="box_card_pen_effect c_text flex_1 text_linebreak">
+										이 카드명의 펜듈럼 효과는 1턴에 1번밖에 사용할 수 없다. ①: 자신 메인 페이즈에 발동할 수 있다. 이 카드를 파괴하고, 패 / 덱에서 &quot;별을 읽는 마술사&quot; 1장을 골라, 자신의 펜듈럼 존에 놓거나 특수 소환한다.
 									</span>
 								</dd>
 			
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									①: 자신 필드의 카드가 전투 / 효과로 파괴되었을 경우에 발동할 수 있다. 이 카드를 패에서 특수 소환한다. 그 후, 이 턴에 파괴된 자신이나 상대의 몬스터 1장을 고르고, 그와 같은 이름의 몬스터 1장을 덱에서 패에 넣을 수 있다. ②: 자신의 패 / 필드 / 묘지의, "펜듈럼 드래곤" "엑시즈 드래곤" "싱크로 드래곤" "퓨전 드래곤" 몬스터 1장씩과, 필드의 이 카드를 제외하고 발동할 수 있다. "패왕룡 즈아크" 1장을 융합 소환으로 취급하고 엑스트라 덱에서 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									①: 자신 필드의 카드가 전투 / 효과로 파괴되었을 경우에 발동할 수 있다. 이 카드를 패에서 특수 소환한다. 그 후, 이 턴에 파괴된 자신이나 상대의 몬스터 1장을 고르고, 그와 같은 이름의 몬스터 1장을 덱에서 패에 넣을 수 있다. ②: 자신의 패 / 필드 / 묘지의, &quot;펜듈럼 드래곤&quot; &quot;엑시즈 드래곤&quot; &quot;싱크로 드래곤&quot; &quot;퓨전 드래곤&quot; 몬스터 1장씩과, 필드의 이 카드를 제외하고 발동할 수 있다. &quot;패왕룡 즈아크&quot; 1장을 융합 소환으로 취급하고 엑스트라 덱에서 특수 소환한다.
 								</dd>
 		
 		
@@ -1896,7 +2065,7 @@
 
 								<input type="hidden" class="cnm" value='아스트로그래프 매지션'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12906">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12906&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1993,15 +2162,15 @@
 										<img class="icon_img" src="external/image/parts/icon_pendulum.png" alt="펜듈럼 스케일" title="펜듈럼 스케일">
 										P스케일 8
 									</span>
-									<span class="box_card_pen_effect c_text flex_1">
-										이 카드명의 펜듈럼 효과는 1턴에 1번밖에 사용할 수 없다. ①: 자신 메인 페이즈에 발동할 수 있다. 이 카드를 파괴하고, 패 / 덱에서 "시간을 읽는 마술사" 1장을 골라, 자신의 펜듈럼 존에 놓거나 특수 소환한다.
+									<span class="box_card_pen_effect c_text flex_1 text_linebreak">
+										이 카드명의 펜듈럼 효과는 1턴에 1번밖에 사용할 수 없다. ①: 자신 메인 페이즈에 발동할 수 있다. 이 카드를 파괴하고, 패 / 덱에서 &quot;시간을 읽는 마술사&quot; 1장을 골라, 자신의 펜듈럼 존에 놓거나 특수 소환한다.
 									</span>
 								</dd>
 			
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									①: 자신 필드의 카드가 전투 / 효과로 파괴되었을 경우에 발동할 수 있다. 이 카드를 패에서 특수 소환한다. 그 후, 패에서 몬스터 1장을 특수 소환할 수 있다. ②: 자신의 패 / 필드 / 묘지의, "펜듈럼 드래곤" "엑시즈 드래곤" "싱크로 드래곤" "퓨전 드래곤" 몬스터 1장씩과, 필드의 이 카드를 제외하고 발동할 수 있다. "패왕룡 즈아크" 1장을 융합 소환으로 취급하고 엑스트라 덱에서 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									①: 자신 필드의 카드가 전투 / 효과로 파괴되었을 경우에 발동할 수 있다. 이 카드를 패에서 특수 소환한다. 그 후, 패에서 몬스터 1장을 특수 소환할 수 있다. ②: 자신의 패 / 필드 / 묘지의, &quot;펜듈럼 드래곤&quot; &quot;엑시즈 드래곤&quot; &quot;싱크로 드래곤&quot; &quot;퓨전 드래곤&quot; 몬스터 1장씩과, 필드의 이 카드를 제외하고 발동할 수 있다. &quot;패왕룡 즈아크&quot; 1장을 융합 소환으로 취급하고 엑스트라 덱에서 특수 소환한다.
 								</dd>
 		
 		
@@ -2018,7 +2187,7 @@
 
 								<input type="hidden" class="cnm" value='크로노그래프 매지션'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12907">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12907&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2110,8 +2279,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									어둠 속성 레벨 4 의 펜듈럼 몬스터 × 2<br>①: 1턴에 1번, 이 카드가 상대 몬스터와 전투를 실행하는 데미지 계산 전에, 이 카드의 엑시즈 소재를 1개 제거하고 발동할 수 있다. 턴 종료시까지, 그 상대 몬스터의 공격력을 0 으로 하고, 그 원래 공격력만큼 이 카드의 공격력을 올린다. ②: 자신 / 상대의 배틀 페이즈에, 이 카드를 엑스트라 덱으로 되돌리고 발동할 수 있다. 자신의 엑스트라 덱(앞면)에서 "패왕권룡" 펜듈럼 몬스터나 "패왕문" 펜듈럼 몬스터를 합계 2장까지 수비 표시로 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									어둠 속성 레벨 4 의 펜듈럼 몬스터 &times; 2&lt;br&gt;①: 1턴에 1번, 이 카드가 상대 몬스터와 전투를 실행하는 데미지 계산 전에, 이 카드의 엑시즈 소재를 1개 제거하고 발동할 수 있다. 턴 종료시까지, 그 상대 몬스터의 공격력을 0 으로 하고, 그 원래 공격력만큼 이 카드의 공격력을 올린다. ②: 자신 / 상대의 배틀 페이즈에, 이 카드를 엑스트라 덱으로 되돌리고 발동할 수 있다. 자신의 엑스트라 덱(앞면)에서 &quot;패왕권룡&quot; 펜듈럼 몬스터나 &quot;패왕문&quot; 펜듈럼 몬스터를 합계 2장까지 수비 표시로 특수 소환한다.
 								</dd>
 		
 		
@@ -2128,7 +2297,7 @@
 
 								<input type="hidden" class="cnm" value='패왕권룡 다크 리벨리온'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13080">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13080&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2225,15 +2394,15 @@
 										<img class="icon_img" src="external/image/parts/icon_pendulum.png" alt="펜듈럼 스케일" title="펜듈럼 스케일">
 										P스케일 5
 									</span>
-									<span class="box_card_pen_effect c_text flex_1">
-										①: 1턴에 1번, 자신 필드에 몬스터가 존재하지 않을 경우에 발동할 수 있다. 덱에서 "패왕문" 펜듈럼 몬스터 1장을 자신의 펜듈럼 존에 놓는다. 이 효과의 발동 후, 턴 종료시까지 자신은 어둠 속성 몬스터밖에 펜듈럼 소환할 수 없다.
+									<span class="box_card_pen_effect c_text flex_1 text_linebreak">
+										①: 1턴에 1번, 자신 필드에 몬스터가 존재하지 않을 경우에 발동할 수 있다. 덱에서 &quot;패왕문&quot; 펜듈럼 몬스터 1장을 자신의 펜듈럼 존에 놓는다. 이 효과의 발동 후, 턴 종료시까지 자신은 어둠 속성 몬스터밖에 펜듈럼 소환할 수 없다.
 									</span>
 								</dd>
 			
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 몬스터 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우에 발동할 수 있다. 덱에서 "패왕문" 펜듈럼 몬스터 1장을 패에 넣는다. ②: 이 카드가 묘지에 존재하고, 자신 필드에 몬스터가 존재하지 않을 경우에 발동할 수 있다. 이 카드를 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 몬스터 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우에 발동할 수 있다. 덱에서 &quot;패왕문&quot; 펜듈럼 몬스터 1장을 패에 넣는다. ②: 이 카드가 묘지에 존재하고, 자신 필드에 몬스터가 존재하지 않을 경우에 발동할 수 있다. 이 카드를 특수 소환한다.
 								</dd>
 		
 		
@@ -2250,7 +2419,7 @@
 
 								<input type="hidden" class="cnm" value='패왕권룡 다크브룸'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12933">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12933&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2347,15 +2516,15 @@
 										<img class="icon_img" src="external/image/parts/icon_pendulum.png" alt="펜듈럼 스케일" title="펜듈럼 스케일">
 										P스케일 8
 									</span>
-									<span class="box_card_pen_effect c_text flex_1">
-										이 카드명의 펜듈럼 효과는 1턴에 1번밖에 사용할 수 없다. ①: 몬스터가 특수 소환되었을 경우, 자신 필드에 "패왕룡 즈아크"와 펜듈럼 몬스터가 각각 존재하면 발동할 수 있다. 이 카드를 특수 소환한다. 그 후, 자신 필드의 펜듈럼 몬스터 1장과 이 카드 중, 1장의 속성 / 레벨을 나머지 1장과 같게 할 수 있다.
+									<span class="box_card_pen_effect c_text flex_1 text_linebreak">
+										이 카드명의 펜듈럼 효과는 1턴에 1번밖에 사용할 수 없다. ①: 몬스터가 특수 소환되었을 경우, 자신 필드에 &quot;패왕룡 즈아크&quot;와 펜듈럼 몬스터가 각각 존재하면 발동할 수 있다. 이 카드를 특수 소환한다. 그 후, 자신 필드의 펜듈럼 몬스터 1장과 이 카드 중, 1장의 속성 / 레벨을 나머지 1장과 같게 할 수 있다.
 									</span>
 								</dd>
 			
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 몬스터 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우에 발동할 수 있다. 자신의 엑스트라 덱(앞면)에서 "패왕권룡" 펜듈럼 몬스터나 "패왕문" 펜듈럼 몬스터 1장을 패에 넣는다. 그 후, "패왕권룡" 싱크로 몬스터 1장의 싱크로 소환 또는 "패왕권룡" 엑시즈 몬스터 1장의 엑시즈 소환을 실행할 수 있다. ②: 이 카드가 엑스트라 덱에 앞면으로 존재하는 상태에서, 자신 필드의 앞면 표시 펜듈럼 몬스터가 전투 / 효과로 파괴되었을 경우에 발동할 수 있다. 이 카드를 패에 넣는다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 몬스터 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우에 발동할 수 있다. 자신의 엑스트라 덱(앞면)에서 &quot;패왕권룡&quot; 펜듈럼 몬스터나 &quot;패왕문&quot; 펜듈럼 몬스터 1장을 패에 넣는다. 그 후, &quot;패왕권룡&quot; 싱크로 몬스터 1장의 싱크로 소환 또는 &quot;패왕권룡&quot; 엑시즈 몬스터 1장의 엑시즈 소환을 실행할 수 있다. ②: 이 카드가 엑스트라 덱에 앞면으로 존재하는 상태에서, 자신 필드의 앞면 표시 펜듈럼 몬스터가 전투 / 효과로 파괴되었을 경우에 발동할 수 있다. 이 카드를 패에 넣는다.
 								</dd>
 		
 		
@@ -2372,7 +2541,7 @@
 
 								<input type="hidden" class="cnm" value='패왕권룡 라이트브룸'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19144">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19144&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2464,8 +2633,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									어둠 속성 펜듈럼 몬스터 × 2<br>이 카드는 융합 소환 및 이하의 방법으로만 특수 소환할 수 있다. ●자신 필드의 상기 카드를 릴리스했을 경우에 엑스트라 덱에서 특수 소환할 수 있다. ①: 1턴에 1번, 이 카드 이외의, 자신이나 상대의 필드 / 묘지의 몬스터 1장을 대상으로 하고 발동할 수 있다. 이 카드는 엔드 페이즈까지, 그 몬스터의 원래의 카드명 / 효과와 같은 카드명 / 효과를 얻는다. 이 턴에, 자신 몬스터가 수비 표시 몬스터를 공격했을 경우, 그 수비력을 공격력이 넘은 만큼만 상대에게 전투 데미지를 준다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									어둠 속성 펜듈럼 몬스터 &times; 2&lt;br&gt;이 카드는 융합 소환 및 이하의 방법으로만 특수 소환할 수 있다. ●자신 필드의 상기 카드를 릴리스했을 경우에 엑스트라 덱에서 특수 소환할 수 있다. ①: 1턴에 1번, 이 카드 이외의, 자신이나 상대의 필드 / 묘지의 몬스터 1장을 대상으로 하고 발동할 수 있다. 이 카드는 엔드 페이즈까지, 그 몬스터의 원래의 카드명 / 효과와 같은 카드명 / 효과를 얻는다. 이 턴에, 자신 몬스터가 수비 표시 몬스터를 공격했을 경우, 그 수비력을 공격력이 넘은 만큼만 상대에게 전투 데미지를 준다.
 								</dd>
 		
 		
@@ -2482,7 +2651,7 @@
 
 								<input type="hidden" class="cnm" value='패왕권룡 스타브 베놈'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13077">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13077&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2579,15 +2748,15 @@
 										<img class="icon_img" src="external/image/parts/icon_pendulum.png" alt="펜듈럼 스케일" title="펜듈럼 스케일">
 										P스케일 4
 									</span>
-									<span class="box_card_pen_effect c_text flex_1">
-										①: 자신 필드의 "패왕권룡" 몬스터 1장을 릴리스하고 발동할 수 있다. 이 카드를 파괴하고, 덱에서 공격력 1500 이하의 펜듈럼 몬스터 1장을 패에 넣는다.
+									<span class="box_card_pen_effect c_text flex_1 text_linebreak">
+										①: 자신 필드의 &quot;패왕권룡&quot; 몬스터 1장을 릴리스하고 발동할 수 있다. 이 카드를 파괴하고, 덱에서 공격력 1500 이하의 펜듈럼 몬스터 1장을 패에 넣는다.
 									</span>
 								</dd>
 			
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									①: 자신 필드의 "패왕권룡" 몬스터 2장을 릴리스하고 발동할 수 있다. 이 카드를 패에서 특수 소환한다. ②: 자신의 펜듈럼 몬스터가 상대 몬스터와 전투를 실행할 경우, 상대에게 주는 전투 데미지는 배가 된다. ③: 자신 / 상대의 배틀 페이즈에 이 카드를 릴리스하고 발동할 수 있다. 자신의 엑스트라 덱(앞면)에서 "패왕권룡 오드아이즈" 이외의 "패왕권룡" 펜듈럼 몬스터나 "패왕문" 펜듈럼 몬스터를 합계 2장까지 수비 표시로 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									①: 자신 필드의 &quot;패왕권룡&quot; 몬스터 2장을 릴리스하고 발동할 수 있다. 이 카드를 패에서 특수 소환한다. ②: 자신의 펜듈럼 몬스터가 상대 몬스터와 전투를 실행할 경우, 상대에게 주는 전투 데미지는 배가 된다. ③: 자신 / 상대의 배틀 페이즈에 이 카드를 릴리스하고 발동할 수 있다. 자신의 엑스트라 덱(앞면)에서 &quot;패왕권룡 오드아이즈&quot; 이외의 &quot;패왕권룡&quot; 펜듈럼 몬스터나 &quot;패왕문&quot; 펜듈럼 몬스터를 합계 2장까지 수비 표시로 특수 소환한다.
 								</dd>
 		
 		
@@ -2604,7 +2773,7 @@
 
 								<input type="hidden" class="cnm" value='패왕권룡 오드아이즈'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13054">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13054&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2696,8 +2865,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									튜너 ＋ 튜너 이외의 어둠 속성 펜듈럼 몬스터 1장 이상<br>①: 이 카드를 싱크로 소환했을 경우에 발동할 수 있다. 상대 필드의 앞면 표시 몬스터를 전부 파괴한다. ②: 1턴에 1번, 이 카드가 상대 몬스터와 전투를 실행하는 데미지 계산 전에 발동할 수 있다. 그 몬스터를 파괴하고, 파괴한 몬스터의 원래 공격력만큼의 데미지를 상대에게 준다. ③: 이 카드가 묘지에 존재할 경우, 자신 필드의 "패왕권룡" 몬스터 2장을 릴리스하고 발동할 수 있다. 이 카드를 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									튜너 ＋ 튜너 이외의 어둠 속성 펜듈럼 몬스터 1장 이상&lt;br&gt;①: 이 카드를 싱크로 소환했을 경우에 발동할 수 있다. 상대 필드의 앞면 표시 몬스터를 전부 파괴한다. ②: 1턴에 1번, 이 카드가 상대 몬스터와 전투를 실행하는 데미지 계산 전에 발동할 수 있다. 그 몬스터를 파괴하고, 파괴한 몬스터의 원래 공격력만큼의 데미지를 상대에게 준다. ③: 이 카드가 묘지에 존재할 경우, 자신 필드의 &quot;패왕권룡&quot; 몬스터 2장을 릴리스하고 발동할 수 있다. 이 카드를 특수 소환한다.
 								</dd>
 		
 		
@@ -2714,7 +2883,7 @@
 
 								<input type="hidden" class="cnm" value='패왕권룡 클리어윙'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13078">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13078&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2811,15 +2980,15 @@
 										<img class="icon_img" src="external/image/parts/icon_pendulum.png" alt="펜듈럼 스케일" title="펜듈럼 스케일">
 										P스케일 1
 									</span>
-									<span class="box_card_pen_effect c_text flex_1">
-										이 카드명의 펜듈럼 효과는 1턴에 1번밖에 사용할 수 없다. ①: 자신 필드의, "패왕권룡" 펜듈럼 몬스터나 "패왕문" 펜듈럼 몬스터 1장을 릴리스하고 발동할 수 있다. 이 카드를 특수 소환한다.
+									<span class="box_card_pen_effect c_text flex_1 text_linebreak">
+										이 카드명의 펜듈럼 효과는 1턴에 1번밖에 사용할 수 없다. ①: 자신 필드의, &quot;패왕권룡&quot; 펜듈럼 몬스터나 &quot;패왕문&quot; 펜듈럼 몬스터 1장을 릴리스하고 발동할 수 있다. 이 카드를 특수 소환한다.
 									</span>
 								</dd>
 			
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									튜너 ＋ 튜너 이외의 어둠 속성 펜듈럼 몬스터 1장 이상<br>①: 이 카드는 몬스터 존에 존재하는 한, 카드명을 "패왕룡 즈아크"로 취급한다. ②: 이 카드가, 전투로 상대 몬스터를 파괴한 데미지 계산 후, 또는 상대에게 전투 데미지를 주었을 때에 발동할 수 있다. 자신의 덱 / 엑스트라 덱 / 묘지에서 "패왕권룡" 몬스터를 2장까지 수비 표시로 특수 소환한다. ③: 몬스터 존의 이 카드가 전투 / 효과로 파괴되었을 경우에 발동할 수 있다. 이 카드를 자신의 펜듈럼 존에 놓는다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									튜너 ＋ 튜너 이외의 어둠 속성 펜듈럼 몬스터 1장 이상&lt;br&gt;①: 이 카드는 몬스터 존에 존재하는 한, 카드명을 &quot;패왕룡 즈아크&quot;로 취급한다. ②: 이 카드가, 전투로 상대 몬스터를 파괴한 데미지 계산 후, 또는 상대에게 전투 데미지를 주었을 때에 발동할 수 있다. 자신의 덱 / 엑스트라 덱 / 묘지에서 &quot;패왕권룡&quot; 몬스터를 2장까지 수비 표시로 특수 소환한다. ③: 몬스터 존의 이 카드가 전투 / 효과로 파괴되었을 경우에 발동할 수 있다. 이 카드를 자신의 펜듈럼 존에 놓는다.
 								</dd>
 		
 		
@@ -2836,7 +3005,7 @@
 
 								<input type="hidden" class="cnm" value='패왕룡 즈아크－싱크로 유니버스'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19722">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19722&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -4270,6 +4439,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4444,6 +4615,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4527,7 +4700,9 @@
 						<p>유희왕 오피셜 카드게임의 공식 사이트입니다. <br>Yu-Gi-Oh! OCG의 모든 카드를 검색하거나 세부 규칙, 금지 및 제한 카드를 참조할 수 있습니다. <br>이미 소지하고 있는 카드나 덱을 마이덱에 등록해서 관리하거나 공개된 덱 레시피를 검색해서 자신의 덱을 구축하는 데 참고할 수도 있습니다.</p>
 						<a class="btn" href="https://www.yugioh.co.kr/site/game_method.php" target="_blank">
 							<img class="ocg" src="external/image/ko/00_logo_ocgtcg.png" />
+
 							<img class="rush" src="external/image/ko/00_logo_rush.png" />
+
 							<span>게임하는 방법</span>
 						</a>
 					</div>
@@ -4905,6 +5080,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -5006,7 +5182,7 @@
 			<p>Privacy Settings</p>
 		</div>
 		<div class="ps_body">
-			<p>Yu-Gi-Oh! Neuron(OFFICIAL CARD GAME CARD DATABASE)을 이용하려면 이용 약관에 동의해야 합니다. <br>이용 약관이 개정된 경우, 서비스를 계속 이용하시려면 개정된 내용에 다시 동의하셔야 합니다.</p>
+			<p>Yu-Gi-Oh! Neuron(OFFICIAL CARD GAME CARD DATABASE) 을 이용하려면 이용 약관에 동의해야 합니다. <br>이용 약관이 개정된 경우, 서비스를 계속 이용하시려면 개정된 내용에 다시 동의하셔야 합니다.</p>
 		</div>
 		<div class="ps_footer">
 			<div class="ps_button">
@@ -5562,6 +5738,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=93&cb=1835423467" async></script></body>
+</body>
 </html>
 

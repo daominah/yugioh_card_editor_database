@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="Supreme King Z-ARC,KONAMI,yugioh,Yu-Gi-Oh,TCG,card,database,card,list,Forbidden,Limited,Semi-limited,Cards,Included in,"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="Supreme King Z-ARC: 4 Dragon monsters (1 Fusion, 1 Synchro, 1 Xyz, and 1 Pendulum) Must be Fusion Summoned. If this c"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Den%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Den%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=en&amp;cid=12953"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Den%26a%3D202611040938"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>Supreme King Z-ARC | Card Details | Yu-Gi-Oh! Neuron(TRADING CARD GAME CARD DATABASE)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,21 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=12953&ciid=1&enc=mHgG1oFHZY9jrXZlkDrQrQ').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=12953&ciid=1&enc=mHgG1oFHZY9jrXZlkDrQrQ').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=12953&ciid=1&enc=mHgG1oFHZY9jrXZlkDrQrQ').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=12953&ciid=1&enc=mHgG1oFHZY9jrXZlkDrQrQ').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=12953&ciid=1&enc=mHgG1oFHZY9jrXZlkDrQrQ').show();
 	   
+		$('#card_image_2').attr('src', '/yugiohdb/get_image.action?type=2&cid=12953&ciid=2&enc=mHgG1oFHZY9jrXZlkDrQrQ');
+		$('#thumbnail_card_image_2,#popup_card_image_2').attr('src', '/yugiohdb/get_image.action?type=1&cid=12953&ciid=2&enc=mHgG1oFHZY9jrXZlkDrQrQ').show();
+		$('#pop_card_image_2,#update_list_card_image_2').attr('src', '/yugiohdb/get_image.action?type=2&cid=12953&ciid=2&enc=mHgG1oFHZY9jrXZlkDrQrQ');
+	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +262,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -339,9 +410,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=12953'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=12953&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -355,32 +426,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=12953'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=12953&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -445,7 +546,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -846,7 +947,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>These are the card details for the Yu-Gi-Oh! TCG card "Supreme King Z-ARC." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Supreme King Z-ARC." <br>Please go to "<a href="deck_search.action?cardid=12953" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Supreme King Z-ARC."</span>
+			<span class="text_linebreak">These are the card details for the Yu-Gi-Oh! TCG card "Supreme King Z-ARC." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Supreme King Z-ARC." <br>Please go to "<a href="deck_search.action?cardid=12953" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Supreme King Z-ARC."</span>
 		</nav>
 	
 
@@ -882,13 +983,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			Supreme King Z-ARC
-	
-		</h1>
-	</div>
 
 
 
@@ -896,26 +991,35 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
+					<div class="left_btn"><span class="arrow"></span></div>
+					<div class="right_btns"><span class="arrow"></span></div>
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="Supreme King Z-ARC" title="Supreme King Z-ARC" class="none">
+		
+						<img id="card_image_2" alt="Supreme King Z-ARC" title="Supreme King Z-ARC" class="none">
 		
 						<?xml version="1.0" encoding="UTF-8"?><svg id="a" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.63 55.5"><defs><style>.c{fill:#ccfeff;}.d{fill:#3e96ff;}</style></defs><g id="b"><g><path class="c" d="M28.13,40.4l1.5-1.3-.1-.1c-2.6,1.2-5.5,1.9-8.4,1.9-5.8,0-11.3-2.5-15.1-7C-.87,25.6,.13,13.2,8.43,6.2,11.93,3.2,16.43,1.6,21.13,1.6c5.8,0,11.3,2.5,15.1,7,5.6,6.6,6.2,16,1.6,23.2l.3,.3,1.5-1.3,10.9,13.1-11.5,9.5-10.9-13Zm-6.9-30.6c-2.7,0-5.3,1-7.4,2.7-4.7,4-5.3,11.3-1.3,16.1,2.2,2.5,5.3,4,8.7,4,2.7,0,5.3-1,7.4-2.7,4.8-4,5.3-11.3,1.3-16.1-2.2-2.6-5.4-4-8.7-4Zm-3.7,20.9v-6h-6v-7h6v-6h7v6h6v7h-6v6h-7Z"/><path class="d" d="M21.13,3c5.2,0,10.3,2.2,13.9,6.5,5.5,6.5,5.7,15.7,.9,22.3l2,2.3,1.5-1.3,9,10.8-9.2,7.7-9-10.7,1.5-1.3-1.8-2.2c-2.8,1.5-5.8,2.2-8.8,2.2-5.2,0-10.3-2.2-13.9-6.4C.83,25.3,1.73,13.8,9.43,7.3c3.4-2.8,7.5-4.3,11.7-4.3m0,31c2.9,0,5.9-1,8.4-3,5.4-4.6,6.1-12.7,1.5-18.2-2.6-3-6.2-4.5-9.8-4.5-2.9,0-5.9,1-8.4,3-5.4,4.6-6.1,12.7-1.5,18.2,2.6,3,6.2,4.5,9.8,4.5m1.9-20.8v6h6v4h-6v6h-4v-6h-6v-4h6v-6h4M21.13,0h0c-5,0-9.8,1.8-13.6,5C-1.37,12.5-2.57,25.9,4.93,34.8c4.1,4.8,10,7.5,16.2,7.5,2,0,4-.3,5.9-.8l.9,1,9,10.7,1.9,2.3,2.3-1.9,9.2-7.7,2.3-1.9-1.9-2.3-9-10.8-1.1-1.3c3.1-7.2,2-15.7-3.3-22C33.33,2.8,27.43,0,21.13,0h0Zm4.9,16.2v-3.7c1,.6,1.9,1.3,2.7,2.2,.4,.5,.7,.9,1,1.5h-3.7Zm-13.4,0c.6-1,1.3-1.9,2.2-2.6,.4-.3,.8-.6,1.3-.9v3.5h-3.5Zm13.4,10h3.7c-.5,.9-1.2,1.8-2.1,2.5-.5,.4-1,.8-1.6,1.1v-3.6h0Zm-13.4,0h3.4v3.4c-.9-.5-1.7-1.2-2.4-2.1-.4-.4-.7-.8-1-1.3h0Z"/></g><g><path class="c" d="M28.13,40.4l1.5-1.3-.1-.1c-2.6,1.2-5.5,1.9-8.4,1.9-5.8,0-11.3-2.5-15.1-7C-.87,25.6,.13,13.2,8.43,6.2,11.93,3.2,16.43,1.6,21.13,1.6c5.8,0,11.3,2.5,15.1,7,5.6,6.6,6.2,16,1.6,23.2l.3,.3,1.5-1.3,10.9,13.1-11.5,9.5-10.9-13Zm-6.9-30.6c-2.7,0-5.3,1-7.4,2.7-4.7,4-5.3,11.3-1.3,16.1,2.2,2.5,5.3,4,8.7,4,2.7,0,5.3-1,7.4-2.7,4.8-4,5.3-11.3,1.3-16.1-2.2-2.6-5.4-4-8.7-4Zm-3.7,20.9v-6h-6v-7h6v-6h7v6h6v7h-6v6h-7Z"/><path class="d" d="M21.13,3c5.2,0,10.3,2.2,13.9,6.5,5.5,6.5,5.7,15.7,.9,22.3l2,2.3,1.5-1.3,9,10.8-9.2,7.7-9-10.7,1.5-1.3-1.8-2.2c-2.8,1.5-5.8,2.2-8.8,2.2-5.2,0-10.3-2.2-13.9-6.4C.83,25.3,1.73,13.8,9.43,7.3c3.4-2.8,7.5-4.3,11.7-4.3m0,31c2.9,0,5.9-1,8.4-3,5.4-4.6,6.1-12.7,1.5-18.2-2.6-3-6.2-4.5-9.8-4.5-2.9,0-5.9,1-8.4,3-5.4,4.6-6.1,12.7-1.5,18.2,2.6,3,6.2,4.5,9.8,4.5m1.9-20.8v6h6v4h-6v6h-4v-6h-6v-4h6v-6h4M21.13,0h0c-5,0-9.8,1.8-13.6,5C-1.37,12.5-2.57,25.9,4.93,34.8c4.1,4.8,10,7.5,16.2,7.5,2,0,4-.3,5.9-.8l.9,1,9,10.7,1.9,2.3,2.3-1.9,9.2-7.7,2.3-1.9-1.9-2.3-9-10.8-1.1-1.3c3.1-7.2,2-15.7-3.3-22C33.33,2.8,27.43,0,21.13,0h0Zm4.9,16.2v-3.7c1,.6,1.9,1.3,2.7,2.2,.4,.5,.7,.9,1,1.5h-3.7Zm-13.4,0c.6-1,1.3-1.9,2.2-2.6,.4-.3,.8-.6,1.3-.9v3.5h-3.5Zm13.4,10h3.7c-.5,.9-1.2,1.8-2.1,2.5-.5,.4-1,.8-1.6,1.1v-3.6h0Zm-13.4,0h3.4v3.4c-.9-.5-1.7-1.2-2.4-2.1-.4-.4-.7-.8-1-1.3h0Z"/></g></g></svg>
 					</a>
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
+		
+				<img id="thumbnail_card_image_2" alt="2" class="none iid_2">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -924,11 +1028,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					Supreme King Z-ARC
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -1029,7 +1135,7 @@
 				<div class="frame pen_effect">
 					<div class="item_box_text">
 			
-							Fusion, Synchro, and Xyz Monsters your opponent controls cannot activate their effects. Once per turn, when a card(s) is added from the Main Deck to your opponent's hand (except during the Draw Phase or the Damage Step): You can destroy that card(s).
+							<div class="text_linebreak">Fusion, Synchro, and Xyz Monsters your opponent controls cannot activate their effects. Once per turn, when a card(s) is added from the Main Deck to your opponent's hand (except during the Draw Phase or the Damage Step): You can destroy that card(s).</div>
 			
 					</div>
 				</div>
@@ -1041,7 +1147,7 @@
 					<div class="text_title">
 						Card Text
 					</div>
-					4 Dragon monsters (1 Fusion, 1 Synchro, 1 Xyz, and 1 Pendulum)<br>Must be Fusion Summoned. If this card is Special Summoned: Destroy all cards your opponent controls. Cannot be destroyed by your opponent's card effects. Your opponent cannot target this card with card effects. When this card destroys an opponent's monster by battle: You can Special Summon 1 "Supreme King Dragon" monster from your Deck or Extra Deck. If this card in the Monster Zone is destroyed by battle or card effect: You can place this card in your Pendulum Zone.
+					<div class="text_linebreak">4 Dragon monsters (1 Fusion, 1 Synchro, 1 Xyz, and 1 Pendulum)&lt;br&gt;Must be Fusion Summoned. If this card is Special Summoned: Destroy all cards your opponent controls. Cannot be destroyed by your opponent's card effects. Your opponent cannot target this card with card effects. When this card destroys an opponent's monster by battle: You can Special Summon 1 &quot;Supreme King Dragon&quot; monster from your Deck or Extra Deck. If this card in the Monster Zone is destroyed by battle or card effect: You can place this card in your Pendulum Zone.</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1069,21 +1175,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=12953"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=12953"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1096,13 +1201,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>Search For Decks Containing This Card</h4>
-			</span></a>
+					<h4>Search For Decks Containing This Card</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1112,30 +1217,52 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>View Cards Related to This Card</h4>
-			</span></a>
+					<h4>View Cards Related to This Card</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+					<div class="left_btn"><span class="arrow"></span></div>
+			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
-				</div>
+					<img id="pop_card_image_2" alt="2" class="none">
 			
+				</div>
+				<div class="btn_set">
+			
+					<div class="right_btns"><span class="arrow"></span></div>
+			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+				<img id="popup_card_image_2" alt="2" class="none iid_2">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1158,17 +1285,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Den%26a%3D202604301956&amp;lang=en&amp;count=horizontal&amp;hashtags=YugiohDB_EN" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Den%26a%3D202611040938&amp;hashtags=YugiohDB_EN" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Den%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=en_US" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D12953%26request_locale%3Den%26a%3D202611040938" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=12953&request_locale=en&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="en" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=12953&request_locale=en&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=12953&request_locale=en&a=202611040938" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1183,32 +1313,119 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>Sets</div>
+					<div>Organized by Illustration</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
+					<div class="btn_set">
+						<span class="all">ALL</span>
+						<span class="left_btn btn">＜</span>
+						<span class="right_btns btn">＞</span>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_2">
+						<div class="inside">
+							<div class="time">
+		
+								2026-06-05
+		
+							</div>
+							<div class="card_img">
+								<img id="update_list_card_image_2" alt="2" class="">
+							</div>
+							<div class="flex_1 contents " >
+								<div class="card_number">
+		
+									BLGG-EN141
+									
+		
+								</div>
+								<div class="pack_name flex_1" >
+									BATTLES OF LEGEND: GLORIOUS GALLERY
+								</div>
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001637000&rp=99999">
+							</div>
+		
+			
+			
+							<div class="icon rarity">
+								<div class="lr_icon rid_4" style="background-color:#cfa15e;color:#cfa15e">
+									<p>UR</p>
+									<span style="background-color:#fff8ee;border-color:#cfa15e;color:#cfa15e; ">
+										Ultra Rare
+									</span>
+								</div>
+							</div><!-- .icon -->
+			
+		
+						</div>
+					</div>
+
+	
+					<div class="t_row  pack_iid_2">
+						<div class="inside">
+							<div class="time">
+		
+								2026-06-05
+		
+							</div>
+							<div class="card_img">
+								<img id="update_list_card_image_2" alt="2" class="">
+							</div>
+							<div class="flex_1 contents " >
+								<div class="card_number">
+		
+									BLGG-EN141
+									
+		
+								</div>
+								<div class="pack_name flex_1" >
+									BATTLES OF LEGEND: GLORIOUS GALLERY
+								</div>
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001637000&rp=99999">
+							</div>
+		
+			
+			
+							<div class="icon rarity">
+								<div class="lr_icon rid_47" style="background-color:#2e47de;color:#2e47de">
+									<p>STAR</p>
+									<span style="background-color:#d5daf8;border-color:#2e47de;color:#2e47de; ">
+										Starlight Rare
+									</span>
+								</div>
+							</div><!-- .icon -->
+			
+		
+						</div>
+					</div>
+
+	
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2025-04-11
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA04-EN284
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									QUARTER CENTURY STAMPEDE
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001456000&rp=99999">
-
 							</div>
 		
 			
@@ -1227,28 +1444,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2025-04-11
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA04-EN284
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									QUARTER CENTURY STAMPEDE
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001456000&rp=99999">
-
 							</div>
 		
 			
@@ -1267,28 +1483,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2020-01-17
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									LED6-EN054
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									LEGENDARY DUELISTS: MAGICAL HERO
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=11119000&rp=99999">
-
 							</div>
 		
 			
@@ -1307,28 +1522,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2018-08-31
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									MP18-EN011
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									2018 MEGA-TINS MEGA PACK
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=15515001&rp=99999">
-
 							</div>
 		
 			
@@ -1347,28 +1561,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2017-05-05
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									MACR-EN039
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									MAXIMUM CRISIS
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=11116003&rp=99999">
-
 							</div>
 		
 			
@@ -1580,15 +1793,15 @@
 										<img class="icon_img" src="external/image/parts/icon_pendulum.png" alt="Pendulum Scale" title="Pendulum Scale">
 										P Scale 1
 									</span>
-									<span class="box_card_pen_effect c_text flex_1">
-										During your Main Phase: You can destroy this card, and if you do, take 1 "Stargazer Magician" from your hand or Deck, and either place it in your Pendulum Zone or Special Summon it. You can only use this effect of "Astrograph Sorcerer" once per turn.
+									<span class="box_card_pen_effect c_text flex_1 text_linebreak">
+										During your Main Phase: You can destroy this card, and if you do, take 1 &quot;Stargazer Magician&quot; from your hand or Deck, and either place it in your Pendulum Zone or Special Summon it. You can only use this effect of &quot;Astrograph Sorcerer&quot; once per turn.
 									</span>
 								</dd>
 			
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									If a card(s) you control is destroyed by battle or card effect: You can Special Summon this card from your hand, then you can choose 1 monster in the GY, Extra Deck, or that is banished, and that was destroyed this turn, and add 1 monster with the same name from your Deck to your hand. You can banish this card you control, plus 4 monsters from your hand, field, and/or GY (1 each with "Pendulum Dragon", "Xyz Dragon", "Synchro Dragon", and "Fusion Dragon" in their names); Special Summon 1 "Supreme King Z-ARC" from your Extra Deck. (This is treated as a Fusion Summon.)
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									If a card(s) you control is destroyed by battle or card effect: You can Special Summon this card from your hand, then you can choose 1 monster in the GY, Extra Deck, or that is banished, and that was destroyed this turn, and add 1 monster with the same name from your Deck to your hand. You can banish this card you control, plus 4 monsters from your hand, field, and/or GY (1 each with &quot;Pendulum Dragon&quot;, &quot;Xyz Dragon&quot;, &quot;Synchro Dragon&quot;, and &quot;Fusion Dragon&quot; in their names); Special Summon 1 &quot;Supreme King Z-ARC&quot; from your Extra Deck. (This is treated as a Fusion Summon.)
 								</dd>
 		
 		
@@ -1605,7 +1818,7 @@
 
 								<input type="hidden" class="cnm" value='Astrograph Sorcerer'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12906">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12906&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1702,15 +1915,15 @@
 										<img class="icon_img" src="external/image/parts/icon_pendulum.png" alt="Pendulum Scale" title="Pendulum Scale">
 										P Scale 8
 									</span>
-									<span class="box_card_pen_effect c_text flex_1">
-										During your Main Phase: You can destroy this card, and if you do, take 1 "Timegazer Magician" from your hand or Deck, and either place it in your Pendulum Zone or Special Summon it. You can only use this effect of "Chronograph Sorcerer" once per turn.
+									<span class="box_card_pen_effect c_text flex_1 text_linebreak">
+										During your Main Phase: You can destroy this card, and if you do, take 1 &quot;Timegazer Magician&quot; from your hand or Deck, and either place it in your Pendulum Zone or Special Summon it. You can only use this effect of &quot;Chronograph Sorcerer&quot; once per turn.
 									</span>
 								</dd>
 			
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									If a card(s) you control is destroyed by battle or card effect: You can Special Summon this card from your hand, then you can Special Summon 1 monster from your hand. You can banish this card you control, plus 4 monsters from your hand, field, and/or GY (1 each with "Pendulum Dragon", "Xyz Dragon", "Synchro Dragon", and "Fusion Dragon" in their names); Special Summon 1 "Supreme King Z-ARC" from your Extra Deck. (This is treated as a Fusion Summon.)
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									If a card(s) you control is destroyed by battle or card effect: You can Special Summon this card from your hand, then you can Special Summon 1 monster from your hand. You can banish this card you control, plus 4 monsters from your hand, field, and/or GY (1 each with &quot;Pendulum Dragon&quot;, &quot;Xyz Dragon&quot;, &quot;Synchro Dragon&quot;, and &quot;Fusion Dragon&quot; in their names); Special Summon 1 &quot;Supreme King Z-ARC&quot; from your Extra Deck. (This is treated as a Fusion Summon.)
 								</dd>
 		
 		
@@ -1727,7 +1940,7 @@
 
 								<input type="hidden" class="cnm" value='Chronograph Sorcerer'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12907">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12907&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1785,8 +1998,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									If you control "Supreme King Z-ARC": Activate 1 of these effects (but you can only use each effect of "Miracle of the Supreme King" once per turn);<br>●Destroy 1 "Supreme King Z-ARC" you control, and if you do, Special Summon 1 "Odd-Eyes" Pendulum Monster or 1 LIGHT "Supreme King Z-ARC" from your Deck or Extra Deck, ignoring its Summoning conditions.<br>●Place 1 face-up Pendulum Monster from your Extra Deck in your Pendulum Zone.<br>●Set 1 Quick-Play Spell directly from your Deck.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									If you control &quot;Supreme King Z-ARC&quot;: Activate 1 of these effects (but you can only use each effect of &quot;Miracle of the Supreme King&quot; once per turn);&lt;br&gt;●Destroy 1 &quot;Supreme King Z-ARC&quot; you control, and if you do, Special Summon 1 &quot;Odd-Eyes&quot; Pendulum Monster or 1 LIGHT &quot;Supreme King Z-ARC&quot; from your Deck or Extra Deck, ignoring its Summoning conditions.&lt;br&gt;●Place 1 face-up Pendulum Monster from your Extra Deck in your Pendulum Zone.&lt;br&gt;●Set 1 Quick-Play Spell directly from your Deck.
 								</dd>
 		
 		
@@ -1803,7 +2016,7 @@
 
 								<input type="hidden" class="cnm" value='Miracle of the Supreme King'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19210">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19210&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1900,15 +2113,15 @@
 										<img class="icon_img" src="external/image/parts/icon_pendulum.png" alt="Pendulum Scale" title="Pendulum Scale">
 										P Scale 13
 									</span>
-									<span class="box_card_pen_effect c_text flex_1">
-										If you have 2 cards in your Pendulum Zones: You can Special Summon this card, then you can apply this effect.<br>●Shuffle 1 card from your Pendulum Zone into the Deck, then if it was added to your Extra Deck, you can Special Summon it, ignoring its Summoning conditions. You can only use this effect of "Odd-Eyes Arcray Dragon" once per turn.
+									<span class="box_card_pen_effect c_text flex_1 text_linebreak">
+										If you have 2 cards in your Pendulum Zones: You can Special Summon this card, then you can apply this effect.&lt;br&gt;●Shuffle 1 card from your Pendulum Zone into the Deck, then if it was added to your Extra Deck, you can Special Summon it, ignoring its Summoning conditions. You can only use this effect of &quot;Odd-Eyes Arcray Dragon&quot; once per turn.
 									</span>
 								</dd>
 			
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									4 Dragon monsters (1 Fusion, 1 Synchro, 1 Xyz, and 1 Pendulum)<br>(This card is always treated as "Supreme King Z-ARC".)<br>This face-down card in the Extra Deck must first be either Fusion Summoned, or Special Summoned by Tributing 1 Level 12 DARK "Supreme King Z-ARC". If this card is Special Summoned from the Extra Deck: You can place 1 Pendulum Monster from your Deck in your Pendulum Zone. If this card in the Monster Zone is destroyed: You can place this card in your Pendulum Zone.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									4 Dragon monsters (1 Fusion, 1 Synchro, 1 Xyz, and 1 Pendulum)&lt;br&gt;(This card is always treated as &quot;Supreme King Z-ARC&quot;.)&lt;br&gt;This face-down card in the Extra Deck must first be either Fusion Summoned, or Special Summoned by Tributing 1 Level 12 DARK &quot;Supreme King Z-ARC&quot;. If this card is Special Summoned from the Extra Deck: You can place 1 Pendulum Monster from your Deck in your Pendulum Zone. If this card in the Monster Zone is destroyed: You can place this card in your Pendulum Zone.
 								</dd>
 		
 		
@@ -1925,7 +2138,7 @@
 
 								<input type="hidden" class="cnm" value='Odd-Eyes Arcray Dragon'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19172">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19172&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1990,8 +2203,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									You can shuffle 1 Pendulum Monster from your hand into the Deck; add 1 Pendulum Monster with 2500 ATK and a different name, from your Deck to your hand. During your Main Phase, if you Special Summoned a Pendulum Monster from the face-down Extra Deck this turn, you can: Immediately after this effect resolves, Pendulum Summon a monster(s). You can target 1 "Supreme King Z-ARC" you control; this turn, it can attack all monsters your opponent controls, once each. You can only use each effect of "Pendulum Evolution" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									You can shuffle 1 Pendulum Monster from your hand into the Deck; add 1 Pendulum Monster with 2500 ATK and a different name, from your Deck to your hand. During your Main Phase, if you Special Summoned a Pendulum Monster from the face-down Extra Deck this turn, you can: Immediately after this effect resolves, Pendulum Summon a monster(s). You can target 1 &quot;Supreme King Z-ARC&quot; you control; this turn, it can attack all monsters your opponent controls, once each. You can only use each effect of &quot;Pendulum Evolution&quot; once per turn.
 								</dd>
 		
 		
@@ -2008,7 +2221,7 @@
 
 								<input type="hidden" class="cnm" value='Pendulum Evolution'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19189">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19189&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2066,8 +2279,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									Tribute 1 Spellcaster Pendulum Monster with 2500 original ATK; Fusion Summon 1 "Supreme King Z-ARC" from your Extra Deck by banishing Fusion Materials mentioned on it from your hand, Deck, Extra Deck, field, and/or GY, but negate its effects unless at least 1 each of your "Pendulum Dragon", "Xyz Dragon", "Synchro Dragon", and "Fusion Dragon" monsters are currently banished. You can only activate 1 "Soul of the Supreme Celestial King" per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									Tribute 1 Spellcaster Pendulum Monster with 2500 original ATK; Fusion Summon 1 &quot;Supreme King Z-ARC&quot; from your Extra Deck by banishing Fusion Materials mentioned on it from your hand, Deck, Extra Deck, field, and/or GY, but negate its effects unless at least 1 each of your &quot;Pendulum Dragon&quot;, &quot;Xyz Dragon&quot;, &quot;Synchro Dragon&quot;, and &quot;Fusion Dragon&quot; monsters are currently banished. You can only activate 1 &quot;Soul of the Supreme Celestial King&quot; per turn.
 								</dd>
 		
 		
@@ -2084,7 +2297,7 @@
 
 								<input type="hidden" class="cnm" value='Soul of the Supreme Celestial King'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19211">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19211&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2142,8 +2355,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									Pay half your LP; Special Summon 1 "Supreme King Z-ARC" from your Extra Deck, ignoring its Summoning conditions, but negate its effects. It is returned to the Extra Deck during the End Phase of the next turn. When your opponent activates a Spell Card or effect: You can banish this card from your GY and 1 "Supreme King Z-ARC" from your face-up Monster Zone; Special Summon up to 1 each "Pendulum Dragon", "Xyz Dragon", "Synchro Dragon", and "Fusion Dragon" monsters from your hand, Deck, Extra Deck, and/or GY.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									Pay half your LP; Special Summon 1 &quot;Supreme King Z-ARC&quot; from your Extra Deck, ignoring its Summoning conditions, but negate its effects. It is returned to the Extra Deck during the End Phase of the next turn. When your opponent activates a Spell Card or effect: You can banish this card from your GY and 1 &quot;Supreme King Z-ARC&quot; from your face-up Monster Zone; Special Summon up to 1 each &quot;Pendulum Dragon&quot;, &quot;Xyz Dragon&quot;, &quot;Synchro Dragon&quot;, and &quot;Fusion Dragon&quot; monsters from your hand, Deck, Extra Deck, and/or GY.
 								</dd>
 		
 		
@@ -2160,7 +2373,7 @@
 
 								<input type="hidden" class="cnm" value='Soul of the Supreme King'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17261">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=17261&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2252,8 +2465,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 Tuner + 1+ non-Tuner DARK Pendulum Monsters<br>If this card is Synchro Summoned: You can destroy all face-up monsters your opponent controls. Once per turn, before damage calculation, if this card battles an opponent's monster: You can destroy that monster, and if you do, inflict damage to your opponent equal to the destroyed monster's original ATK. If this card is in your GY: You can Tribute 2 "Supreme King Dragon" monsters; Special Summon this card.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 Tuner + 1+ non-Tuner DARK Pendulum Monsters&lt;br&gt;If this card is Synchro Summoned: You can destroy all face-up monsters your opponent controls. Once per turn, before damage calculation, if this card battles an opponent's monster: You can destroy that monster, and if you do, inflict damage to your opponent equal to the destroyed monster's original ATK. If this card is in your GY: You can Tribute 2 &quot;Supreme King Dragon&quot; monsters; Special Summon this card.
 								</dd>
 		
 		
@@ -2270,7 +2483,7 @@
 
 								<input type="hidden" class="cnm" value='Supreme King Dragon Clear Wing'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13078">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13078&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2362,8 +2575,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									2 Level 4 DARK Pendulum Monsters<br>Once per turn, before damage calculation, if this card battles an opponent's monster: You can detach 1 material from this card; until the end of this turn, change the ATK of that face-up opponent's monster to 0, and if you do, this card gains ATK equal to the original ATK of that opponent's monster. During the Battle Phase (Quick Effect): You can return this card to the Extra Deck; Special Summon up to 2 "Supreme King Dragon" and/or "Supreme King Gate" Pendulum Monsters from your face-up Extra Deck in Defense Position.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									2 Level 4 DARK Pendulum Monsters&lt;br&gt;Once per turn, before damage calculation, if this card battles an opponent's monster: You can detach 1 material from this card; until the end of this turn, change the ATK of that face-up opponent's monster to 0, and if you do, this card gains ATK equal to the original ATK of that opponent's monster. During the Battle Phase (Quick Effect): You can return this card to the Extra Deck; Special Summon up to 2 &quot;Supreme King Dragon&quot; and/or &quot;Supreme King Gate&quot; Pendulum Monsters from your face-up Extra Deck in Defense Position.
 								</dd>
 		
 		
@@ -2380,7 +2593,7 @@
 
 								<input type="hidden" class="cnm" value='Supreme King Dragon Dark Rebellion'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13080">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=13080&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2477,15 +2690,15 @@
 										<img class="icon_img" src="external/image/parts/icon_pendulum.png" alt="Pendulum Scale" title="Pendulum Scale">
 										P Scale 5
 									</span>
-									<span class="box_card_pen_effect c_text flex_1">
-										Once per turn, if you control no monsters: You can place 1 "Supreme King Gate" Pendulum Monster from your Deck in your Pendulum Zone, also you cannot Pendulum Summon monsters for the rest of this turn, except DARK monsters.
+									<span class="box_card_pen_effect c_text flex_1 text_linebreak">
+										Once per turn, if you control no monsters: You can place 1 &quot;Supreme King Gate&quot; Pendulum Monster from your Deck in your Pendulum Zone, also you cannot Pendulum Summon monsters for the rest of this turn, except DARK monsters.
 									</span>
 								</dd>
 			
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									If this card is Normal or Special Summoned: You can add 1 "Supreme King Gate" Pendulum Monster from your Deck to your hand. If this card is in your GY and you control no monsters: You can Special Summon this card. You can only use each effect of "Supreme King Dragon Darkwurm" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									If this card is Normal or Special Summoned: You can add 1 &quot;Supreme King Gate&quot; Pendulum Monster from your Deck to your hand. If this card is in your GY and you control no monsters: You can Special Summon this card. You can only use each effect of &quot;Supreme King Dragon Darkwurm&quot; once per turn.
 								</dd>
 		
 		
@@ -2502,7 +2715,7 @@
 
 								<input type="hidden" class="cnm" value='Supreme King Dragon Darkwurm'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12933">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12933&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3926,6 +4139,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4100,6 +4315,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4183,7 +4400,7 @@
 						<p>This is an official site for the Yu-Gi-Oh! Trading Card Game. <br>You can search through all Yu-Gi-Oh! TCG cards, check detailed rules, and view the Forbidden & Limited List. <br>You can also manage your own cards and Decks by registering them in My Deck, and search publicly available Deck Recipes to help you build your own Deck.</p>
 						<a class="btn" href="https://www.yugioh-card.com/en/rulebook/index.html" target="_blank">
 							<img class="ocg" src="external/image/en/00_logo_ocgtcg.png" />
-							<img class="rush" src="external/image/en/00_logo_rush.png" />
+
 							<span>How to Play</span>
 						</a>
 					</div>
@@ -5201,6 +5418,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=15&cb=271244853" async></script></body>
+</body>
 </html>
 

@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="Time Thief Redoer,KONAMI,yugioh,Yu-Gi-Oh,TCG,card,database,card,list,Forbidden,Limited,Semi-limited,Cards,Included in,"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="Time Thief Redoer: 2 Level 4 monsters Once per turn, during the Standby Phase: You can attach the top card of your o"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14356%26request_locale%3Den%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14356%26request_locale%3Den%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=en&amp;cid=14356"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14356%26request_locale%3Den%26a%3D202611040938"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>Time Thief Redoer | Card Details | Yu-Gi-Oh! Neuron(TRADING CARD GAME CARD DATABASE)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=14356&ciid=1&enc=oLRv5h91iwfsOj9aCt449g').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=14356&ciid=1&enc=oLRv5h91iwfsOj9aCt449g').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=14356&ciid=1&enc=oLRv5h91iwfsOj9aCt449g').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=14356&ciid=1&enc=oLRv5h91iwfsOj9aCt449g').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=14356&ciid=1&enc=oLRv5h91iwfsOj9aCt449g').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -339,9 +406,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=14356'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=14356&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -355,32 +422,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=14356'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=14356&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -445,7 +542,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -846,7 +943,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>These are the card details for the Yu-Gi-Oh! TCG card "Time Thief Redoer." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Time Thief Redoer." <br>Please go to "<a href="deck_search.action?cardid=14356" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Time Thief Redoer."</span>
+			<span class="text_linebreak">These are the card details for the Yu-Gi-Oh! TCG card "Time Thief Redoer." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Time Thief Redoer." <br>Please go to "<a href="deck_search.action?cardid=14356" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Time Thief Redoer."</span>
 		</nav>
 	
 
@@ -882,13 +979,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			Time Thief Redoer
-	
-		</h1>
-	</div>
 
 
 
@@ -896,10 +987,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="Time Thief Redoer" title="Time Thief Redoer" class="none">
@@ -909,13 +1001,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -924,11 +1017,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					Time Thief Redoer
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -1015,7 +1110,7 @@
 					<div class="text_title">
 						Card Text
 					</div>
-					2 Level 4 monsters<br>Once per turn, during the Standby Phase: You can attach the top card of your opponent's Deck to this card as material. (Quick Effect): You can detach up to 3 different types of materials from this card, then apply the following effect(s) depending on what was detached.<br>●Monster: Banish this card until the End Phase.<br>●Spell: Draw 1 card.<br>●Trap: Place 1 face-up card your opponent controls on top of the Deck.<br>You can only use this effect of "Time Thief Redoer" once per turn.
+					<div class="text_linebreak">2 Level 4 monsters&lt;br&gt;Once per turn, during the Standby Phase: You can attach the top card of your opponent's Deck to this card. (Quick Effect): You can detach up to 3 different types of materials from this card, then apply the following effect(s) depending on what was detached.&lt;br&gt;●Monster: Banish this card until the End Phase.&lt;br&gt;●Spell: Draw 1 card.&lt;br&gt;●Trap: Place 1 face-up card your opponent controls on top of the Deck.&lt;br&gt;You can only use this effect of &quot;Time Thief Redoer&quot; once per turn.</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1043,21 +1138,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=14356"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=14356"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1070,13 +1164,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>Search For Decks Containing This Card</h4>
-			</span></a>
+					<h4>Search For Decks Containing This Card</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1086,30 +1180,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>View Cards Related to This Card</h4>
-			</span></a>
+					<h4>View Cards Related to This Card</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1132,17 +1240,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14356%26request_locale%3Den%26a%3D202604301956&amp;lang=en&amp;count=horizontal&amp;hashtags=YugiohDB_EN" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14356%26request_locale%3Den%26a%3D202611040938&amp;hashtags=YugiohDB_EN" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14356%26request_locale%3Den%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=en_US" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D14356%26request_locale%3Den%26a%3D202611040938" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=14356&request_locale=en&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="en" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=14356&request_locale=en&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=14356&request_locale=en&a=202611040938" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1157,32 +1268,74 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>Sets</div>
+					<div>Organized by Illustration</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
+						<div class="inside">
+							<div class="time">
+		
+								2026-08-07
+		
+							</div>
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
+							<div class="flex_1 contents " >
+								<div class="card_number">
+		
+									LAVD-ENL38
+									
+		
+								</div>
+								<div class="pack_name flex_1" >
+									LEGENDARY ARC-V DECKS
+								</div>
+								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001679000&rp=99999">
+							</div>
+		
+			
+			
+							<div class="icon rarity">
+								<div class="lr_icon rid_1" style="background-color:#9c9c9c;color:#9c9c9c">
+									<p>C</p>
+									<span style="background-color:#ffffff;border-color:#9c9c9c;color:#9c9c9c; ">
+										Common
+									</span>
+								</div>
+							</div><!-- .icon -->
+			
+		
+						</div>
+					</div>
+
+	
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2024-12-06
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									CRBR-EN014
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									CROSSOVER BREAKERS
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001427000&rp=99999">
-
 							</div>
 		
 			
@@ -1201,28 +1354,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN041
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1241,28 +1393,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN041
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1281,28 +1432,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN041
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1321,28 +1471,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN041
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1361,28 +1510,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN041
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1401,28 +1549,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN041
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1441,28 +1588,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-03
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									RA01-EN041
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY RARITY COLLECTION
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001283000&rp=99999">
-
 							</div>
 		
 			
@@ -1481,28 +1627,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2021-04-16
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									GFTP-EN064
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									GHOSTS FROM THE PAST
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001105000&rp=99999">
-
 							</div>
 		
 			
@@ -1521,28 +1666,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2020-08-28
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									MP20-EN040
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									2020 TIN OF LOST MEMORIES
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=15517000&rp=99999">
-
 							</div>
 		
 			
@@ -1561,28 +1705,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2019-12-05
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									OP12-EN011
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									OTS TOURNAMENT PACK 12
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1121218003&rp=99999">
-
 							</div>
 		
 			
@@ -1601,28 +1744,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2019-02-01
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									SAST-EN085
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									SAVAGE STRIKE
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=11118001&rp=99999">
-
 							</div>
 		
 			
@@ -1829,8 +1971,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									If you Normal or Special Summon a "Time Thief" monster(s), except "Time Thief Adjuster" (except during the Damage Step): You can Special Summon this card from your hand. If this card is Normal or Special Summoned: You can send 1 "Time Thief" card from your Deck to the GY, except "Time Thief Adjuster". You can only use 1 "Time Thief Adjuster" effect per turn, and only once that turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									If you Normal or Special Summon a &quot;Time Thief&quot; monster(s), except &quot;Time Thief Adjuster&quot; (except during the Damage Step): You can Special Summon this card from your hand. If this card is Normal or Special Summoned: You can send 1 &quot;Time Thief&quot; card from your Deck to the GY, except &quot;Time Thief Adjuster&quot;. You can only use 1 &quot;Time Thief Adjuster&quot; effect per turn, and only once that turn.
 								</dd>
 		
 		
@@ -1847,7 +1989,7 @@
 
 								<input type="hidden" class="cnm" value='Time Thief Adjuster'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=15855">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=15855&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1939,8 +2081,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									(Quick Effect): You can Tribute this card, then target 1 "Time Thief" Xyz Monster you control; attach 1 card from your opponent's GY to that monster as material. If this card is in the GY: You can detach 1 material from an Xyz Monster you control; Special Summon this card, but banish it when it leaves the field. You can only use each effect of "Time Thief Bezel Ship" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									(Quick Effect): You can Tribute this card, then target 1 &quot;Time Thief&quot; Xyz Monster you control; attach 1 card from your opponent's GY to that monster as material. If this card is in the GY: You can detach 1 material from an Xyz Monster you control; Special Summon this card, but banish it when it leaves the field. You can only use each effect of &quot;Time Thief Bezel Ship&quot; once per turn.
 								</dd>
 		
 		
@@ -1957,7 +2099,7 @@
 
 								<input type="hidden" class="cnm" value='Time Thief Bezel Ship'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14354">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14354&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2015,8 +2157,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									Target 1 "Time Thief" Xyz Monster you control; attach 1 "Time Thief" card from your hand or Deck to it as material. You can banish this card from your GY, then target 1 "Time Thief" Xyz Monster you control; attach 1 card from your opponent's GY to it as material. You can only use 1 "Time Thief Flyback" effect per turn, and only once that turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									Target 1 &quot;Time Thief&quot; Xyz Monster you control; attach 1 &quot;Time Thief&quot; card from your hand or Deck to it as material. You can banish this card from your GY, then target 1 &quot;Time Thief&quot; Xyz Monster you control; attach 1 card from your opponent's GY to it as material. You can only use 1 &quot;Time Thief Flyback&quot; effect per turn, and only once that turn.
 								</dd>
 		
 		
@@ -2033,7 +2175,7 @@
 
 								<input type="hidden" class="cnm" value='Time Thief Flyback'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14358">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14358&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2125,8 +2267,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									2 Level 4 monsters<br>During the Standby Phase: You can detach 1 material from this card, then target 1 "Time Thief" monster in your GY, except "Time Thief Perpetua"; Special Summon that monster. (Quick Effect): You can target 1 other Xyz Monster you control; attach 1 "Time Thief" card from your Deck to it as material. You can only use each effect of "Time Thief Perpetua" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									2 Level 4 monsters&lt;br&gt;During the Standby Phase: You can detach 1 material from this card, then target 1 &quot;Time Thief&quot; monster in your GY, except &quot;Time Thief Perpetua&quot;; Special Summon that monster. (Quick Effect): You can target 1 other Xyz Monster you control; attach 1 &quot;Time Thief&quot; card from your Deck to it as material. You can only use each effect of &quot;Time Thief Perpetua&quot; once per turn.
 								</dd>
 		
 		
@@ -2143,7 +2285,7 @@
 
 								<input type="hidden" class="cnm" value='Time Thief Perpetua'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14799">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14799&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2208,8 +2350,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									Special Summon this card as a Normal Monster (Psychic/DARK/Level 4/ATK 1900/DEF 2500) (this card is also still a Trap), then you can Special Summon 1 Machine "Time Thief" monster from your hand, Deck, or GY. If you control an Xyz Monster(s) that has both a Spell and a Trap as material: You can banish this card from your GY; banish 1 card on the field. You can only use each effect of "Time Thief Power Reserve" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									Special Summon this card as a Normal Monster (Psychic/DARK/Level 4/ATK 1900/DEF 2500) (this card is also still a Trap), then you can Special Summon 1 Machine &quot;Time Thief&quot; monster from your hand, Deck, or GY. If you control an Xyz Monster(s) that has both a Spell and a Trap as material: You can banish this card from your GY; banish 1 card on the field. You can only use each effect of &quot;Time Thief Power Reserve&quot; once per turn.
 								</dd>
 		
 		
@@ -2226,7 +2368,7 @@
 
 								<input type="hidden" class="cnm" value='Time Thief Power Reserve'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19141">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19141&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2318,8 +2460,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									If you control no other monsters: You can Tribute this card; Special Summon 2 "Time Thief" monsters with different names from your Deck in Defense Position, except "Time Thief Regulator". When an Xyz Monster you control is destroyed by battle, while this card is in your GY: You can Special Summon this card, but banish it when it leaves the field. You can only use each effect of "Time Thief Regulator" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									If you control no other monsters: You can Tribute this card; Special Summon 2 &quot;Time Thief&quot; monsters with different names from your Deck in Defense Position, except &quot;Time Thief Regulator&quot;. When an Xyz Monster you control is destroyed by battle, while this card is in your GY: You can Special Summon this card, but banish it when it leaves the field. You can only use each effect of &quot;Time Thief Regulator&quot; once per turn.
 								</dd>
 		
 		
@@ -2336,7 +2478,7 @@
 
 								<input type="hidden" class="cnm" value='Time Thief Regulator'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14355">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14355&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2401,8 +2543,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									When a Spell/Trap Card is activated while you control a "Time Thief" Xyz Monster: Negate the activation, and if you do, attach that card to a "Time Thief" Xyz Monster you control as material. You can only activate 1 "Time Thief Retrograde" per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									When a Spell/Trap Card is activated while you control a &quot;Time Thief&quot; Xyz Monster: Negate the activation, and if you do, attach that card to a &quot;Time Thief&quot; Xyz Monster you control as material. You can only activate 1 &quot;Time Thief Retrograde&quot; per turn.
 								</dd>
 		
 		
@@ -2419,7 +2561,7 @@
 
 								<input type="hidden" class="cnm" value='Time Thief Retrograde'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14884">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14884&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2484,8 +2626,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									Special Summon 1 "Time Thief" monster from your hand. During your Main Phase: You can banish this card from your GY, then target 1 "Time Thief" Xyz Monster you control; attach 3 "Time Thief" cards of different types (1 Monster, 1 Spell, and 1 Trap) from your GY to that monster as material. You can only use 1 "Time Thief Startup" effect per turn, and only once that turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									Special Summon 1 &quot;Time Thief&quot; monster from your hand. During your Main Phase: You can banish this card from your GY, then target 1 &quot;Time Thief&quot; Xyz Monster you control; attach 3 &quot;Time Thief&quot; cards of different types (1 Monster, 1 Spell, and 1 Trap) from your GY to that monster as material. You can only use 1 &quot;Time Thief Startup&quot; effect per turn, and only once that turn.
 								</dd>
 		
 		
@@ -2502,7 +2644,7 @@
 
 								<input type="hidden" class="cnm" value='Time Thief Startup'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14870">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14870&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2594,8 +2736,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									You can Tribute this card, then target 1 monster your opponent controls; banish it until the End Phase. If this card is in your GY: You can target 1 "Time Thief" monster you control, except "Time Thief Temporwhal"; return that monster to the hand, and if you do, Special Summon this card, but banish it when it leaves the field. You can only use each effect of "Time Thief Temporwhal" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									You can Tribute this card, then target 1 monster your opponent controls; banish it until the End Phase. If this card is in your GY: You can target 1 &quot;Time Thief&quot; monster you control, except &quot;Time Thief Temporwhal&quot;; return that monster to the hand, and if you do, Special Summon this card, but banish it when it leaves the field. You can only use each effect of &quot;Time Thief Temporwhal&quot; once per turn.
 								</dd>
 		
 		
@@ -2612,7 +2754,7 @@
 
 								<input type="hidden" class="cnm" value='Time Thief Temporwhal'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16047">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=16047&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2704,8 +2846,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									You can detach 1 material from an Xyz Monster you control; Special Summon this card from your hand. If this card is Normal or Special Summoned: You can add 1 "Time Thief" card from your Deck to your hand, except "Time Thief Winder". You can only use each effect of "Time Thief Winder" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									You can detach 1 material from an Xyz Monster you control; Special Summon this card from your hand. If this card is Normal or Special Summoned: You can add 1 &quot;Time Thief&quot; card from your Deck to your hand, except &quot;Time Thief Winder&quot;. You can only use each effect of &quot;Time Thief Winder&quot; once per turn.
 								</dd>
 		
 		
@@ -2722,7 +2864,7 @@
 
 								<input type="hidden" class="cnm" value='Time Thief Winder'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14353">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=14353&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -4141,6 +4283,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4315,6 +4459,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4398,7 +4544,7 @@
 						<p>This is an official site for the Yu-Gi-Oh! Trading Card Game. <br>You can search through all Yu-Gi-Oh! TCG cards, check detailed rules, and view the Forbidden & Limited List. <br>You can also manage your own cards and Decks by registering them in My Deck, and search publicly available Deck Recipes to help you build your own Deck.</p>
 						<a class="btn" href="https://www.yugioh-card.com/en/rulebook/index.html" target="_blank">
 							<img class="ocg" src="external/image/en/00_logo_ocgtcg.png" />
-							<img class="rush" src="external/image/en/00_logo_rush.png" />
+
 							<span>How to Play</span>
 						</a>
 					</div>
@@ -5416,6 +5562,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=18&cb=1351749964" async></script></body>
+</body>
 </html>
 

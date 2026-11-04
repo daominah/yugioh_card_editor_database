@@ -79,9 +79,12 @@ type CardLocaleText struct {
 	// kana-only. Empty for EN and KO pages.
 	NamePronunciation string
 	// NameEnglishOnPage is the EN name as printed on the page's <h1> bare
-	// <span> (no class). JA and KO pages carry it; EN pages do not (the
-	// page is already EN). Always empty for Rush JA pages (no EN span).
-	// Used by the crawler to populate cards.card_name_en during the JA pass.
+	// <span> (no class). Only JA and KO pages saved before around 2026-10-28
+	// carry it: Konami removed the span from current pages.
+	// EN pages never had it (the page is already EN),
+	// and it is always empty for Rush JA pages (no EN span).
+	// The crawler uses it first for cards.card_name_en,
+	// then falls back to the EN page name.
 	NameEnglishOnPage string
 	Effect            string
 	PendulumEffect    string
@@ -164,9 +167,9 @@ func parseCardLocaleTextFromNode(root *html.Node, _ CardID) CardLocaleText {
 
 	var t CardLocaleText
 
-	// Name: text-nodes only from h1#cardname, skipping child element nodes
+	// Name: text-nodes only from the card name h1, skipping child element nodes
 	// (the ruby span on JA pages holds the katakana pronunciation, not the name).
-	h1 := getNode(root, `//*[@id="cardname"]//h1`)
+	h1 := getNode(root, xpathCardNameBox+`//h1`)
 	if h1.Parent != nil {
 		t.Name, t.NamePronunciation, t.NameEnglishOnPage = parseCardNameAndPronunciation(h1)
 	}
@@ -206,8 +209,9 @@ func parseCardLocaleTextFromNode(root *html.Node, _ CardID) CardLocaleText {
 	return t
 }
 
-// parseCardNameAndPronunciation splits a h1#cardname node into three parts.
-// Konami's <h1> structure is locale-dependent:
+// parseCardNameAndPronunciation splits the card name h1 node into three parts.
+// Konami's <h1> structure is locale-dependent
+// (the <span>[EN name]</span> is only on pages saved before around 2026-10-28):
 //   - JA: <span class="ruby">[kana]</span>  [kanji text]  <span>[EN name]</span>
 //   - KO:                                   [hangul text] <span>[EN name]</span>
 //   - EN:                                   [EN text]
@@ -219,7 +223,8 @@ func parseCardLocaleTextFromNode(root *html.Node, _ CardID) CardLocaleText {
 //   - element WITHOUT class="ruby" is the EN-name span (JA and KO carry it)
 //
 // Returning EN-on-page separately lets the crawler write cards.card_name_en
-// from the JA pass while keeping name_katakana kana-only on JA and empty on KO.
+// from the JA pass (when the span exists)
+// while keeping name_katakana kana-only on JA and empty on KO.
 func parseCardNameAndPronunciation(h1 *html.Node) (name, pronunciation, nameEN string) {
 	var nameParts, pronunciationParts, nameENParts []string
 	for child := h1.FirstChild; child != nil; child = child.NextSibling {

@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="Prayers of the Voiceless Voice,KONAMI,yugioh,Yu-Gi-Oh,TCG,card,database,card,list,Forbidden,Limited,Semi-limited,Cards,Included in,"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="Prayers of the Voiceless Voice: This card can be used to Ritual Summon any LIGHT Ritual Monster. You must also Tribute LIGHT monster"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19521%26request_locale%3Den%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19521%26request_locale%3Den%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=en&amp;cid=19521"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19521%26request_locale%3Den%26a%3D202611040938"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>Prayers of the Voiceless Voice | Card Details | Yu-Gi-Oh! Neuron(TRADING CARD GAME CARD DATABASE)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=19521&ciid=1&enc=GToCvGvHi68rjg6e6KAe7Q').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=19521&ciid=1&enc=GToCvGvHi68rjg6e6KAe7Q').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=19521&ciid=1&enc=GToCvGvHi68rjg6e6KAe7Q').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=19521&ciid=1&enc=GToCvGvHi68rjg6e6KAe7Q').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=19521&ciid=1&enc=GToCvGvHi68rjg6e6KAe7Q').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -327,9 +394,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=19521'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=19521&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -343,32 +410,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=19521'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=19521&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -433,7 +530,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -834,7 +931,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>These are the card details for the Yu-Gi-Oh! TCG card "Prayers of the Voiceless Voice." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Prayers of the Voiceless Voice." <br>Please go to "<a href="deck_search.action?cardid=19521" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Prayers of the Voiceless Voice."</span>
+			<span class="text_linebreak">These are the card details for the Yu-Gi-Oh! TCG card "Prayers of the Voiceless Voice." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Prayers of the Voiceless Voice." <br>Please go to "<a href="deck_search.action?cardid=19521" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Prayers of the Voiceless Voice."</span>
 		</nav>
 	
 
@@ -870,13 +967,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			Prayers of the Voiceless Voice
-	
-		</h1>
-	</div>
 
 
 
@@ -884,10 +975,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="Prayers of the Voiceless Voice" title="Prayers of the Voiceless Voice" class="none">
@@ -897,13 +989,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -912,11 +1005,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					Prayers of the Voiceless Voice
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -944,7 +1039,7 @@
 					<div class="text_title">
 						Card Text
 					</div>
-					This card can be used to Ritual Summon any LIGHT Ritual Monster. You must also Tribute LIGHT monsters from your hand or field whose total Levels equal or exceed the Level of the Ritual Monster. If a face-up LIGHT Ritual Monster(s) you control leaves the field by an opponent's card effect (except during the Damage Step): You can banish this card from your GY; Special Summon 1 "Sauravis, the Ancient and Ascended", "Saffira, Queen of Dragons", or "Skull Guardian, Protector of the Voiceless Voice" from your hand or Deck, ignoring its Summoning conditions. You can only use this effect of "Prayers of the Voiceless Voice" once per turn.
+					<div class="text_linebreak">This card can be used to Ritual Summon any LIGHT Ritual Monster. You must also Tribute LIGHT monsters from your hand or field whose total Levels equal or exceed the Level of the Ritual Monster. If a face-up LIGHT Ritual Monster(s) you control leaves the field by an opponent's card effect (except during the Damage Step): You can banish this card from your GY; Special Summon 1 &quot;Sauravis, the Ancient and Ascended&quot;, &quot;Saffira, Queen of Dragons&quot;, or &quot;Skull Guardian, Protector of the Voiceless Voice&quot; from your hand or Deck, ignoring its Summoning conditions. You can only use this effect of &quot;Prayers of the Voiceless Voice&quot; once per turn.</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -972,21 +1067,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=19521"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=19521"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -999,13 +1093,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>Search For Decks Containing This Card</h4>
-			</span></a>
+					<h4>Search For Decks Containing This Card</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1015,30 +1109,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>View Cards Related to This Card</h4>
-			</span></a>
+					<h4>View Cards Related to This Card</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1061,17 +1169,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19521%26request_locale%3Den%26a%3D202604301956&amp;lang=en&amp;count=horizontal&amp;hashtags=YugiohDB_EN" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19521%26request_locale%3Den%26a%3D202611040938&amp;hashtags=YugiohDB_EN" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19521%26request_locale%3Den%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=en_US" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19521%26request_locale%3Den%26a%3D202611040938" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=19521&request_locale=en&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="en" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=19521&request_locale=en&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=19521&request_locale=en&a=202611040938" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1086,32 +1197,35 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>Sets</div>
+					<div>Organized by Illustration</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2025-09-05
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									MP25-EN169
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									2025 MEGA-PACK TIN
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001524000&rp=99999">
-
 							</div>
 		
 			
@@ -1130,28 +1244,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2024-02-09
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									PHNI-EN066
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									PHANTOM NIGHTMARE
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001328000&rp=99999">
-
 							</div>
 		
 			
@@ -1331,8 +1444,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									While you control "Lo, the Prayers of the Voiceless Voice" and a LIGHT Ritual Monster, your opponent's monsters can only target Ritual Monsters for attacks, also your opponent cannot target LIGHT monsters you control with card effects. During your Main Phase: You can add 1 "Voiceless Voice" card or 1 "Skull Guardian" Ritual Monster from your Deck to your hand, except "Barrier of the Voiceless Voice". You can only use this effect of "Barrier of the Voiceless Voice" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									While you control &quot;Lo, the Prayers of the Voiceless Voice&quot; and a LIGHT Ritual Monster, your opponent's monsters can only target Ritual Monsters for attacks, also your opponent cannot target LIGHT monsters you control with card effects. During your Main Phase: You can add 1 &quot;Voiceless Voice&quot; card or 1 &quot;Skull Guardian&quot; Ritual Monster from your Deck to your hand, except &quot;Barrier of the Voiceless Voice&quot;. You can only use this effect of &quot;Barrier of the Voiceless Voice&quot; once per turn.
 								</dd>
 		
 		
@@ -1349,7 +1462,7 @@
 
 								<input type="hidden" class="cnm" value='Barrier of the Voiceless Voice'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19522">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19522&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1414,8 +1527,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									You can target 1 of your "Voiceless Voice" cards that is banished or in your GY, except "Blessing of the Voiceless Voice"; add it to your hand. If a non-Ritual Monster(s) is Normal or Special Summoned face-up (except during the Damage Step): You can Ritual Summon 1 LIGHT Ritual Monster (Warrior or Dragon) from your hand, by Tributing monsters from your hand or field whose total Levels equal or exceed the Level of that Ritual Monster, and if you do, it cannot be destroyed by battle. You can only use each effect of "Blessing of the Voiceless Voice" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									You can target 1 of your &quot;Voiceless Voice&quot; cards that is banished or in your GY, except &quot;Blessing of the Voiceless Voice&quot;; add it to your hand. If a non-Ritual Monster(s) is Normal or Special Summoned face-up (except during the Damage Step): You can Ritual Summon 1 LIGHT Ritual Monster (Warrior or Dragon) from your hand, by Tributing monsters from your hand or field whose total Levels equal or exceed the Level of that Ritual Monster, and if you do, it cannot be destroyed by battle. You can only use each effect of &quot;Blessing of the Voiceless Voice&quot; once per turn.
 								</dd>
 		
 		
@@ -1432,7 +1545,7 @@
 
 								<input type="hidden" class="cnm" value='Blessing of the Voiceless Voice'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19903">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19903&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1524,8 +1637,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									If you Ritual Summon exactly 1 LIGHT Ritual Monster (Warrior or Dragon) with a card effect that requires use of monsters, this card can be used as the entire Tribute. You can only use each of the following effects of "Lo, the Prayers of the Voiceless Voice" once per turn. If this card is Normal or Special Summoned: You can place 1 "Voiceless Voice" Continuous Spell/Trap from your Deck face-up in your Spell & Trap Zone. If a LIGHT Ritual Monster (Warrior or Dragon) is Special Summoned to your field, while this card is in your GY (except during the Damage Step): You can Special Summon this card.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									If you Ritual Summon exactly 1 LIGHT Ritual Monster (Warrior or Dragon) with a card effect that requires use of monsters, this card can be used as the entire Tribute. You can only use each of the following effects of &quot;Lo, the Prayers of the Voiceless Voice&quot; once per turn. If this card is Normal or Special Summoned: You can place 1 &quot;Voiceless Voice&quot; Continuous Spell/Trap from your Deck face-up in your Spell &amp; Trap Zone. If a LIGHT Ritual Monster (Warrior or Dragon) is Special Summoned to your field, while this card is in your GY (except during the Damage Step): You can Special Summon this card.
 								</dd>
 		
 		
@@ -1542,7 +1655,7 @@
 
 								<input type="hidden" class="cnm" value='Lo, the Prayers of the Voiceless Voice'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19474">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19474&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1607,8 +1720,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									During the Main Phase: You can activate 1 of these effects;<br>●Shuffle 1 LIGHT Ritual Monster (Warrior or Dragon) or 1 Ritual Spell from your hand or GY into the Deck, and if you do, add to your hand, or Special Summon, 1 "Voiceless Voice" monster from your Deck.<br>●Target cards your opponent controls, up to the number of LIGHT Ritual Monsters (Warrior or Dragon) you control; destroy both this card and as many of the targeted cards as possible.<br>You can only use the effect of "Radiance of the Voiceless Voice" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									During the Main Phase: You can activate 1 of these effects;&lt;br&gt;●Shuffle 1 LIGHT Ritual Monster (Warrior or Dragon) or 1 Ritual Spell from your hand or GY into the Deck, and if you do, add to your hand, or Special Summon, 1 &quot;Voiceless Voice&quot; monster from your Deck.&lt;br&gt;●Target cards your opponent controls, up to the number of LIGHT Ritual Monsters (Warrior or Dragon) you control; destroy both this card and as many of the targeted cards as possible.&lt;br&gt;You can only use the effect of &quot;Radiance of the Voiceless Voice&quot; once per turn.
 								</dd>
 		
 		
@@ -1625,7 +1738,7 @@
 
 								<input type="hidden" class="cnm" value='Radiance of the Voiceless Voice'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19531">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19531&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1717,8 +1830,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									You can Ritual Summon this card with "Hymn of Light". During the End Phase, if this card was Ritual Summoned this turn, or if a LIGHT monster was sent from the hand or Deck to the GY this turn while this card was face-up on the field: You can activate 1 of these effects;<br>●Draw 2 cards, then discard 1 card.<br>●Discard 1 random card from your opponent's hand.<br>●Add 1 LIGHT monster from your GY to your hand.<br>You can only use this effect of "Saffira, Queen of Dragons" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									You can Ritual Summon this card with &quot;Hymn of Light&quot;. During the End Phase, if this card was Ritual Summoned this turn, or if a LIGHT monster was sent from the hand or Deck to the GY this turn while this card was face-up on the field: You can activate 1 of these effects;&lt;br&gt;●Draw 2 cards, then discard 1 card.&lt;br&gt;●Discard 1 random card from your opponent's hand.&lt;br&gt;●Add 1 LIGHT monster from your GY to your hand.&lt;br&gt;You can only use this effect of &quot;Saffira, Queen of Dragons&quot; once per turn.
 								</dd>
 		
 		
@@ -1735,7 +1848,7 @@
 
 								<input type="hidden" class="cnm" value='Saffira, Queen of Dragons'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=11259">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=11259&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1827,8 +1940,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									You can Ritual Summon this card with "Sprite's Blessing". When your opponent activates a card or effect that targets a monster you control (Quick Effect): You can discard this card; negate the activation. When your opponent would Special Summon a monster(s) (Quick Effect): You can return this card to the hand; negate the Special Summon, and if you do, banish that monster(s).
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									You can Ritual Summon this card with &quot;Sprite's Blessing&quot;. When your opponent activates a card or effect that targets a monster you control (Quick Effect): You can discard this card; negate the activation. When your opponent would Special Summon a monster(s) (Quick Effect): You can return this card to the hand; negate the Special Summon, and if you do, banish that monster(s).
 								</dd>
 		
 		
@@ -1845,7 +1958,7 @@
 
 								<input type="hidden" class="cnm" value='Sauravis, the Ancient and Ascended'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12627">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=12627&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1937,8 +2050,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									You can Ritual Summon this card with "Prayers of the Voiceless Voice". Gains 2050 ATK while you have "Lo, the Prayers of the Voiceless Voice" on your field or in your GY. You can only use each of the following effects of "Skull Guardian, Protector of the Voiceless Voice" once per turn. If this card is Ritual Summoned: You can add 1 "Voiceless Voice" monster, or 1 Ritual Monster (Warrior or Dragon), from your Deck to your hand. When your opponent activates a card or effect while you control "Lo, the Prayers of the Voiceless Voice" (Quick Effect): You can negate the activation, and if you do, destroy that card.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									You can Ritual Summon this card with &quot;Prayers of the Voiceless Voice&quot;. Gains 2050 ATK while you have &quot;Lo, the Prayers of the Voiceless Voice&quot; on your field or in your GY. You can only use each of the following effects of &quot;Skull Guardian, Protector of the Voiceless Voice&quot; once per turn. If this card is Ritual Summoned: You can add 1 &quot;Voiceless Voice&quot; monster, or 1 Ritual Monster (Warrior or Dragon), from your Deck to your hand. When your opponent activates a card or effect while you control &quot;Lo, the Prayers of the Voiceless Voice&quot; (Quick Effect): You can negate the activation, and if you do, destroy that card.
 								</dd>
 		
 		
@@ -1955,7 +2068,7 @@
 
 								<input type="hidden" class="cnm" value='Skull Guardian, Protector of the Voiceless Voice'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19492">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19492&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3374,6 +3487,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3548,6 +3663,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3631,7 +3748,7 @@
 						<p>This is an official site for the Yu-Gi-Oh! Trading Card Game. <br>You can search through all Yu-Gi-Oh! TCG cards, check detailed rules, and view the Forbidden & Limited List. <br>You can also manage your own cards and Decks by registering them in My Deck, and search publicly available Deck Recipes to help you build your own Deck.</p>
 						<a class="btn" href="https://www.yugioh-card.com/en/rulebook/index.html" target="_blank">
 							<img class="ocg" src="external/image/en/00_logo_ocgtcg.png" />
-							<img class="rush" src="external/image/en/00_logo_rush.png" />
+
 							<span>How to Play</span>
 						</a>
 					</div>
@@ -4649,6 +4766,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=36&cb=962630934" async></script></body>
+</body>
 </html>
 

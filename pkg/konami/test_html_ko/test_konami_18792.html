@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="콘필드 코아틀,유희왕,덱,듀얼 몬스터즈,VRAINS,브레인즈,금지,제한,팩,금지 카드,카드,수록,룰,오피셜 카드게임,코나미,KONAM"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="콘필드 코아틀: 이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 패에서 버리고 발동할 수 있다.  콘필드 코아틀  이외의  키메라 퓨전 의 카드명이 쓰여진 몬스터"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D18792%26request_locale%3Dko%26a%3D202604301956"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D18792%26request_locale%3Dko%26a%3D202604301956"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=ko&amp;cid=18792"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D18792%26request_locale%3Dko%26a%3D202611040939"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>콘필드 코아틀 | 카드 상세 | Yu-Gi-Oh! Neuron(오피셜 카드게임 카드 데이터 베이스)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=18792&ciid=1&enc=qWAy1em1hZvDKQJg2MwGPw').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=18792&ciid=1&enc=qWAy1em1hZvDKQJg2MwGPw').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=18792&ciid=1&enc=qWAy1em1hZvDKQJg2MwGPw').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=18792&ciid=1&enc=qWAy1em1hZvDKQJg2MwGPw').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=18792&ciid=1&enc=qWAy1em1hZvDKQJg2MwGPw').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -331,9 +398,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=18792'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=18792&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -347,32 +414,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=18792'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=18792&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -437,7 +534,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" class="current">한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" class="current">한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -578,6 +675,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -759,6 +857,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -844,7 +943,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>Yu-Gi-Oh! OCG 카드 '콘필드 코아틀'의 카드 상세 정보입니다. <br>'콘필드 코아틀'의 Yu-Gi-Oh! OCG 공식 규칙은 이 페이지에서 확인하세요. <br>'콘필드 코아틀' 카드를 사용한 덱을 검색하고 싶다면 '<a href="deck_search.action?cardid=18792" target=_blank>이 카드를 사용한 덱을 검색</a>'에서 확인할 수 있습니다.</span>
+			<span class="text_linebreak">Yu-Gi-Oh! OCG 카드 '콘필드 코아틀'의 카드 상세 정보입니다. <br>'콘필드 코아틀'의 Yu-Gi-Oh! OCG 공식 규칙은 이 페이지에서 확인하세요. <br>'콘필드 코아틀' 카드를 사용한 덱을 검색하고 싶다면 '<a href="deck_search.action?cardid=18792" target=_blank>이 카드를 사용한 덱을 검색</a>'에서 확인할 수 있습니다.</span>
 		</nav>
 	
 
@@ -880,15 +979,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			콘필드 코아틀
-	
-			<span>Cornfield Coatl</span>
-	
-		</h1>
-	</div>
 
 
 
@@ -896,10 +987,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="콘필드 코아틀" title="콘필드 코아틀" class="none">
@@ -909,13 +1001,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -924,11 +1017,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					콘필드 코아틀
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -1015,7 +1110,7 @@
 					<div class="text_title">
 						카드 텍스트
 					</div>
-					이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 패에서 버리고 발동할 수 있다. "콘필드 코아틀" 이외의 "키메라 퓨전"의 카드명이 쓰여진 몬스터 1장을 덱에서 패에 넣는다. ②: 이 카드가 몬스터와 전투를 실행할 경우, 그 2장은 그 전투로는 파괴되지 않는다. ③: 자신 필드에 "유익환상수 키메라"가 존재하고, 자신 필드의 카드를 대상으로 하는 효과를 상대가 발동했을 때, 필드 / 묘지의 이 카드를 제외하고 발동할 수 있다. 그 효과를 무효로 하고 파괴한다.
+					<div class="text_linebreak">이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 패에서 버리고 발동할 수 있다. &quot;콘필드 코아틀&quot; 이외의 &quot;키메라 퓨전&quot;의 카드명이 쓰여진 몬스터 1장을 덱에서 패에 넣는다. ②: 이 카드가 몬스터와 전투를 실행할 경우, 그 2장은 그 전투로는 파괴되지 않는다. ③: 자신 필드에 &quot;유익환상수 키메라&quot;가 존재하고, 자신 필드의 카드를 대상으로 하는 효과를 상대가 발동했을 때, 필드 / 묘지의 이 카드를 제외하고 발동할 수 있다. 그 효과를 무효로 하고 파괴한다.</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1043,21 +1138,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=18792"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=18792"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1070,13 +1164,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>이 카드를  사용한 덱을 검색</h4>
-			</span></a>
+					<h4>이 카드를  사용한 덱을 검색</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1086,30 +1180,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>이 카드의 관련 카드 보기</h4>
-			</span></a>
+					<h4>이 카드의 관련 카드 보기</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1132,17 +1240,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D18792%26request_locale%3Dko%26a%3D202604301956&amp;lang=ko&amp;count=horizontal&amp;hashtags=YugiohDB_KO" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D18792%26request_locale%3Dko%26a%3D202611040939&amp;hashtags=YugiohDB_KO" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D18792%26request_locale%3Dko%26a%3D202604301956&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=ko_KR" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D18792%26request_locale%3Dko%26a%3D202611040939" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=18792&request_locale=ko&a=202604301956" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="ko" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=18792&request_locale=ko&a=202604301956"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=18792&request_locale=ko&a=202611040939" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1157,32 +1268,35 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>수록 시리즈</div>
+					<div>일러스트별 수록</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-06-24
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									DUNE-KR005
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									듀얼리스트 넥서스
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=1010001272000&rp=99999">
-
 							</div>
 		
 			
@@ -1389,8 +1503,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우에 발동할 수 있다. 야수족 / 레벨 4 몬스터 및 "키메라 퓨전"을 각각 1장까지 덱에서 패에 넣는다. 이 효과의 발동 후, 턴 종료시까지 자신은 융합 몬스터밖에 엑스트라 덱에서 특수 소환할 수 없다. ②: 이 카드가 융합 소환의 소재가 되어 묘지로 보내졌을 경우, 자신 묘지의 환상마족 몬스터 1장을 대상으로 하고 발동할 수 있다. 그 몬스터를 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우에 발동할 수 있다. 야수족 / 레벨 4 몬스터 및 &quot;키메라 퓨전&quot;을 각각 1장까지 덱에서 패에 넣는다. 이 효과의 발동 후, 턴 종료시까지 자신은 융합 몬스터밖에 엑스트라 덱에서 특수 소환할 수 없다. ②: 이 카드가 융합 소환의 소재가 되어 묘지로 보내졌을 경우, 자신 묘지의 환상마족 몬스터 1장을 대상으로 하고 발동할 수 있다. 그 몬스터를 특수 소환한다.
 								</dd>
 		
 		
@@ -1407,7 +1521,7 @@
 
 								<input type="hidden" class="cnm" value='대익의 바포메트'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18791">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18791&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1499,8 +1613,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 자신 / 상대 턴에, 이 카드를 릴리스하고 발동할 수 있다. "미러 스워드나이트" 이외의 "키메라 퓨전"의 카드명이 쓰여진 몬스터 1장을 덱에서 특수 소환한다. ②: 이 카드가 몬스터와 전투를 실행할 경우, 그 2장은 그 전투로는 파괴되지 않는다. ③: 자신 필드에 "유익환상수 키메라"가 존재하고, 상대 필드의 몬스터가 효과를 발동했을 때, 필드 / 묘지의 이 카드를 제외하고 발동할 수 있다. 그 효과를 무효로 한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 자신 / 상대 턴에, 이 카드를 릴리스하고 발동할 수 있다. &quot;미러 스워드나이트&quot; 이외의 &quot;키메라 퓨전&quot;의 카드명이 쓰여진 몬스터 1장을 덱에서 특수 소환한다. ②: 이 카드가 몬스터와 전투를 실행할 경우, 그 2장은 그 전투로는 파괴되지 않는다. ③: 자신 필드에 &quot;유익환상수 키메라&quot;가 존재하고, 상대 필드의 몬스터가 효과를 발동했을 때, 필드 / 묘지의 이 카드를 제외하고 발동할 수 있다. 그 효과를 무효로 한다.
 								</dd>
 		
 		
@@ -1517,7 +1631,7 @@
 
 								<input type="hidden" class="cnm" value='미러 스워드나이트'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18793">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18793&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1609,8 +1723,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									"환상수왕 가젤" ＋ "바포메트"<br>①: 이 카드가 파괴되었을 때, 자신 묘지의, "환상수왕 가젤"이나 "바포메트" 1장을 대상으로 하고 발동할 수 있다. 그 몬스터를 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									&quot;환상수왕 가젤&quot; ＋ &quot;바포메트&quot;&lt;br&gt;①: 이 카드가 파괴되었을 때, 자신 묘지의, &quot;환상수왕 가젤&quot;이나 &quot;바포메트&quot; 1장을 대상으로 하고 발동할 수 있다. 그 몬스터를 특수 소환한다.
 								</dd>
 		
 		
@@ -1627,7 +1741,7 @@
 
 								<input type="hidden" class="cnm" value='유익환상수 키메라'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=4756">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=4756&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1692,8 +1806,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ②의 효과는 1턴에 1번밖에 사용할 수 없다. ①: 자신 / 상대의 메인 페이즈에 발동할 수 있다. 야수족 / 악마족 몬스터 중 어느 것을 포함하는, 자신의 패 / 필드의 몬스터를 융합 소재로 하고, 융합 몬스터 1장을 융합 소환한다. ②: 자신 메인 페이즈에 이 카드가 묘지에 존재하고, 자신 필드나 묘지에 "유익환상수 키메라"가 존재할 경우, 이하에서 1개를 선택하여 발동할 수 있다. ●이 카드를 패에 넣는다. ●이 카드를 제외하고, 자신의 덱 / 묘지에서 "환상수왕 가젤" 1장과 "바포메트" 1장을 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ②의 효과는 1턴에 1번밖에 사용할 수 없다. ①: 자신 / 상대의 메인 페이즈에 발동할 수 있다. 야수족 / 악마족 몬스터 중 어느 것을 포함하는, 자신의 패 / 필드의 몬스터를 융합 소재로 하고, 융합 몬스터 1장을 융합 소환한다. ②: 자신 메인 페이즈에 이 카드가 묘지에 존재하고, 자신 필드나 묘지에 &quot;유익환상수 키메라&quot;가 존재할 경우, 이하에서 1개를 선택하여 발동할 수 있다. ●이 카드를 패에 넣는다. ●이 카드를 제외하고, 자신의 덱 / 묘지에서 &quot;환상수왕 가젤&quot; 1장과 &quot;바포메트&quot; 1장을 특수 소환한다.
 								</dd>
 		
 		
@@ -1710,7 +1824,7 @@
 
 								<input type="hidden" class="cnm" value='키메라 퓨전'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18839">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18839&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1802,8 +1916,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									"유익환상수 키메라" ＋ 환상마족 몬스터 1장 이상<br>①: 이 카드의 카드명은, 필드 / 묘지에 존재하는 한 "유익환상수 키메라"로 취급한다. ②: 이 카드는 1번의 배틀 페이즈 중에, 이 카드의 융합 소재로 한 몬스터의 수까지 몬스터에 공격할 수 있다. ③: 이 카드가 몬스터와 전투를 실행할 경우, 그 2장은 그 전투로는 파괴되지 않는다. ④: 이 카드가 상대 몬스터와 전투를 실행한 데미지 스텝 종료시에 발동할 수 있다. 그 상대 몬스터의 공격력은 0 이 되고, 효과는 무효화된다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									&quot;유익환상수 키메라&quot; ＋ 환상마족 몬스터 1장 이상&lt;br&gt;①: 이 카드의 카드명은, 필드 / 묘지에 존재하는 한 &quot;유익환상수 키메라&quot;로 취급한다. ②: 이 카드는 1번의 배틀 페이즈 중에, 이 카드의 융합 소재로 한 몬스터의 수까지 몬스터에 공격할 수 있다. ③: 이 카드가 몬스터와 전투를 실행할 경우, 그 2장은 그 전투로는 파괴되지 않는다. ④: 이 카드가 상대 몬스터와 전투를 실행한 데미지 스텝 종료시에 발동할 수 있다. 그 상대 몬스터의 공격력은 0 이 되고, 효과는 무효화된다.
 								</dd>
 		
 		
@@ -1820,7 +1934,7 @@
 
 								<input type="hidden" class="cnm" value='환상마수 키메라'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18821">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18821&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1912,8 +2026,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									종족이 다른 야수족 / 악마족 / 환상마족 몬스터 × 2<br>이 카드명의 ②③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드의 카드명은, 필드 / 묘지에 존재하는 한 "유익환상수 키메라"로 취급한다. ②: 이 카드를 융합 소환했을 경우에 발동할 수 있다. 덱에서 야수족 / 악마족 / 환상마족 몬스터 1장을 묘지로 보낸다. ③: 상대 턴에 묘지의 이 카드를 제외하고, "환상수마왕 바포메트" 이외의 자신의 제외 상태인 야수족 / 악마족 / 환상마족 몬스터 1장을 대상으로 하여 발동할 수 있다. 그 몬스터를 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									종족이 다른 야수족 / 악마족 / 환상마족 몬스터 &times; 2&lt;br&gt;이 카드명의 ②③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드의 카드명은, 필드 / 묘지에 존재하는 한 &quot;유익환상수 키메라&quot;로 취급한다. ②: 이 카드를 융합 소환했을 경우에 발동할 수 있다. 덱에서 야수족 / 악마족 / 환상마족 몬스터 1장을 묘지로 보낸다. ③: 상대 턴에 묘지의 이 카드를 제외하고, &quot;환상수마왕 바포메트&quot; 이외의 자신의 제외 상태인 야수족 / 악마족 / 환상마족 몬스터 1장을 대상으로 하여 발동할 수 있다. 그 몬스터를 특수 소환한다.
 								</dd>
 		
 		
@@ -1930,7 +2044,7 @@
 
 								<input type="hidden" class="cnm" value='환상수마왕 바포메트'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19174">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19174&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2022,8 +2136,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									야수족 몬스터 ＋ 악마족 몬스터<br>이 카드명의 ②③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드의 카드명은, 필드 / 묘지에 존재하는 한 "유익환상수 키메라"로 취급한다. ②: 이 카드를 융합 소환했을 경우에 발동할 수 있다. 이 턴의 엔드 페이즈에 상대의 패를 무작위로 1장 묘지로 보낸다. ③: 상대 턴에 묘지의 이 카드를 제외하고, 자신 묘지의 야수족 / 악마족 / 환상마족 몬스터 1장을 대상으로 하여 발동할 수 있다. 그 몬스터를 특수 소환한다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									야수족 몬스터 ＋ 악마족 몬스터&lt;br&gt;이 카드명의 ②③의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드의 카드명은, 필드 / 묘지에 존재하는 한 &quot;유익환상수 키메라&quot;로 취급한다. ②: 이 카드를 융합 소환했을 경우에 발동할 수 있다. 이 턴의 엔드 페이즈에 상대의 패를 무작위로 1장 묘지로 보낸다. ③: 상대 턴에 묘지의 이 카드를 제외하고, 자신 묘지의 야수족 / 악마족 / 환상마족 몬스터 1장을 대상으로 하여 발동할 수 있다. 그 몬스터를 특수 소환한다.
 								</dd>
 		
 		
@@ -2040,7 +2154,7 @@
 
 								<input type="hidden" class="cnm" value='환상수왕 키메라'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18820">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18820&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2132,8 +2246,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우에 발동할 수 있다. 덱에서 악마족 / 레벨 5 몬스터 1장이나 "키메라 퓨전" 1장을 패에 넣는다. ②: 이 카드가 융합 소환의 소재가 되어 묘지로 보내졌을 경우에 발동할 수 있다. 덱에서 환상마족 몬스터 1장을 패에 넣는다.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									이 카드명의 ①②의 효과는 각각 1턴에 1번밖에 사용할 수 없다. ①: 이 카드를 일반 소환 / 특수 소환했을 경우에 발동할 수 있다. 덱에서 악마족 / 레벨 5 몬스터 1장이나 &quot;키메라 퓨전&quot; 1장을 패에 넣는다. ②: 이 카드가 융합 소환의 소재가 되어 묘지로 보내졌을 경우에 발동할 수 있다. 덱에서 환상마족 몬스터 1장을 패에 넣는다.
 								</dd>
 		
 		
@@ -2150,7 +2264,7 @@
 
 								<input type="hidden" class="cnm" value='환조의 왕 가젤'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18790">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=18790&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3579,6 +3693,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3753,6 +3869,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -3836,7 +3954,9 @@
 						<p>유희왕 오피셜 카드게임의 공식 사이트입니다. <br>Yu-Gi-Oh! OCG의 모든 카드를 검색하거나 세부 규칙, 금지 및 제한 카드를 참조할 수 있습니다. <br>이미 소지하고 있는 카드나 덱을 마이덱에 등록해서 관리하거나 공개된 덱 레시피를 검색해서 자신의 덱을 구축하는 데 참고할 수도 있습니다.</p>
 						<a class="btn" href="https://www.yugioh.co.kr/site/game_method.php" target="_blank">
 							<img class="ocg" src="external/image/ko/00_logo_ocgtcg.png" />
+
 							<img class="rush" src="external/image/ko/00_logo_rush.png" />
+
 							<span>게임하는 방법</span>
 						</a>
 					</div>
@@ -4214,6 +4334,7 @@
 							<li><a href="/yugiohdb/trends_search.action?ope=2">주목할 카테고리 랭킹</a></li>
 						</ul>
 					</li>
+				
 			
 			
 
@@ -4315,7 +4436,7 @@
 			<p>Privacy Settings</p>
 		</div>
 		<div class="ps_body">
-			<p>Yu-Gi-Oh! Neuron(OFFICIAL CARD GAME CARD DATABASE)을 이용하려면 이용 약관에 동의해야 합니다. <br>이용 약관이 개정된 경우, 서비스를 계속 이용하시려면 개정된 내용에 다시 동의하셔야 합니다.</p>
+			<p>Yu-Gi-Oh! Neuron(OFFICIAL CARD GAME CARD DATABASE) 을 이용하려면 이용 약관에 동의해야 합니다. <br>이용 약관이 개정된 경우, 서비스를 계속 이용하시려면 개정된 내용에 다시 동의하셔야 합니다.</p>
 		</div>
 		<div class="ps_footer">
 			<div class="ps_button">
@@ -4871,6 +4992,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=111&cb=504165152" async></script></body>
+</body>
 </html>
 

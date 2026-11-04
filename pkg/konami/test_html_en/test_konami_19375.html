@@ -20,7 +20,6 @@
 
 
 
-
 <!-- ///MetaCardDetail  -->
 
 	<meta name="keywords" content="Centur-Ion Legatia,KONAMI,yugioh,Yu-Gi-Oh,TCG,card,database,card,list,Forbidden,Limited,Semi-limited,Cards,Included in,"/>
@@ -37,8 +36,8 @@
 
 	<meta name="twitter:description" content="Centur-Ion Legatia: 1 Tuner + 1+ non-Tuner monsters Your monsters with 2000 or less ATK cannot be destroyed by battle"/>
 
-	<meta property="og:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Den%26a%3D202606262316"/>
-	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Den%26a%3D202606262316"/>
+	<meta property="og:url" content="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&amp;request_locale=en&amp;cid=19375"/>
+	<meta name="twitter:url" content="https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Den%26a%3D202611040938"/>
 
 	<meta http-equiv="x-ua-compatible" content="IE=10" >
 	<meta http-equiv="x-ua-compatible" content="IE=EmulateIE10" >
@@ -78,7 +77,6 @@
 
 
 
-
 	
 		<title>Centur-Ion Legatia | Card Details | Yu-Gi-Oh! Neuron(TRADING CARD GAME CARD DATABASE)</title>
 	
@@ -96,7 +94,7 @@
 
 	<script type="text/javascript" src="external/jquery/jquery-ui-1.13.1.custom/jquery-ui.js"></script>
 
-	<script type="text/javascript" src="external/js/common.js?2026042101"></script>
+	<script type="text/javascript" src="external/js/common.js?2026090701"></script>
 
 	<script type="text/javascript" src="external/jquery/scrolltopcontrol.js"></script>
 
@@ -182,27 +180,38 @@
 	<!--
 
 	$(function() {
+		
+		var update_list_all = $("#update_list .t_body .t_row").length;
+		$('.cardnum_all').text(update_list_all);
+
+
+		
 		var cimg_end = $("#thumbnail img").length;
 		cimg_end--;
 		var cimg_now = "0";
-		$('.img_yaji li,#pop_set .btn_set span').click(function() {
+		$('#pop_set .btn_set div').click(function() {
 			var iyaji_class = $(this).attr("class");
-			if(iyaji_class == "right_btns btn"){ 
+			if(iyaji_class == "right_btns"){ 
 				cimg_now++;
 				if(cimg_now > cimg_end){
+					cimg_now = cimg_end;
 					cimg_now = 0;
 				}
 			}else{
 				cimg_now--;
-				if(0 > cimg_now){	
+				if(0 > cimg_now){
 					cimg_now = cimg_end;
 				}
 			}
 			$("#thumbnail img").eq(cimg_now).click();
 
 		});
-
-
+		if(cimg_end <= 4){
+			$("#CardImgSet").removeClass("partialdisp");
+		}
+		$(".partialdisp .partialdisp_s").click(function(){
+			$("#CardImgSet").removeClass("partialdisp");
+		});
 
 		$('input:checkbox').prop('checked', false);
  		$('#othercon_and').prop('checked', false).closest('a').addClass('radio_off_left').removeClass('radio_on_left').find('img').attr('src', 'external/image/parts/check_off.png');
@@ -222,11 +231,17 @@
 		
 	   
 		$('#card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=19375&ciid=1&enc=hoLCZxBEZI7MqNkwfVPADA').show();
-		$('#thumbnail_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=19375&ciid=1&enc=hoLCZxBEZI7MqNkwfVPADA').addClass('current').show();
-		$('#pop_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=19375&ciid=1&enc=hoLCZxBEZI7MqNkwfVPADA').show();
+		$('#thumbnail_card_image_1,#popup_card_image_1').attr('src', '/yugiohdb/get_image.action?type=1&cid=19375&ciid=1&enc=hoLCZxBEZI7MqNkwfVPADA').addClass('current').show();
+		$('#pop_card_image_1,#update_list_card_image_1').attr('src', '/yugiohdb/get_image.action?type=2&cid=19375&ciid=1&enc=hoLCZxBEZI7MqNkwfVPADA').show();
 	   
+
+
 		
-		$('#thumbnail img').click(function(){
+
+		$('.thumbnail img').click(function(){
+
+			$("#update_list .btn_set span").removeClass("now");
+
 			
 			var setImgId = $(this).attr('alt');
 			var setContent = 'https://www.db.yugioh-card.com'
@@ -243,10 +258,62 @@
 			$('#card_frame [id^=card_image],[id^=pop_card_image_]').hide();
 			$('#card_frame #card_image_' + $(this).attr('alt')).show();
 			$('#pop_card_image_' + $(this).attr('alt')).show();
-			$('[id^=thumbnail_card_image]').removeClass('current');
-			$(this).addClass('current');
+			$('.thumbnail img').removeClass('current');
+			$(".iid_"+setImgId).addClass('current');
+
+			const index = $(this).index();
+			cimg_now = index;
+
+			var iid_now = $(this).attr('alt');
+			$("#update_list .t_row").hide();
+			$(".pack_iid_" + iid_now).show();
+
+			var update_list_now = $("#update_list .t_body .t_row:visible").length;
+			$('.cardnum_now span').text(update_list_now);
+
+			$('.cardnum_now.t_haed_list').show();
+
 		});
 
+		
+		$('.img_yaji li,#update_list .btn_set span,#card_frame .set > div').click(function(){
+			$('.cardnum_now.t_haed_list').show();
+
+			var update_list_btn_class = $(this).attr("class").replace(/ btn/g, '');
+			switch (update_list_btn_class) {
+				case 'left_btn':
+					$('#pop_set .left_btn').click();
+
+					break;
+				case 'right_btns':
+					$('#pop_set .right_btns').click();
+
+					break;
+				case 'all':
+					$("#update_list .t_row").show();
+					$("#update_list .all").addClass("now");
+					$('.cardnum_now.t_haed_list').hide();
+					break;
+				case 'all now':
+					$('#thumbnail img.current').click();
+					break;
+			}
+		});
+
+
+		$('#card_frame').clone().prependTo('.cardname div');
+
+		
+		var iid = "";
+
+		if(iid != ""){
+			$('#thumbnail img.iid_' + iid).click();
+			$('#update_list .btn_set .all').click();
+			$('.cardnum_now.t_haed_list').hide();
+		}else{
+			$("#update_list .btn_set span.all").click();
+			$('.cardnum_now.t_haed_list').hide();
+		}
 
 		
 		$('#pack_list table tr.row').click(function() {
@@ -339,9 +406,9 @@
 				
 				location.href = '/yugiohdb/card_search.action'
 							+ '?ope=2'
-							+ '&cid=19375'
 							+ '&sess=4'
-							+ '&mode=' + value;
+							+ '&mode=' + value
+							+ '&cid=19375&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10&page=1';
 
 		});
 		$('#mode_set.tablink li').click(function(){
@@ -355,32 +422,62 @@
 		
 		$('.box_card_linkmarker').load(function(){ });
 
+		$('#card_frame').clone().appendTo('.cardname');
+
+
 
 
 	});
+
+
+	
+	setTimeout(function () {
+		$('#pan_nav .btn').trigger('click');
+	}, 5000);
+
 
 	
 	function ChangePage(page) {
 		location.href = '/yugiohdb/card_search.action'
 					+ '?ope=2'
-					+ '&cid=19375'
 					+ '&sess=3'
-					+ '&rp=' + encodeURIComponent($('#rp').val())
-					+ '&page=' + page;
+					+ '&page=' + page
+					+ '&cid=19375&stype=1&othercon=2&releaseYStart=1999&releaseMStart=02&releaseDStart=04&sort=1&rp=10';
 	}
 
 	
 
-	$(document).ready(function(){
-		$(".col").colorbox({
-			transition:"fade",
-			inline: true,
-    innerWidth: 600,//ColorBoxの幅
-    innerHeight: 600,//ColorBoxの高さ
-    maxWidth:"100%",
-    maxHeight:"100%"
-		});
-	});
+
+$(document).ready(function(){
+
+    $(".col").colorbox({
+        transition: "fade",
+        inline: true,
+        maxWidth: "100%",
+        scrolling: false,
+
+        onComplete: function() {
+
+            var height = $("#cboxLoadedContent").prop("scrollHeight");
+
+            $.colorbox.resize({
+                height: height
+            });
+        }
+    });
+
+});
+
+
+$(window).on('scroll', function() {
+	const $target = $('.cboxElement');
+	const targetBottom = $target.offset().top + $target.outerHeight() - 50;
+	if ($(window).scrollTop() > targetBottom) {
+		$('.cardname').addClass('show');
+	} else {
+		$('.cardname').removeClass('show');
+	}
+});
 	//-->
 	</script>
 
@@ -445,7 +542,7 @@
 						<div class="rush">
 							<ul>
 								<li><a href="javascript:ChangeLanguage('ja')" >日本語</a></li>
-								<li><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
+								<li class="ko"><a href="javascript:ChangeLanguage('ko')" >한글</a></li>
 							</ul>
 						</div>
 						<div class="ocg ocgtcg">
@@ -846,7 +943,7 @@
 
 	 
 		<nav id="title_msg">
-			<span>These are the card details for the Yu-Gi-Oh! TCG card "Centur-Ion Legatia." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Centur-Ion Legatia." <br>Please go to "<a href="deck_search.action?cardid=19375" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Centur-Ion Legatia."</span>
+			<span class="text_linebreak">These are the card details for the Yu-Gi-Oh! TCG card "Centur-Ion Legatia." <br>Please refer to this page for the Yu-Gi-Oh! TCG official rules for "Centur-Ion Legatia." <br>Please go to "<a href="deck_search.action?cardid=19375" target=_blank>Search For Decks Containing This Card,</a>" if you would like to search for Decks that contain "Centur-Ion Legatia."</span>
 		</nav>
 	
 
@@ -882,13 +979,7 @@
 <div id="CardSet">
 
 	
-	<div id="cardname" class="pc cardname">
-		<h1>
 	
-			Centur-Ion Legatia
-	
-		</h1>
-	</div>
 
 
 
@@ -896,10 +987,11 @@
 	<div class="top">
 
 		
-		<div id="CardImgSet">
+		<div id="CardImgSet" class="partialdisp">
 			<div id="card_frame">
 				<div class="set">
 	
+		
 					<a class="col " href="#pop_set" >
 		
 						<img id="card_image_1" alt="Centur-Ion Legatia" title="Centur-Ion Legatia" class="none">
@@ -909,13 +1001,14 @@
 	
 	
 			</div></div>
+
 	
-			<div id="thumbnail">
+			<div id="thumbnail" class="thumbnail" id="thumbnail">
 		
-				<img id="thumbnail_card_image_1" alt="1" class="none">
+				<img id="thumbnail_card_image_1" alt="1" class="none iid_1">
 		
 			</div>
-		
+			<div class="partialdisp_s">&#x25bc;</div>
 	
 		</div><!-- #CardImgSet -->
 
@@ -924,11 +1017,13 @@
 
 
 			
-			<div class="sp cardname">
+			<div class="cardname">
+				<div>
 				<h1>
 		
 					Centur-Ion Legatia
 				</h1>
+				</div>
 			</div>
 
 			<div class="CardText">
@@ -1015,7 +1110,7 @@
 					<div class="text_title">
 						Card Text
 					</div>
-					1 Tuner + 1+ non-Tuner monsters<br>Your monsters with 2000 or less ATK cannot be destroyed by battle. You can only use each of the following effects of "Centur-Ion Legatia" once per turn. If this card is Special Summoned: You can draw 1 card, then you can destroy the monster your opponent controls with the highest ATK (your choice, if tied). During the End Phase: You can place 1 non-Synchro "Centur-Ion" monster from your hand or GY in your Spell & Trap Zone as a face-up Continuous Trap.
+					<div class="text_linebreak">1 Tuner + 1+ non-Tuner monsters&lt;br&gt;Your monsters with 2000 or less ATK cannot be destroyed by battle. You can only use each of the following effects of &quot;Centur-Ion Legatia&quot; once per turn. If this card is Special Summoned: You can draw 1 card, then you can destroy the monster your opponent controls with the highest ATK (your choice, if tied). During the End Phase: You can place 1 non-Synchro &quot;Centur-Ion&quot; monster from your hand or GY in your Spell &amp; Trap Zone as a face-up Continuous Trap.</div>
 				</div>
 			</div><!-- CardText -->
 		
@@ -1043,21 +1138,20 @@
 				</div>
 			</div>
 		
-	</div>
-	<div class="bottom">
+		<div id="IncludedLanguages" class="bottom">
 
-		
-		
+			
+			
 
 <!-- ///VoteCondition  -->
 
 
 
 
-		<div id="CardRelation">
-			
-			<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=19375"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+			<div id="CardRelation">
+				
+				<a class="navbtn forb hex btn" href="/yugiohdb/deck_search.action?cardid=19375"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1070,13 +1164,13 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>Search For Decks Containing This Card</h4>
-			</span></a>
+					<h4>Search For Decks Containing This Card</h4>
+				</span></a>
+				
+				
 			
-			
-		
-			<a class="navbtn forb hex btn" href="#relationCard"><span>
-				<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
+				<a class="navbtn forb hex btn" href="#relationCard"><span>
+					<div class="hex icon"><span><?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
   <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
   <g>
@@ -1086,30 +1180,44 @@
     </g>
   </g>
 </svg></span></div>
-				<h4>View Cards Related to This Card</h4>
-			</span></a>
+					<h4>View Cards Related to This Card</h4>
+				</span></a>
 
+			
+
+
+			</div><!-- CardRelation -->
 		
-
-
-		</div><!-- CardRelation -->
-	
-	
-	
+		
+		
+		</div>
 	</div>
+
 </div><!-- #CardSet -->
 	
 <div style="display: none;">
 	<div id="pop_set">
+
 		<div class="img_set">
+				<div class="btn_set">
 			
+				</div>
 				<div id="pop_card">
 			
 					<img id="pop_card_image_1" alt="1" class="none">
 			
 				</div>
+				<div class="btn_set">
 			
+				</div>
 		</div>
+	
+			<div class="thumbnail">
+		
+				<img id="popup_card_image_1" alt="1" class="none iid_1">
+		
+			</div>
+	
 	</div>
 </div>
 	
@@ -1132,17 +1240,20 @@
 	<div class="sns_btn">
 		<div class="sns">
 			
-			<iframe src="//platform.twitter.com/widgets/tweet_button.html?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Den%26a%3D202606262316&amp;lang=en&amp;count=horizontal&amp;hashtags=YugiohDB_EN" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Den%26a%3D202611040938&amp;hashtags=YugiohDB_EN" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Den%26a%3D202606262316&amp;send=false&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;locale=en_US" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:20px;" allowTransparency="true"></iframe>
+			
+			<a class="sns_f" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.db.yugioh-card.com%2Fyugiohdb%2Fcard_search.action%3Fope%3D2%26cid%3D19375%26request_locale%3Den%26a%3D202611040938" target="_blank" rel="noopener noreferrer"></a>
 
 			
-			<div class="fb-share-button" data-href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=19375&request_locale=en&a=202606262316" data-layout="button_count" data-size="small" ></div>
+			
 
 			
-			<div class="line-it-button" style="display: none;" data-lang="en" data-type="share-a" data-url="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=19375&request_locale=en&a=202606262316"></div>
-			<script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+			
+			<a class="sns_l" href="https://social-plugins.line.me/lineit/share?url=https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=19375&request_locale=en&a=202611040938" target="_blank" rel="noopener noreferrer"></a>
+
 		</div>
 	</div>
 
@@ -1157,32 +1268,35 @@
 
 			<div id="update_list" class="list">
 				<div class="t_haed">
-					<div>Sets</div>
+					<div>Organized by Illustration</div>
+					<div class="cardnum">
+						<p class="cardnum_now t_haed_list"><span>0</span>&nbsp;/&nbsp;</p><p class="cardnum_all">0</p>
+					</div>
+	
 				</div>
 				<div class="t_body">
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2024-09-20
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									MP24-EN145
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									25TH ANNIVERSARY TIN: DUELING MIRRORS
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001375000&rp=99999">
-
 							</div>
 		
 			
@@ -1201,28 +1315,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-17
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									VASM-EN019
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									VALIANT SMASHERS
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001304000&rp=99999">
-
 							</div>
 		
 			
@@ -1241,28 +1354,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-17
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									VASM-EN019
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									VALIANT SMASHERS
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001304000&rp=99999">
-
 							</div>
 		
 			
@@ -1281,28 +1393,27 @@
 					</div>
 
 	
-					<div class="t_row ">
+					<div class="t_row  pack_iid_1">
 						<div class="inside">
 							<div class="time">
 		
 								2023-11-17
 		
 							</div>
-
+							<div class="card_img">
+								<img id="update_list_card_image_1" alt="1" class="">
+							</div>
 							<div class="flex_1 contents " >
 								<div class="card_number">
 		
 									VASM-EN019
+									
 		
 								</div>
 								<div class="pack_name flex_1" >
 									VALIANT SMASHERS
 								</div>
-
-
-
 								<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=1&sess=1&pid=2000001304000&rp=99999">
-
 							</div>
 		
 			
@@ -1509,8 +1620,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									If this card you control would be used as Synchro Material, you can treat it as a non-Tuner. You can only use each of the following effects of "Centur-Ion Atrii" once per turn. If this card is Normal or Special Summoned, and you have both an "Emblema" card and a "Centur-Ion" card in your GY: You can draw 1 card, also you cannot Special Summon "Centur-Ion Atrii" for the rest of this turn. During the Main Phase, if this card is a Continuous Trap: You can Special Summon this card.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									If this card you control would be used as Synchro Material, you can treat it as a non-Tuner. You can only use each of the following effects of &quot;Centur-Ion Atrii&quot; once per turn. If this card is Normal or Special Summoned, and you have both an &quot;Emblema&quot; card and a &quot;Centur-Ion&quot; card in your GY: You can draw 1 card, also you cannot Special Summon &quot;Centur-Ion Atrii&quot; for the rest of this turn. During the Main Phase, if this card is a Continuous Trap: You can Special Summon this card.
 								</dd>
 		
 		
@@ -1527,7 +1638,7 @@
 
 								<input type="hidden" class="cnm" value='Centur-Ion Atrii'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20200">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20200&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1619,8 +1730,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 Tuner + 1+ non-Tuner monsters<br>Face-up cards in your Spell & Trap Zone cannot be destroyed by card effects. You can only use each of the following effects of "Centur-Ion Auxila" once per turn. If this card is Special Summoned: You can add 1 "Centur-Ion" card from your Deck to your hand. During the End Phase: You can place 1 of your non-Synchro "Centur-Ion" monsters that is banished or in your GY, in your Spell & Trap Zone as a face-up Continuous Trap.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 Tuner + 1+ non-Tuner monsters&lt;br&gt;Face-up cards in your Spell &amp; Trap Zone cannot be destroyed by card effects. You can only use each of the following effects of &quot;Centur-Ion Auxila&quot; once per turn. If this card is Special Summoned: You can add 1 &quot;Centur-Ion&quot; card from your Deck to your hand. During the End Phase: You can place 1 of your non-Synchro &quot;Centur-Ion&quot; monsters that is banished or in your GY, in your Spell &amp; Trap Zone as a face-up Continuous Trap.
 								</dd>
 		
 		
@@ -1637,7 +1748,7 @@
 
 								<input type="hidden" class="cnm" value='Centur-Ion Auxila'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19883">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19883&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1702,8 +1813,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									Place 1 "Centur-Ion" monster from your hand or GY in your Spell & Trap Zone as a face-up Continuous Trap. If a "Centur-Ion" Synchro Monster(s) is Special Summoned to your field, while this card is in your GY (except during the Damage Step): You can banish this card, then target 1 "Centur-Ion" monster in your GY; place it in your Spell & Trap Zone as a face-up Continuous Trap. You can only use each effect of "Centur-Ion Bonds" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									Place 1 &quot;Centur-Ion&quot; monster from your hand or GY in your Spell &amp; Trap Zone as a face-up Continuous Trap. If a &quot;Centur-Ion&quot; Synchro Monster(s) is Special Summoned to your field, while this card is in your GY (except during the Damage Step): You can banish this card, then target 1 &quot;Centur-Ion&quot; monster in your GY; place it in your Spell &amp; Trap Zone as a face-up Continuous Trap. You can only use each effect of &quot;Centur-Ion Bonds&quot; once per turn.
 								</dd>
 		
 		
@@ -1720,7 +1831,7 @@
 
 								<input type="hidden" class="cnm" value='Centur-Ion Bonds'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19378">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19378&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1812,8 +1923,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									When your opponent activates a monster effect as Chain Link 2 or higher (Quick Effect): You can make the activated effect become "Your opponent places 1 "Centur-Ion" monster from their face-up field or GY in their Spell & Trap Zone as a face-up Continuous Trap", also you cannot Special Summon "Centur-Ion Chimerea" for the rest of this turn. During the Main Phase, if this card is a Continuous Trap: You can Special Summon this card. You can only use each effect of "Centur-Ion Chimerea" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									When your opponent activates a monster effect as Chain Link 2 or higher (Quick Effect): You can make the activated effect become &quot;Your opponent places 1 &quot;Centur-Ion&quot; monster from their face-up field or GY in their Spell &amp; Trap Zone as a face-up Continuous Trap&quot;, also you cannot Special Summon &quot;Centur-Ion Chimerea&quot; for the rest of this turn. During the Main Phase, if this card is a Continuous Trap: You can Special Summon this card. You can only use each effect of &quot;Centur-Ion Chimerea&quot; once per turn.
 								</dd>
 		
 		
@@ -1830,7 +1941,7 @@
 
 								<input type="hidden" class="cnm" value='Centur-Ion Chimerea'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20492">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20492&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -1922,8 +2033,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									During your opponent's turn, if this card is in your hand or GY (Quick Effect): You can target 1 "Centur-Ion" monster you control, except "Centur-Ion Emeth VI"; place it in your Spell & Trap Zone as a face-up Continuous Trap, and if you do, Special Summon this card, also you cannot Special Summon "Centur-Ion Emeth VI" for the rest of this turn. During the Main Phase, if this card is a Continuous Trap: You can Special Summon this card. You can only use each effect of "Centur-Ion Emeth VI" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									During your opponent's turn, if this card is in your hand or GY (Quick Effect): You can target 1 &quot;Centur-Ion&quot; monster you control, except &quot;Centur-Ion Emeth VI&quot;; place it in your Spell &amp; Trap Zone as a face-up Continuous Trap, and if you do, Special Summon this card, also you cannot Special Summon &quot;Centur-Ion Emeth VI&quot; for the rest of this turn. During the Main Phase, if this card is a Continuous Trap: You can Special Summon this card. You can only use each effect of &quot;Centur-Ion Emeth VI&quot; once per turn.
 								</dd>
 		
 		
@@ -1940,7 +2051,7 @@
 
 								<input type="hidden" class="cnm" value='Centur-Ion Emeth VI'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19374">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19374&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2032,8 +2143,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									You can send 1 face-up "Centur-Ion" card you control to the GY; Special Summon this card from your hand, also you cannot Special Summon "Centur-Ion Gargoyle II" for the rest of this turn. If this card is sent to the GY as Synchro Material: You can add this card to your hand. During the Main Phase, if this card is a Continuous Trap: You can Special Summon this card, then you can reduce its Level by 4. You can only use each effect of "Centur-Ion Gargoyle II" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									You can send 1 face-up &quot;Centur-Ion&quot; card you control to the GY; Special Summon this card from your hand, also you cannot Special Summon &quot;Centur-Ion Gargoyle II&quot; for the rest of this turn. If this card is sent to the GY as Synchro Material: You can add this card to your hand. During the Main Phase, if this card is a Continuous Trap: You can Special Summon this card, then you can reduce its Level by 4. You can only use each effect of &quot;Centur-Ion Gargoyle II&quot; once per turn.
 								</dd>
 		
 		
@@ -2050,7 +2161,7 @@
 
 								<input type="hidden" class="cnm" value='Centur-Ion Gargoyle II'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19862">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19862&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2108,8 +2219,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									Target 1 face-up Monster Card on the field; banish it, and if you do, during the Standby Phase of the next turn, Special Summon that banished monster to its owner's field. You can banish this card from your GY, then target 1 "Centur-Ion" Synchro Monster in your GY; Special Summon it, but it loses 1500 ATK. You can only use 1 "Centur-Ion Phalanx" effect per turn, and only once that turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									Target 1 face-up Monster Card on the field; banish it, and if you do, during the Standby Phase of the next turn, Special Summon that banished monster to its owner's field. You can banish this card from your GY, then target 1 &quot;Centur-Ion&quot; Synchro Monster in your GY; Special Summon it, but it loses 1500 ATK. You can only use 1 &quot;Centur-Ion Phalanx&quot; effect per turn, and only once that turn.
 								</dd>
 		
 		
@@ -2126,7 +2237,7 @@
 
 								<input type="hidden" class="cnm" value='Centur-Ion Phalanx'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19379">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19379&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2218,8 +2329,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									While this card is a Continuous Trap, Level 5 or higher "Centur-Ion" monsters you control cannot be destroyed by card effects. You can only use each of the following effects of "Centur-Ion Primera" once per turn. If this card is Normal or Special Summoned: You can add 1 "Centur-Ion" card from your Deck to your hand, except "Centur-Ion Primera", also you cannot Special Summon "Centur-Ion Primera" for the rest of this turn. During the Main Phase, if this card is a Continuous Trap: You can Special Summon this card.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									While this card is a Continuous Trap, Level 5 or higher &quot;Centur-Ion&quot; monsters you control cannot be destroyed by card effects. You can only use each of the following effects of &quot;Centur-Ion Primera&quot; once per turn. If this card is Normal or Special Summoned: You can add 1 &quot;Centur-Ion&quot; card from your Deck to your hand, except &quot;Centur-Ion Primera&quot;, also you cannot Special Summon &quot;Centur-Ion Primera&quot; for the rest of this turn. During the Main Phase, if this card is a Continuous Trap: You can Special Summon this card.
 								</dd>
 		
 		
@@ -2236,7 +2347,7 @@
 
 								<input type="hidden" class="cnm" value='Centur-Ion Primera'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19372">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19372&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2328,8 +2439,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									1 Tuner + 1+ non-Tuner monsters<br>Cannot be destroyed by battle, unless it was Special Summoned from the Extra Deck. You can only use each of the following effects of "Centur-Ion Primera Primus" once per turn. If this card is Synchro Summoned: You can add 1 "Emblema" card from your Deck or GY to your hand, then you can destroy 2 cards (1 on each field). If a face-up "Centur-Ion" card(s) you control leaves the field by an opponent's card effect, while this card is in your GY (except during the Damage Step): You can Special Summon this card.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									1 Tuner + 1+ non-Tuner monsters&lt;br&gt;Cannot be destroyed by battle, unless it was Special Summoned from the Extra Deck. You can only use each of the following effects of &quot;Centur-Ion Primera Primus&quot; once per turn. If this card is Synchro Summoned: You can add 1 &quot;Emblema&quot; card from your Deck or GY to your hand, then you can destroy 2 cards (1 on each field). If a face-up &quot;Centur-Ion&quot; card(s) you control leaves the field by an opponent's card effect, while this card is in your GY (except during the Damage Step): You can Special Summon this card.
 								</dd>
 		
 		
@@ -2346,7 +2457,7 @@
 
 								<input type="hidden" class="cnm" value='Centur-Ion Primera Primus'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20514">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=20514&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 			
@@ -2438,8 +2549,8 @@
 								</dd>
 		
 		
-								<dd class="box_card_text c_text flex_1">
-									During your Main Phase: You can place this card you control and 1 "Centur-Ion" monster from your hand or Deck, except "Centur-Ion Trudea", in your Spell & Trap Zones as face-up Continuous Traps, also you cannot Special Summon "Centur-Ion Trudea" for the rest of this turn. During the Main Phase, if this card is a Continuous Trap: You can Special Summon this card, then you can increase its Level by 4. You can only use each effect of "Centur-Ion Trudea" once per turn.
+								<dd class="box_card_text c_text flex_1 text_linebreak">
+									During your Main Phase: You can place this card you control and 1 &quot;Centur-Ion&quot; monster from your hand or Deck, except &quot;Centur-Ion Trudea&quot;, in your Spell &amp; Trap Zones as face-up Continuous Traps, also you cannot Special Summon &quot;Centur-Ion Trudea&quot; for the rest of this turn. During the Main Phase, if this card is a Continuous Trap: You can Special Summon this card, then you can increase its Level by 4. You can only use each effect of &quot;Centur-Ion Trudea&quot; once per turn.
 								</dd>
 		
 		
@@ -2456,7 +2567,7 @@
 
 								<input type="hidden" class="cnm" value='Centur-Ion Trudea'>
 								<input type="hidden" class="fltype" value=''>
-							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19373">
+							<input type="hidden" class="link_value" value="/yugiohdb/card_search.action?ope=2&cid=19373&iid=1">
 						</div><!-- .t_row c_normal -->
 		  
 					</div><!--.list_style-->
@@ -3880,6 +3991,8 @@
 			
 														<option value="2026" >2026</option>
 			
+														<option value="2027" >2027</option>
+			
 													</select>
 												</span>
 											</div>
@@ -4053,6 +4166,8 @@
 														<option value="2025" >2025</option>
 			
 														<option value="2026" >2026</option>
+			
+														<option value="2027" >2027</option>
 			
 													</select>
 												</span>
@@ -5155,6 +5270,6 @@
 
 
 
-<script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=1&cb=1169208419" async></script></body>
+</body>
 </html>
 

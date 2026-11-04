@@ -452,8 +452,7 @@ If this card is sent to the GY by a card effect: You can Special Summon it in fa
 				CardEffect: `Booting in Replica Mode...
 An error has occurred while executing C:\sophia\zefra.exe
 Unknown publisher.
-Allow C:\tierra\qliphort.exe ?
-...[Y]
+Allow C:\tierra\qliphort.exe ? <Y/N>...[Y]
 Booting in Autonomy Mode...`,
 
 				MonsterAttribute:     EARTH,
@@ -599,7 +598,7 @@ You can only use this effect of "Ghost Belle & Haunted Mansion" once per turn.`,
 				CardType:    Monster,
 				CardSubtype: MonsterXyz,
 				CardEffect: `2 Level 4 monsters
-Once per turn, during the Standby Phase: You can attach the top card of your opponent's Deck to this card as material. (Quick Effect): You can detach up to 3 different types of materials from this card, then apply the following effect(s) depending on what was detached.
+Once per turn, during the Standby Phase: You can attach the top card of your opponent's Deck to this card. (Quick Effect): You can detach up to 3 different types of materials from this card, then apply the following effect(s) depending on what was detached.
 ● Monster: Banish this card until the End Phase.
 ● Spell: Draw 1 card.
 ● Trap: Place 1 face-up card your opponent controls on top of the Deck.
@@ -713,7 +712,7 @@ You can only activate 1 "Triple Tactics Talent" per turn.`,
 				CardType:    Monster,
 				CardSubtype: MonsterXyz,
 				CardEffect: `2 Level 12 monsters
-Once per turn, if an Xyz Monster battled this turn, you can also Xyz Summon "Divine Arsenal AA-ZEUS - Sky Thunder" by using 1 Xyz Monster you control as material (transfer its materials to this card). (Quick Effect): You can detach 2 materials from this card; send all other cards from the field to the GY. Once per turn, if another card(s) you control is destroyed by battle or an opponent's card effect: You can attach 1 card from your hand, Deck, or Extra Deck to this card.`,
+Once per turn, if an Xyz Monster battled this turn, you can also Xyz Summon "Divine Arsenal AA-ZEUS - Sky Thunder" by using 1 Xyz Monster you control (transfer its materials). (Quick Effect): You can detach 2 materials from this card; send all other cards from the field to the GY. Once per turn, if another card(s) you control is destroyed by battle or an opponent's card effect: You can attach 1 card from your hand, Deck, or Extra Deck to this card.`,
 
 				MonsterAttribute:     LIGHT,
 				MonsterType:          Machine,
