@@ -45,10 +45,17 @@
 # TODO: Investigate Suspicious Empty Fields
 
 - The `--- suspicious empty fields ---` section of `cmd/read-yugiohdb-stats` flags
-  parser misses worth investigating. Counts from the 2026-09 crawl:
-  406 cards with empty `card_name_en`, 52 set_cards rows with empty `release_date`,
+  parser misses worth investigating. Counts from the 2026-11-04 crawl:
+  404 cards with empty `card_name_en`, 52 set_cards rows with empty `release_date`,
   28 Pendulum rows with `pendulum_scale=0`, 19 cards_rush rows with empty `card_subtype`,
   7 non-Link monsters with `level_rank_link=0`, 6 ja card_texts rows with empty `effect`,
-  and 1 set_cards row missing both `rarity_code` and `rarity_name`.
+  and 79 set_cards rows missing both `rarity_code` and `rarity_name`.
+- The 404 empty `card_name_en` are cards with no EN page
+  (Konami removed the English name from JA and KO pages around 2026-10-28):
+  81 cards new in 2026-10 and 323 OCG-only cards.
+- 76 of the 79 rows without rarity are prints of MAGNIFICENT MAESTROS (`MAMS`),
+  a set released 2026-11-13 whose rarities Konami had not published yet:
+  they should fill on the next crawl after release.
+  The others are 2 `RD/26IM` (Korean promo of 2026-10-15) and `RD/P001-KR001`.
 - MonsterLink rows with empty `link_arrows` used to be the largest group (~462).
   That check now reports 0, so it needs no further investigation.
