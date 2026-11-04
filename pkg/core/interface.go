@@ -14,6 +14,9 @@ type App struct {
 // Konami data. Implemented by pkg/driver/sqlite.
 type Database interface {
 	UpsertCard(c konami.Card) error
+	// FillCardNameEN sets cards.card_name_en for an existing card row
+	// only when it is still empty, so a name from an earlier source is kept.
+	FillCardNameEN(cardID, nameEN string) error
 	UpsertCardRush(c konami.CardRushDuel) error
 	UpsertCardPassword(cardID, password, cardName string) error
 	UpsertCardText(cardID, lang string, t konami.CardLocaleText) error

@@ -250,7 +250,7 @@ func main() {
 		label string
 		query string
 	}{
-		// cards: every row should have card_type / card_subtype / card_name_en (filled by ja pass)
+		// cards: every row should have card_type / card_subtype / card_name_en (filled by the ja pass, else the en page name)
 		{"cards.card_type=''", "SELECT COUNT(*) FROM cards WHERE card_type = ''"},
 		{"cards.card_subtype=''", "SELECT COUNT(*) FROM cards WHERE card_subtype = ''"},
 		{"cards.card_name_en=''", "SELECT COUNT(*) FROM cards WHERE card_name_en = ''"},

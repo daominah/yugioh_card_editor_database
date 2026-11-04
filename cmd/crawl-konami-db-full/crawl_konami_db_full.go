@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime/pprof"
+	"slices"
 	"sync"
 	"time"
 
@@ -47,6 +48,11 @@ const (
 	latestKnownRushCardID = 24004
 
 	isIncludingCardPassword = true // 3rd-party data ygocdb.com
+
+	// isFillingNameENFromAsiaEnglish runs fillCardNameENFromAsiaEnglish after the standard passes.
+	// Off: on the 2026-11-04 full crawl, all 404 cards still missing an English name
+	// had no "ae" page either, so it filled 0 names for about 400 extra requests.
+	isFillingNameENFromAsiaEnglish = false
 )
 
 func main() {
@@ -88,6 +94,9 @@ func main() {
 	for _, locale := range []string{"ja", "en", "ko"} {
 		log.Printf("begin crawlLocale %v %v", konami.StandardDB, locale)
 		crawlLocale(db, htmlCacheDir, konami.StandardDB, locale, nLimit)
+	}
+	if isFillingNameENFromAsiaEnglish {
+		fillCardNameENFromAsiaEnglish(db, htmlCacheDir)
 	}
 
 	// Rush Duel / Duel Links: only JA and KO are available on rushdb.
@@ -303,6 +312,16 @@ func crawlLocale(database core.Database, htmlCacheDir string,
 				if err := database.UpsertCard(card); err != nil {
 					log.Printf("error UpsertCard cardID=%v: %v", cardID, err)
 				}
+				if card.CardNameEN == "" {
+					cardsMissingNameEN.add(cardID)
+				}
+			}
+			// Konami's current JA pages no longer print the English name,
+			// so the EN page name fills cards.card_name_en for those cards.
+			if locale == "en" && card.CardName != "" && cardsMissingNameEN.remove(cardID) {
+				if err := database.FillCardNameEN(string(cardID), card.CardName); err != nil {
+					log.Printf("error FillCardNameEN cardID=%v: %v", cardID, err)
+				}
 			}
 		}
 
@@ -386,6 +405,68 @@ func crawlLocale(database core.Database, htmlCacheDir string,
 	log.Printf("________________________________________")
 }
 
+// fillCardNameENFromAsiaEnglish fills cards.card_name_en
+// for cards still missing it after the "ja" and "en" passes,
+// mostly OCG-only cards that have no EN (TCG) page.
+// It reads the "ae" (English Asia, the OCG English edition) page name.
+// Only the name is used: "ae" card texts and set prints are not stored.
+// It visits only the missing card IDs instead of the whole ID range,
+// so it cannot use crawlLocale (whose early stop needs consecutive IDs).
+func fillCardNameENFromAsiaEnglish(database core.Database, htmlCacheDir string) {
+	const locale = "ae"
+	beginT := time.Now()
+	cardIDs := cardsMissingNameEN.sorted()
+	log.Printf("begin fillCardNameENFromAsiaEnglish missing=%v", len(cardIDs))
+
+	baseURL := fmt.Sprintf("https://www.db.yugioh-card.com/%v/card_search.action", konami.StandardDB)
+	cacheDir := filepath.Join(htmlCacheDir, string(konami.StandardDB), locale)
+	if err := os.MkdirAll(cacheDir, 0755); err != nil {
+		log.Fatalf("error os.MkdirAll %v: %v", cacheDir, err)
+	}
+	httpClient := &http.Client{Timeout: 128 * time.Second}
+
+	var (
+		mu          sync.Mutex
+		filledCount int
+		wg          sync.WaitGroup
+	)
+	cardIDCh := make(chan konami.CardID, maxGoroutines)
+	for range maxGoroutines {
+		wg.Go(func() {
+			for cardID := range cardIDCh {
+				cardNum := cardID.Int()
+				cachePath := filepath.Join(cacheDir, fmt.Sprintf("%v.html", cardNum))
+				bodyBs, err := readOrFetchHTML(httpClient, cachePath, baseURL, locale, cardNum, latestKnownCardID)
+				if err != nil {
+					log.Printf("error cardID=%v locale=%v: %v", cardID, locale, err)
+					continue
+				}
+				if bytes.Contains(bodyBs, []byte(notFoundMarkers[locale])) {
+					continue
+				}
+				nameEN := konami.NewParser(bodyBs, cardID).LocaleText().Name
+				if nameEN == "" {
+					continue
+				}
+				if err := database.FillCardNameEN(string(cardID), nameEN); err != nil {
+					log.Printf("error FillCardNameEN cardID=%v: %v", cardID, err)
+					continue
+				}
+				mu.Lock()
+				filledCount++
+				mu.Unlock()
+			}
+		})
+	}
+	for _, cardID := range cardIDs {
+		cardIDCh <- cardID
+	}
+	close(cardIDCh)
+	wg.Wait()
+	log.Printf("end fillCardNameENFromAsiaEnglish filled=%v stillMissing=%v duration=%v",
+		filledCount, len(cardIDs)-filledCount, formatDuration(time.Since(beginT)))
+}
+
 // readOrFetchHTML returns HTML for cardID: from the on-disk cache if present,
 // otherwise fetches from the Konami DB and writes the response to the cache.
 // The cache allows re-parsing during development without re-downloading.
@@ -452,6 +533,7 @@ func formatDuration(d time.Duration) string {
 // and disable the maxConsecutiveNotFound early-stop.
 var notFoundMarkers = map[string]string{
 	"en": "Card information not found",
+	"ae": "Card information not found",
 	"ja": "カード情報がありません",
 	"ko": "카드 정보가 없습니다",
 }
@@ -508,4 +590,45 @@ func upsertSetIfChanged(database core.Database, fresh konami.KonamiSet) {
 	if err := database.UpsertSet(merged); err != nil {
 		log.Printf("error UpsertSet %v: %v", merged.Abbreviation, err)
 	}
+}
+
+// cardsMissingNameEN holds the card IDs whose "ja" pass found no English name,
+// because Konami's current JA pages no longer print it.
+// The "en" pass removes the cards it fills,
+// and fillCardNameENFromAsiaEnglish tries the rest when isFillingNameENFromAsiaEnglish is on.
+var cardsMissingNameEN = &cardIDSet{ids: make(map[konami.CardID]bool)}
+
+// cardIDSet is a set of card IDs, safe for the crawler's worker goroutines.
+type cardIDSet struct {
+	mu  sync.Mutex
+	ids map[konami.CardID]bool
+}
+
+func (s *cardIDSet) add(id konami.CardID) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.ids[id] = true
+}
+
+// remove deletes id and reports whether it was in the set.
+func (s *cardIDSet) remove(id konami.CardID) bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if !s.ids[id] {
+		return false
+	}
+	delete(s.ids, id)
+	return true
+}
+
+// sorted returns the card IDs in numeric order.
+func (s *cardIDSet) sorted() []konami.CardID {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	ret := make([]konami.CardID, 0, len(s.ids))
+	for id := range s.ids {
+		ret = append(ret, id)
+	}
+	slices.SortFunc(ret, func(a, b konami.CardID) int { return a.Int() - b.Int() })
+	return ret
 }

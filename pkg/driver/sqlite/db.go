@@ -181,6 +181,22 @@ func (db *DB) UpsertCardRush(c konami.CardRushDuel) error {
 	return nil
 }
 
+// FillCardNameEN sets card_name_en for an existing cards row
+// only when it is still empty.
+// The crawler calls it after the "ja" pass with names from other locales,
+// because Konami's current JA pages no longer print the English name.
+func (db *DB) FillCardNameEN(cardID, nameEN string) error {
+	_, err := db.sql.Exec(`
+        UPDATE cards SET card_name_en = ?
+        WHERE card_id = ? AND card_name_en = ''`,
+		nameEN, cardID,
+	)
+	if err != nil {
+		return fmt.Errorf("error FillCardNameEN %v: %w", cardID, err)
+	}
+	return nil
+}
+
 // UpsertCardPassword writes the YGOCDB password row for one cardID.
 // card_passwords is its own table because passwords come from a third-party
 // source (ygocdb.com) on a different lifecycle than the Konami crawl.
