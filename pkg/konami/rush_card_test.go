@@ -22,15 +22,18 @@ func TestPrepareRushDuelData(t *testing.T) {
 
 	for _, locale := range []string{"ja", "ko"} {
 		for _, cardID := range []string{
-			"15184", // Blue-Eyes White Dragon
-			"16372", // Pot of Greed
-			"19096", // Harpy Lady Sisters [L]
-			"19097", // Harpy Lady Sisters (center Maximum Monster)
+			"15184", // Blue-Eyes White Dragon (Normal Monster)
+			"16372", // Pot of Greed (Normal Spell)
+			"19096", // Harpy Lady Sisters [L] (Effect Monster)
+			"19097", // Harpy Lady Sisters (Effect Monster, center Maximum Monster)
 			"19105", // Harpie's Full Dress (Equip Spell)
-			"19342", // Negate Attack
-			"20453", // Elemental HERO Flame Wingman
-			"21588", // Magician of Black Chaos (Ritual Monster)
-			"21597", // Ritual of Black Chaos (Ritual Spell — pairs with 21588)
+			"19342", // Negate Attack (Normal Trap)
+			"20453", // Elemental HERO Flame Wingman (Fusion Monster with effect)
+			"21588", // Magician of Black Chaos (Ritual Monster with effect)
+			"21597", // Ritual of Black Chaos (Ritual Spell, pairs with 21588)
+			"16924", // Labyrinth Tank (Fusion Monster without effect)
+			"21848", // Zera (Ritual Monster without effect)
+			"23429", // Hiyoku Renrin (Union Monster)
 		} {
 			cardURL := `https://www.db.yugioh-card.com/rushdb/card_search.action?ope=2` +
 				fmt.Sprintf(`&request_locale=%v&cid=%v`, locale, cardID)
@@ -72,19 +75,19 @@ func TestPrepareRushDuelData(t *testing.T) {
 var (
 	//go:embed test_rushduel_html_ja/test_konami_15184.html
 	test_rushduel_15184 []byte
-	// 15184: Blue-Eyes White Dragon
+	// 15184: Blue-Eyes White Dragon (Normal Monster)
 
 	//go:embed test_rushduel_html_ja/test_konami_16372.html
 	test_rushduel_16372 []byte
-	// 16372: Pot of Greed
+	// 16372: Pot of Greed (Normal Spell)
 
 	//go:embed test_rushduel_html_ja/test_konami_19096.html
 	test_rushduel_19096 []byte
-	// 19096: Harpy Lady Sisters [L]
+	// 19096: Harpy Lady Sisters [L] (Effect Monster)
 
 	//go:embed test_rushduel_html_ja/test_konami_19097.html
 	test_rushduel_19097 []byte
-	// 19097: Harpy Lady Sisters (center Maximum Monster)
+	// 19097: Harpy Lady Sisters (Effect Monster, center Maximum Monster)
 
 	//go:embed test_rushduel_html_ja/test_konami_19105.html
 	test_konami_19105 []byte
@@ -92,19 +95,31 @@ var (
 
 	//go:embed test_rushduel_html_ja/test_konami_19342.html
 	test_rushduel_19342 []byte
-	// 19342: Negate Attack
+	// 19342: Negate Attack (Normal Trap)
 
 	//go:embed test_rushduel_html_ja/test_konami_20453.html
 	test_rushduel_20453 []byte
-	// 20453: Elemental HERO Flame Wingman
+	// 20453: Elemental HERO Flame Wingman (Fusion Monster with effect, species "フュージョン/効果")
 
 	//go:embed test_rushduel_html_ja/test_konami_21588.html
 	test_rushduel_21588 []byte
-	// 21588: Magician of Black Chaos (Ritual Monster)
+	// 21588: Magician of Black Chaos (Ritual Monster with effect, species "リチュアル/効果")
 
 	//go:embed test_rushduel_html_ja/test_konami_21597.html
 	test_rushduel_21597 []byte
-	// 21597: Ritual of Black Chaos (Ritual Spell — pairs with 21588)
+	// 21597: Ritual of Black Chaos (Ritual Spell, pairs with 21588)
+
+	//go:embed test_rushduel_html_ja/test_konami_16924.html
+	test_rushduel_16924 []byte
+	// 16924: Labyrinth Tank (Fusion Monster without effect, species "フュージョン")
+
+	//go:embed test_rushduel_html_ja/test_konami_21848.html
+	test_rushduel_21848 []byte
+	// 21848: Zera (Ritual Monster without effect, species "リチュアル")
+
+	//go:embed test_rushduel_html_ja/test_konami_23429.html
+	test_rushduel_23429 []byte
+	// 23429: Hiyoku Renrin (Union Monster, species "ユニオン/効果")
 )
 
 func TestParseRushDuelCardHTML(t *testing.T) {
@@ -116,7 +131,7 @@ func TestParseRushDuelCardHTML(t *testing.T) {
 		{pageHTML: test_rushduel_15184, cardID: "15184",
 			want: CardRushDuel{
 				Card: Card{
-					CardName:    "青眼の白龍", // Blue-Eyes White Dragon
+					CardName:    "青眼の白龍", // Blue-Eyes White Dragon (Normal Monster)
 					CardType:    Monster,
 					CardSubtype: MonsterNormal,
 					CardEffect:  `高い攻撃力を誇る伝説のドラゴン。どんな相手でも粉砕する、その破壊力は計り知れない。`,
@@ -140,7 +155,7 @@ func TestParseRushDuelCardHTML(t *testing.T) {
 		{pageHTML: test_rushduel_16372, cardID: "16372",
 			want: CardRushDuel{
 				Card: Card{
-					CardName:    "強欲な壺", // Pot of Greed
+					CardName:    "強欲な壺", // Pot of Greed (Normal Spell)
 					CardType:    Spell,
 					CardSubtype: SpellNormal,
 					CardEffect: `【条件】なし
@@ -158,7 +173,7 @@ func TestParseRushDuelCardHTML(t *testing.T) {
 		{pageHTML: test_rushduel_19096, cardID: "19096",
 			want: CardRushDuel{
 				Card: Card{
-					CardName:    "ハーピィ三姉妹［L］", // Harpy Lady Sisters [L]
+					CardName:    "ハーピィ三姉妹［L］", // Harpy Lady Sisters [L] (Effect Monster)
 					CardType:    Monster,
 					CardSubtype: MonsterEffect,
 					CardEffect: `墓地にいるこのカードのカード名は「ハーピィ三姉妹」になる。
@@ -187,7 +202,7 @@ func TestParseRushDuelCardHTML(t *testing.T) {
 		{pageHTML: test_rushduel_19097, cardID: "19097",
 			want: CardRushDuel{
 				Card: Card{
-					CardName:    "ハーピィ三姉妹", // Harpy Lady Sisters (center Maximum Monster)
+					CardName:    "ハーピィ三姉妹", // Harpy Lady Sisters (Effect Monster, center Maximum Monster)
 					CardType:    Monster,
 					CardSubtype: MonsterEffect,
 					CardEffect: `「ハーピィ三姉妹[L]」「ハーピィ三姉妹[R]」と揃えてマキシマム召喚できる。
@@ -216,7 +231,7 @@ func TestParseRushDuelCardHTML(t *testing.T) {
 		{pageHTML: test_konami_19105, cardID: "19105",
 			want: CardRushDuel{
 				Card: Card{
-					CardName:    "ハーピィズフルドレス", // Harpie's Full Dress
+					CardName:    "ハーピィズフルドレス", // Harpie's Full Dress (Equip Spell)
 					CardType:    Spell,
 					CardSubtype: SpellEquip,
 					CardEffect: `【条件】自分フィールドの表側表示の「ハーピィ・レディ」または「ハーピィ三姉妹」1体に装備できる。
@@ -234,7 +249,7 @@ func TestParseRushDuelCardHTML(t *testing.T) {
 		{pageHTML: test_rushduel_19342, cardID: "19342",
 			want: CardRushDuel{
 				Card: Card{
-					CardName:    "攻撃の無力化", // Negate Attack
+					CardName:    "攻撃の無力化", // Negate Attack (Normal Trap)
 					CardType:    Trap,
 					CardSubtype: TrapNormal,
 					CardEffect: `【条件】相手モンスターの攻撃宣言時に発動できる。
@@ -252,9 +267,9 @@ func TestParseRushDuelCardHTML(t *testing.T) {
 		{pageHTML: test_rushduel_20453, cardID: "20453",
 			want: CardRushDuel{
 				Card: Card{
-					CardName:    "E・HERO フレイム・ウィングマン", // Elemental HERO Flame Wingman
+					CardName:    "E・HERO フレイム・ウィングマン", // Elemental HERO Flame Wingman (Fusion Monster)
 					CardType:    Monster,
-					CardSubtype: MonsterEffect,
+					CardSubtype: MonsterFusion,
 					CardEffect: `「E・HERO フェザーマン」+「E・HERO バーストレディ」
 このカードはフュージョン召喚でしか特殊召喚できない。
 【条件】なし
@@ -282,9 +297,9 @@ func TestParseRushDuelCardHTML(t *testing.T) {
 		{pageHTML: test_rushduel_21588, cardID: "21588",
 			want: CardRushDuel{
 				Card: Card{
-					CardName:    "マジシャン・オブ・ブラックカオス", // Magician of Black Chaos
+					CardName:    "マジシャン・オブ・ブラックカオス", // Magician of Black Chaos (Ritual Monster)
 					CardType:    Monster,
-					CardSubtype: MonsterEffect,
+					CardSubtype: MonsterRitual,
 					CardEffect: `墓地にいるこのカードのカード名は「ブラック・マジシャン」になる。
 【条件】なし
 【効果】なし`,
@@ -313,11 +328,67 @@ func TestParseRushDuelCardHTML(t *testing.T) {
 				// a Monster with attribute "リチュアル魔法"; this case is a
 				// regression test for that bug (cards_rush had 32 such rows).
 				Card: Card{
-					CardName:    "カオス－黒魔術の儀式", // Ritual of Black Chaos
+					CardName:    "カオス－黒魔術の儀式", // Ritual of Black Chaos (Ritual Spell)
 					CardType:    Spell,
 					CardSubtype: SpellRitual,
 
 					MiscKonamiCardID: "21597",
+				},
+			}},
+
+		{pageHTML: test_rushduel_16924, cardID: "16924",
+			want: CardRushDuel{
+				Card: Card{
+					CardName:    "迷宮の魔戦車", // Labyrinth Tank (Fusion Monster)
+					CardType:    Monster,
+					CardSubtype: MonsterFusion,
+					CardEffect:  `「ギガテック・ウルフ」+「キャノン・ソルジャー」`,
+
+					MonsterAttribute:     DARK,
+					MonsterType:          Machine,
+					MonsterLevelRankLink: 7,
+					MonsterATK:           2400,
+					MonsterDEF:           2400,
+					IsNonEffectMonster:   true,
+
+					MiscKonamiCardID: "16924",
+				},
+			}},
+
+		{pageHTML: test_rushduel_21848, cardID: "21848",
+			want: CardRushDuel{
+				Card: Card{
+					CardName:    "ゼラ", // Zera (Ritual Monster)
+					CardType:    Monster,
+					CardSubtype: MonsterRitual,
+
+					MonsterAttribute:     DARK,
+					MonsterType:          Fiend,
+					MonsterLevelRankLink: 8,
+					MonsterATK:           2800,
+					MonsterDEF:           2300,
+					IsNonEffectMonster:   true,
+
+					MiscKonamiCardID: "21848",
+				},
+			}},
+
+		{pageHTML: test_rushduel_23429, cardID: "23429",
+			want: CardRushDuel{
+				Card: Card{
+					CardName:    "比翼レンリン", // Hiyoku Renrin (Union Monster)
+					CardType:    Monster,
+					CardSubtype: MonsterEffect,
+
+					MonsterAttribute:     DARK,
+					MonsterType:          Dragon,
+					MonsterLevelRankLink: 3,
+					MonsterATK:           1500,
+					MonsterDEF:           0,
+					MonsterAbilities:     []MonsterAbility{Union},
+					IsNonEffectMonster:   false,
+
+					MiscKonamiCardID: "23429",
 				},
 			}},
 	} {
@@ -368,6 +439,46 @@ func TestParseRushDuelCardHTML(t *testing.T) {
 		}
 		if want.MiscYear != "" && got.MiscYear != want.MiscYear {
 			t.Errorf("cardID %v MiscYear got %q, want %q", c.cardID, got.MiscYear, want.MiscYear)
+		}
+	}
+}
+
+func TestRushDuelParseSpecies(t *testing.T) {
+	for _, c := range []struct {
+		speciesText            string
+		wantSubtype            CardSubtype
+		wantAbilities          []MonsterAbility
+		wantIsNonEffectMonster bool
+	}{
+		// GIVEN species lines as written by Konami in Japanese, Korean and English
+		{"機械族／フュージョン", MonsterFusion, nil, true},
+		{"機械族／フュージョン／効果", MonsterFusion, nil, false},
+		{"기계족／퓨전", MonsterFusion, nil, true},
+		{"기계족／퓨전／효과", MonsterFusion, nil, false},
+		{"Machine / Fusion", MonsterFusion, nil, true},
+		{"Machine / Fusion / Effect", MonsterFusion, nil, false},
+		{"悪魔族／リチュアル", MonsterRitual, nil, true},
+		{"悪魔族／リチュアル／効果", MonsterRitual, nil, false},
+		{"악마족／리추얼", MonsterRitual, nil, true},
+		{"악마족／리추얼／효과", MonsterRitual, nil, false},
+		{"Fiend / Ritual / Effect", MonsterRitual, nil, false},
+		{"ドラゴン族／ユニオン／効果", MonsterEffect, []MonsterAbility{Union}, false},
+		{"드래곤족／유니온／효과", MonsterEffect, []MonsterAbility{Union}, false},
+		{"鳥獣族／マキシマム／効果", MonsterEffect, []MonsterAbility{RushMaximum}, false},
+	} {
+		// WHEN the species line is parsed
+		var got CardRushDuel
+		rushDuelParseSpecies(&got, c.speciesText)
+
+		// THEN the subtype, abilities and effect flag match the Konami card frame
+		if got.CardSubtype != c.wantSubtype {
+			t.Errorf("species %q CardSubtype got %q, want %q", c.speciesText, got.CardSubtype, c.wantSubtype)
+		}
+		if !CheckEqualArray(got.MonsterAbilities, c.wantAbilities) {
+			t.Errorf("species %q MonsterAbilities got %v, want %v", c.speciesText, got.MonsterAbilities, c.wantAbilities)
+		}
+		if got.IsNonEffectMonster != c.wantIsNonEffectMonster {
+			t.Errorf("species %q IsNonEffectMonster got %v, want %v", c.speciesText, got.IsNonEffectMonster, c.wantIsNonEffectMonster)
 		}
 	}
 }
