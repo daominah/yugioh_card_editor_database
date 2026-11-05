@@ -49,6 +49,15 @@ A static snapshot is embedded at `pkg/core/ygocdb_card_password.json` for offlin
 
 Set data (abbreviation, names, release date, OCG vs TCG) comes from the prints
 listed on Konami card pages, stored in the `sets` table of `data/yugioh.db`.
+Konami reuses one set code for several products (bonus cards, numbered series, event families),
+so `cmd/crawl-konami-db-full` collects every pack name per set code and locale
+and `konami.ChooseSetName` picks the main product's name
+(no bonus marker, generic before variant, most prints, earliest date).
+Konami writes a bracketed English title on only some JA and KO names
+("エイジ・オブ・オーバーロード [ AGE OF OVERLORD ]"),
+so `konami.SplitEnglishTitle` drops it for consistency
+and the title fills `name_en` when no EN page names the set.
+A bracket without Latin letters or with Japanese text stays in the name.
 A manually saved Yugipedia set chronology page used to provide title-case English set names;
 it was removed once `cmd/export-all-cards-csv` started writing `data/yugioh_sets.csv` from the database.
 
