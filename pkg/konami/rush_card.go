@@ -325,24 +325,33 @@ func rushDuelParseSpecies(card *CardRushDuel, speciesText string) {
 			continue
 		}
 
+		// Fusion and Ritual set only the subtype: like the OCG parser,
+		// only the Effect token clears IsNonEffectMonster and
+		// it must not overwrite a Fusion or Ritual subtype.
+		// Rush pages write them in katakana ("フュージョン", "リチュアル"),
+		// not the kanji used by the OCG pages.
 		switch token {
-		case "Normal", "通常":
+		case "Normal", "通常", "일반":
 			card.CardSubtype = MonsterNormal
 			continue
-		case "Effect", "効果":
-			card.CardSubtype = MonsterEffect
+		case "Effect", "効果", "효과":
+			if card.CardSubtype == "" {
+				card.CardSubtype = MonsterEffect
+			}
 			card.IsNonEffectMonster = false
 			continue
-		case "Maximum", "マキシマム":
+		case "Maximum", "マキシマム", "맥시멈":
 			card.MonsterAbilities = append(card.MonsterAbilities, RushMaximum)
 			continue
-		case "Fusion", "融合":
+		case "Fusion", "融合", "フュージョン", "퓨전":
 			card.CardSubtype = MonsterFusion
-			card.IsNonEffectMonster = false
 			continue
-		case "Ritual", "儀式":
+		case "Ritual", "儀式", "リチュアル", "리추얼":
 			card.CardSubtype = MonsterRitual
-			card.IsNonEffectMonster = false
+			continue
+		}
+		if ability := toMonsterAbility(token); ability != "" {
+			card.MonsterAbilities = append(card.MonsterAbilities, ability)
 			continue
 		}
 
