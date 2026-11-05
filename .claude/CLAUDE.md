@@ -42,20 +42,25 @@
   For any ordering or comparison logic (sorting, range checks, thresholds),
   use the `Int()` method instead of comparing the strings lexicographically.
 
-# TODO: Investigate Suspicious Empty Fields
+# Suspicious Empty Fields
 
 - The `--- suspicious empty fields ---` section of `cmd/read-yugiohdb-stats` flags
-  parser misses worth investigating. Counts from the 2026-11-04 crawl:
-  404 cards with empty `card_name_en`, 52 set_cards rows with empty `release_date`,
-  28 Pendulum rows with `pendulum_scale=0`, 19 cards_rush rows with empty `card_subtype`,
-  7 non-Link monsters with `level_rank_link=0`, 6 ja card_texts rows with empty `effect`,
-  and 79 set_cards rows missing both `rarity_code` and `rarity_name`.
-- The 404 empty `card_name_en` are cards with no EN page
+  possible parser misses. Investigated on the 2026-11-04 crawl:
+  every remaining non-zero count is Konami's own data, not a parser miss.
+- 404 `cards.card_name_en` are empty: cards with no EN page
   (Konami removed the English name from JA and KO pages around 2026-10-28):
   81 cards new in 2026-10 and 323 OCG-only cards.
-- 76 of the 79 rows without rarity are prints of MAGNIFICENT MAESTROS (`MAMS`),
+- 52 `set_cards.release_date` are empty: Konami's date cell is empty
+  (42 `JUMP`, 3 `JMP`, 1 `JMPS`, and `DL1` to `DL5` prizes).
+- 28 Pendulum rows with `pendulum_scale=0`: Konami's page shows scale 0.
+- 7 non-Link monsters with `level_rank_link=0`:
+  real Rank 0 Xyz and Level 0 Synchro monsters.
+- 6 ja `card_texts` rows with empty `effect`: Rush Ritual monsters
+  whose text box is empty on Konami's page.
+- 79 `set_cards` rows without rarity: 76 are prints of MAGNIFICENT MAESTROS (`MAMS`),
   a set released 2026-11-13 whose rarities Konami had not published yet:
   they should fill on the next crawl after release.
-  The others are 2 `RD/26IM` (Korean promo of 2026-10-15) and `RD/P001-KR001`.
-- MonsterLink rows with empty `link_arrows` used to be the largest group (~462).
-  That check now reports 0, so it needs no further investigation.
+  The other 3 (`RD/26IM-KR002`, `RD/26IM-KR003`, `RD/P001-KR001`)
+  show no rarity icon on Konami's page.
+- Rush Duel empty `card_subtype` (19 rows) was a parser bug, fixed:
+  Fusion, Ritual and Union species tokens are katakana or Hangul on Rush pages.
