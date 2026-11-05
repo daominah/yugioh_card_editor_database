@@ -105,6 +105,8 @@ func main() {
 		crawlLocale(db, htmlCacheDir, konami.RushDB, locale, nLimitRush)
 	}
 
+	writeChosenSets(db)
+
 	if isIncludingCardPassword {
 		populateCardPasswords(db)
 	}
@@ -336,20 +338,7 @@ func crawlLocale(database core.Database, htmlCacheDir string,
 			if p.Position == "" {
 				continue
 			}
-			set := konami.KonamiSet{
-				Abbreviation:  p.SetCode(),
-				YuGiOhVersion: konami.YuGiOhVersion(gameVersion),
-				ReleaseDate:   p.Date,
-			}
-			switch locale {
-			case "ja":
-				set.NameJA = p.SetName
-			case "ko":
-				set.NameKO = p.SetName
-			case "en":
-				set.NameEN = p.SetName
-			}
-			upsertSetIfChanged(database, set)
+			recordSetName(p.SetCode(), konami.YuGiOhVersion(gameVersion), locale, p)
 		}
 		if err := database.UpsertSetCards(prints); err != nil {
 			log.Printf("error UpsertSetCards cardID=%v: %v", cardID, err)
@@ -543,53 +532,151 @@ var notFoundMarkers = map[string]string{
 // Inspect with `go tool pprof <path>` (top, list, web).
 var cpuProfile = flag.String("cpuprofile", "", "write CPU profile to this file")
 
-// upsertSetIfChanged is a write-through cache over Database.UpsertSet:
-// it skips the SQL call when the merge of the in-memory cached row
-// and the new value would produce no field changes.
-// Konami's per-card pages echo the same set name
-// across every card that belongs to a given set,
-// so most UpsertSet calls in a hot loop carry no new data
-// and only burn the writer mutex; this cache filters them out.
-// Crosses locale passes intentionally: the JA pass populates NameJA,
-// the EN pass populates NameEN on the same cached row,
-// and each genuinely-new locale name triggers exactly one SQL call.
+// setNameKey identifies the pack names of one set code in one locale.
+// Konami's product ids differ per locale (the same booster has a different
+// pid on the JA, KO and EN pages), so names cannot be matched across locales
+// and each locale picks its own most representative name.
+type setNameKey struct {
+	setCode string
+	locale  string
+}
+
+// setNameStat accumulates the prints that list one pack name.
+type setNameStat struct {
+	date       string // earliest non-empty print date
+	printCount int
+}
+
+// Pack names seen on card pages, collected while crawling and written
+// by writeChosenSets after every pass, so the result does not depend
+// on which card page a worker goroutine happens to parse first.
 var (
-	seenSetsMu sync.Mutex
-	seenSets   = make(map[string]konami.KonamiSet) // set_code -> last merged value
+	setNamesMu      sync.Mutex
+	setNames        = make(map[setNameKey]map[string]*setNameStat)
+	setGameVersions = make(map[string]konami.YuGiOhVersion) // set code -> version of the first pass that saw it
 )
 
-func upsertSetIfChanged(database core.Database, fresh konami.KonamiSet) {
-	seenSetsMu.Lock()
-	cached, exists := seenSets[fresh.Abbreviation]
-	merged := cached
-	if !exists {
-		merged = fresh
-	} else {
-		// First-write-wins per field:
-		// only fill empty cached fields from non-empty fresh fields.
-		// Mirrors UpsertSet's ON CONFLICT semantics.
-		if merged.NameJA == "" && fresh.NameJA != "" {
-			merged.NameJA = fresh.NameJA
+// recordSetName notes that print p lists a pack name under setCode in locale.
+func recordSetName(setCode string, version konami.YuGiOhVersion, locale string, p konami.CardPrint) {
+	if p.SetName == "" {
+		return
+	}
+	setNamesMu.Lock()
+	defer setNamesMu.Unlock()
+	if _, ok := setGameVersions[setCode]; !ok {
+		setGameVersions[setCode] = version
+	}
+	key := setNameKey{setCode, locale}
+	byName := setNames[key]
+	if byName == nil {
+		byName = make(map[string]*setNameStat)
+		setNames[key] = byName
+	}
+	stat := byName[p.SetName]
+	if stat == nil {
+		stat = &setNameStat{}
+		byName[p.SetName] = stat
+	}
+	stat.printCount++
+	if p.Date != "" && (stat.date == "" || p.Date < stat.date) {
+		stat.date = p.Date
+	}
+}
+
+// writeChosenSets writes one sets row per set code:
+// each locale's name is the one konami.ChooseSetName prefers,
+// and release_date comes from the first locale that has a date:
+// EN first for TCG sets, JA first otherwise
+// (JA is the earliest release on Konami's DB, TCG sets have no JA page).
+func writeChosenSets(database core.Database) {
+	setNamesMu.Lock()
+	defer setNamesMu.Unlock()
+	rows := make(map[string]konami.KonamiSet)
+	// Only some JA and KO names carry Konami's bracketed English title,
+	// drop it for consistency and keep it as name_en when no EN page names the set.
+	englishTitles := make(map[string]map[string]string) // set code -> bare name -> English title
+	for key, byName := range setNames {
+		if key.locale == "en" {
+			continue
 		}
-		if merged.NameKO == "" && fresh.NameKO != "" {
-			merged.NameKO = fresh.NameKO
+		merged := make(map[string]*setNameStat)
+		for name, stat := range byName {
+			base, english := konami.SplitEnglishTitle(name)
+			if english != "" {
+				if englishTitles[key.setCode] == nil {
+					englishTitles[key.setCode] = make(map[string]string)
+				}
+				englishTitles[key.setCode][base] = english
+			}
+			m := merged[base]
+			if m == nil {
+				m = &setNameStat{}
+				merged[base] = m
+			}
+			m.printCount += stat.printCount
+			if stat.date != "" && (m.date == "" || stat.date < m.date) {
+				m.date = stat.date
+			}
 		}
-		if merged.NameEN == "" && fresh.NameEN != "" {
-			merged.NameEN = fresh.NameEN
-		}
-		if merged.ReleaseDate == "" && fresh.ReleaseDate != "" {
-			merged.ReleaseDate = fresh.ReleaseDate
+		setNames[key] = merged
+	}
+	for _, locale := range []string{"ja", "ko", "en"} {
+		for key, byName := range setNames {
+			if key.locale != locale {
+				continue
+			}
+			candidates := make([]konami.SetNameCandidate, 0, len(byName))
+			for name, stat := range byName {
+				candidates = append(candidates, konami.SetNameCandidate{
+					Name: name, Date: stat.date, PrintCount: stat.printCount})
+			}
+			chosen := konami.ChooseSetName(candidates)
+			row, ok := rows[key.setCode]
+			if !ok {
+				row = konami.KonamiSet{
+					Abbreviation:  key.setCode,
+					YuGiOhVersion: setGameVersions[key.setCode],
+				}
+			}
+			switch locale {
+			case "ja":
+				row.NameJA = chosen.Name
+			case "ko":
+				row.NameKO = chosen.Name
+			case "en":
+				row.NameEN = chosen.Name
+			}
+			rows[key.setCode] = row
 		}
 	}
-	if exists && merged == cached {
-		seenSetsMu.Unlock()
-		return // nothing new to write
+	for setCode, row := range rows {
+		if row.NameEN == "" {
+			// Only one JA or KO name can be chosen, so prefer the JA one.
+			if title := englishTitles[setCode][row.NameJA]; title != "" {
+				row.NameEN = title
+			} else if title := englishTitles[setCode][row.NameKO]; title != "" {
+				row.NameEN = title
+			}
+		}
+		localesByPriority := []string{"ja", "ko", "en"}
+		if row.YuGiOhVersion == konami.TCG {
+			localesByPriority = []string{"en", "ko", "ja"}
+		}
+		for _, locale := range localesByPriority {
+			chosenName := map[string]string{"ja": row.NameJA, "ko": row.NameKO, "en": row.NameEN}[locale]
+			if stat := setNames[setNameKey{setCode, locale}][chosenName]; stat != nil && stat.date != "" {
+				row.ReleaseDate = stat.date
+				break
+			}
+		}
+		rows[setCode] = row
 	}
-	seenSets[fresh.Abbreviation] = merged
-	seenSetsMu.Unlock()
-	if err := database.UpsertSet(merged); err != nil {
-		log.Printf("error UpsertSet %v: %v", merged.Abbreviation, err)
+	for _, row := range rows {
+		if err := database.UpsertSet(row); err != nil {
+			log.Printf("error UpsertSet %v: %v", row.Abbreviation, err)
+		}
 	}
+	log.Printf("end write sets, count=%v", len(rows))
 }
 
 // cardsMissingNameEN holds the card IDs whose "ja" pass found no English name,
